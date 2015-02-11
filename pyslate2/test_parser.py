@@ -1,0 +1,109 @@
+__author__ = 'aleksander chrabaszcz'
+
+import unittest
+from pyslate2.parser import PyLexer, PyParser, InnerTag, Placeholder
+
+
+class LexerTest(unittest.TestCase):
+
+    def setUp(self):
+        self.lexer = PyLexer()
+        self.lexer.build()
+
+    def tokenize_to_list(self, text):
+        return [(token.type, token.value) for token in self.lexer.tokenize(text)]
+
+    def test_simple(self):
+        tokens = self.tokenize_to_list(r"AAA")
+        self.assertListEqual([("PLAINTEXT", "AAA")], tokens)
+
+        tokens = self.tokenize_to_list(r"%{}")
+        self.assertListEqual([("PERC_LBRACE", "%{"), ("RBRACE", "}")], tokens)
+
+        tokens = self.tokenize_to_list(r"\%{\}")
+        self.assertListEqual([("PLAINTEXT", "%{"), ("PLAINTEXT", "}")], tokens)
+
+        tokens = self.tokenize_to_list(r"\a")
+        self.assertListEqual([("PLAINTEXT", "a")], tokens)
+
+        tokens = self.tokenize_to_list(r"\\")
+        self.assertListEqual([("PLAINTEXT", '\\')], tokens)
+
+    def test_complex(self):
+        tokens = self.tokenize_to_list("AAA${hehe}}")
+        self.assertListEqual([("PLAINTEXT", "AAA"), ("DOL_LBRACE", "${"),
+                          ("PLAINTEXT", "hehe"), ("RBRACE", "}"), ("PLAINTEXT", "}")], tokens)
+
+        tokens = self.tokenize_to_list("%{\}aaa}}")
+        self.assertListEqual([("PERC_LBRACE", "%{"), ("PLAINTEXT", "}"),
+                          ("PLAINTEXT", "aaa"), ("RBRACE", "}"), ("PLAINTEXT", "}")], tokens)
+
+    def test_colon(self):
+        tokens = self.tokenize_to_list(
+            r"aaa:hehe%{a:b}")
+        self.assertListEqual([("PLAINTEXT", r"aaa"), ("PLAINTEXT", ":"), ("PLAINTEXT", "hehe"),
+          ("PERC_LBRACE", "%{"), ("PLAINTEXT", "a"), ("COLON", ":"), ("PLAINTEXT", "b"), ("RBRACE", "}")], tokens)
+
+    def test_hardcore(self):
+        tokens = self.tokenize_to_list(
+            r"AAiap→óðą…œó$…ðóąœ…ðóą…óA \%{edsepksofk${entity%{hehe}} \a!!–þ≠→»þ≠ó²óþ≠<<{{{{\}\}\}\}eee\}}")
+        self.assertListEqual([("PLAINTEXT", r"AAiap→óðą…œó$…ðóąœ…ðóą…óA "), ("PLAINTEXT", "%{"),
+                              ("PLAINTEXT", "edsepksofk"), ("DOL_LBRACE", "${"), ("PLAINTEXT", "entity"),
+                              ("PERC_LBRACE", "%{"), ("PLAINTEXT", "hehe"), ("RBRACE", "}"), ("RBRACE", "}"),
+                              ("PLAINTEXT", " "), ("PLAINTEXT", "a"), ("PLAINTEXT", "!!–þ≠→»þ≠ó²óþ≠<<{{{{"),
+                              ("PLAINTEXT", "}"), ("PLAINTEXT", "}"), ("PLAINTEXT", "}"), ("PLAINTEXT", "}"),
+                              ("PLAINTEXT", "eee"), ("PLAINTEXT", "}"), ("PLAINTEXT", "}"), ], tokens)
+
+
+class ParserTest(unittest.TestCase):
+
+    def setUp(self):
+        self.parser = PyParser()
+
+    def test_simple(self):
+
+        result = self.parser.parse("aaa")
+        self.assertEqual(['aaa'], result)
+
+        result = self.parser.parse("${aaa}")
+        self.assertEqual([InnerTag(['aaa'])], result)
+
+        result = self.parser.parse("%{aaa}")
+        self.assertEqual([Placeholder('aaa')], result)
+
+    def test_escape(self):
+
+        result = self.parser.parse("\%{}")
+        # escaped, so it should be treated as plaintext, end bracked has no open, so needn't be escaped...
+        self.assertEqual(['%{}'], result)
+
+        result = self.parser.parse("\%{\}")
+        # ... but it can
+        self.assertEqual(['%{}'], result)
+
+    def test_invalid(self):
+        result = self.parser.parse("%{")
+        # unclosed tag, so it shouldn't be parsed
+        self.assertEqual(None, result)
+
+        result = self.parser.parse("${${a}}")
+        # recursive inner tags are not allowed
+        self.assertEqual([], result)
+
+        result = self.parser.parse("%{%{a}}")
+        # recursive placeholders are not allowed, but it might change TODO reconsider it
+        self.assertEqual([], result)
+
+    def test_complicated(self):
+        result = self.parser.parse("${entity_%{item}}")
+        self.assertEqual([InnerTag(["entity_", Placeholder("item")])], result)
+
+        result = self.parser.parse("%{hehe_${aaa}}")
+        # placeholder name based on inner tag is not allowed
+        self.assertEqual([], result)
+
+    def test_named_inner_tags(self):
+        result = self.parser.parse("You see ${giver:char_info} give ${entity_%{item_name}#u} to ${taker:char_info}.")
+        self.assertEqual(["You see ", InnerTag(["char_info"], tag_id="giver"), " give ",
+                          InnerTag(["entity_", Placeholder("item_name"), "#u"]), " to ",
+                          InnerTag(["char_info"], tag_id="taker"), "."], result)
