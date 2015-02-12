@@ -11,6 +11,8 @@ class PyLexer:
         'PLAINTEXT',
         'RBRACE',
         'ESCAPED',
+        'PIPE',
+        'LT',
     )
 
     def t_DOL_LBRACE(self, t):
@@ -29,7 +31,19 @@ class PyLexer:
             t.type = "PLAINTEXT"
         return t
 
-    t_PLAINTEXT = r'([^\$%{}\\:]|[^\$%}\\:]{|[\$%][^{}\\:])+'
+    def t_PIPE(self, t):
+        r'\|'
+        if not self.nesting_depth:
+            t.type = "PLAINTEXT"
+        return t
+
+    def t_LT(self, t):
+        r'>'
+        if not self.nesting_depth:
+            t.type = "PLAINTEXT"
+        return t
+
+    t_PLAINTEXT = r'([^\$%{}\\:|>]|[^\$%}\\:|>]{|[\$%][^{}\\:|>])+'
 
     def t_RBRACE(self, t):
         r'}'
@@ -67,14 +81,15 @@ class PyLexer:
         return list(self.lexer)
 
 
+
 class PyParser:
 
     def p_expression(self, p):
         """expression : plaintext expression
+                      | variants_variant expression
                       | inner_tag expression
                       | pholder_tag expression
                       | empty"""
-
         p[0] = []
         if len(p) == 3:
             p[0] += [p[1]] + p[2]
@@ -83,6 +98,22 @@ class PyParser:
     def p_pholder_tag(self, p):
         """pholder_tag : PERC_LBRACE plaintext RBRACE"""
         p[0] = Placeholder(p[2])
+
+    def p_variants_tag(self, p):
+        """pholder_tag : PERC_LBRACE variants_variant RBRACE
+                       | PERC_LBRACE plaintext COLON variants_variant RBRACE """
+        if len(p) == 6:
+            p[0] = Variants(p[4][0], p[4][1], tag_id=p[2])
+        else:
+            p[0] = Variants(p[2][0], p[2][1])
+
+    def p_variants_variant(self, p):
+        """variants_variant : plaintext LT plaintext PIPE variants_variant
+                            | plaintext LT plaintext"""
+        p[0] = {p[1]: p[3]}
+        if len(p) == 6:
+            p[0].update(p[5][0])
+        p[0] = (p[0], p[1])  # tuple with dict and its first key
 
     def p_inner_tag(self, p):
         """inner_tag : DOL_LBRACE inner_tag_name RBRACE
@@ -152,3 +183,16 @@ class Placeholder:
 
     def __repr__(self):
         return "placeholder(" + str(self.contents) + ")"
+
+
+class Variants:
+    def __init__(self, variants, first_key, tag_id=None):
+        self.first_key = first_key
+        self.variants = variants
+        self.tag_id = tag_id
+
+    def __eq__(self, other):
+        return self.variants == other.variants and self.first_key == other.first_key
+
+    def __repr__(self):
+        return "variants(" + str(self.variants) + ", " + self.first_key + ")"

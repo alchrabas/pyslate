@@ -1,6 +1,5 @@
-import string
 from pyslate2 import config
-from pyslate2.parser import InnerTag, Placeholder
+from pyslate2.parser import InnerTag, Placeholder, Variants
 
 
 class Pyslate:
@@ -15,19 +14,28 @@ class Pyslate:
 
     def translate(self, tag_name, **kwargs):
 
-        if tag_name in self.functions:
-            return self.functions[tag_name](self, tag_name, kwargs)
-
         if "number" in kwargs and not (config.DISABLE_NUMBER_FOR_VARIANT_TAGS and "#" in tag_name):
-            tag_name = tag_name.partition("#")[0] + "#" + config.NUMBERS[self.language](kwargs["number"])
+            languages = self._get_languages() + [config.NUMBER_FALLBACK_LANGUAGE]
+            fallback = self._first_left_value(config.NUMBERS, languages)(kwargs["number"])
+            tag_name = tag_name.partition("#")[0] + "#" + fallback
 
-        t9n = self._get_raw_content(tag_name)
+
+        if tag_name in self.functions:
+            t9n = self.functions[tag_name](self, tag_name, kwargs)
+        else:
+            t9n = self._get_raw_content(tag_name)
 
         nodes = self.parser.parse(t9n)
         print(nodes)
         t9n = "".join([self.traverse(node, kwargs) for node in nodes])
 
         return t9n
+
+    def _first_left_value(self, dictionary, keys):
+        for key in keys:
+            if key in dictionary:
+                return dictionary[key]
+        return None
 
     def localize(self):
         pass
@@ -41,12 +49,12 @@ class Pyslate:
     def set_global_fallback(self, fallback_language):
         self.global_fallback = fallback_language
 
-    def get_fallbacks(self):
-        fallbacks = []
+    def _get_languages(self):
+        languages = [self.language]
         if self.fallbacks[self.language]:
-            fallbacks += [self.fallbacks[self.language]]
-        fallbacks += [self.global_fallback]
-        return fallbacks
+            languages += [self.fallbacks[self.language]]
+        languages += [self.global_fallback]
+        return languages
 
     def register_function(self, tag_name, function):
         self.functions[tag_name] = function
@@ -58,9 +66,18 @@ class Pyslate:
         if "#" in tag_name:
             requested_tags += [tag_name.partition("#")[0]]
 
-        languages = [self.language] + self.get_fallbacks()
-
+        languages = self._get_languages()
         return self.backend.get_content(requested_tags, languages)
+
+    def _get_raw_grammar(self, tag_name):
+        """Gets and returns grammar from backend considering all possible tag and language fallbacks
+        Returns none if no grammar is set"""
+        requested_tags = [tag_name]
+        if "#" in tag_name:
+            requested_tags += [tag_name.partition("#")[0]]
+
+        languages = self._get_languages()
+        return self.backend.get_grammar(requested_tags, languages)
 
     def traverse(self, node, kwargs):
         if type(node) is InnerTag:
@@ -74,10 +91,22 @@ class Pyslate:
                     final_kwargs.update(kwargs["groups"][node.tag_id])
             return self.translate(tag_name, **final_kwargs)
         elif type(node) is Placeholder:
-            return self.replacement(node, kwargs)
+            return self._replace_placeholder(node, kwargs)
+        elif type(node) is Variants:
+            return self._replace_variants(node, kwargs)
         elif type(node) is str:
             return node
 
-    def replacement(self, node, kwargs):
+    def _replace_placeholder(self, node, kwargs):
         return str(kwargs[node.contents]) if node.contents in kwargs else "MISSING TAG '{0}'".format(node.contents)
+
+    def _replace_variants(self, node, kwargs):
+        param_name = "variant"
+        if node.tag_id:
+            param_name = node.tag_id
+
+        if param_name in kwargs and kwargs[param_name] in node.variants:
+            return node.variants[kwargs[param_name]]
+        else:
+            return node.variants[node.first_key]
 

@@ -11,6 +11,16 @@ class BackendStub():
                     return BackendStub.TAGS[tag_name][language]
         return None
 
+    def get_grammar(self, tag_names, languages):
+        for language in languages:
+            for tag_name in tag_names:
+                if language in BackendStub.TAGS.get(tag_name, {}):
+                    if "grammar" in BackendStub.TAGS[tag_name] and language in BackendStub.TAGS[tag_name]["grammar"]:
+                        return BackendStub.TAGS[tag_name]["grammar"][language]
+                    else:
+                        return None
+        return None
+
     # region constants
     TAGS = {
         "hello_world": {
@@ -89,11 +99,41 @@ class BackendStub():
         "entity_elk#pa": {
             "pl": "łosie",
         },
+        "entity_hammer": {
+            "en": "hammer",
+            "pl": "młotek",
+        },
+        "a_masterwork": {
+            "en": "a masterwork",
+            "pl": "wspaniale wykonany",
+        },
+        "a_masterwork#f": {
+            "pl": "wspaniale wykonana",
+        },
+        "a_poor": {
+            "en": "a poor",
+            "pl": "kiepski",
+        },
+        "a_poor#f": {
+            "pl": "kiepska",
+        },
+        "entity_wand": {
+            "en": "wand",
+            "pl": "różdżka",
+            "grammar": {
+                "en": "c",
+                "pl": "f",
+            }
+        },
+        "being_in_shop": {
+            "en": "I was in shop",
+            "pl": "Był%{m>em|f>am} dziś w sklepie",
+        },
     }
     # endregion
     """
 
-    s - 1
+    [empty] - 1
     f - a few [2,4]
     p - 5+
     u - undefined
@@ -105,7 +145,7 @@ class BackendStub():
     a - accusative (biernik)
 
 
-    Kupił%{gender|m>eś|f>aś} nowiutk{item_g:m>i|f>ą|p>ie} ${entity_${item_name}}. # no dobra, to się nie może zdarzyć
+    Kupił%{gender:m>eś|f>aś} nowiutk{item_g:m>i|f>ą|p>ie} ${entity_${item_name}}. # no dobra, to się nie może zdarzyć
 
 
     You have bought a%{item:v>n|} ${item:entity_%{item_name}}. item_name="apron"
@@ -155,6 +195,7 @@ class TestTranslationsEnglish(unittest.TestCase):
                          self.pys.t("action_give_others", item_name="carrot", groups={"giver": {"char_id": 1},
                                                                                       "taker": {"char_id": 2},
                                                                                       }))
+
     def test_recursion_fun(self):
         self.pys.register_function("object_info", lambda self, name, params: "a note 'trololo'" if params['item_id'] == 3 else "ERROR")
         self.pys.register_function("char_info", lambda self, name, params: "Edd" if params['char_id'] == 2 else "John")
@@ -180,3 +221,53 @@ class TestTranslationsPolish(unittest.TestCase):
     def test_hunt(self):
         self.assertEqual("Atakujesz łosia przy pomocy miecza.",
                          self.pys.t("hunting_hunter", animal="elk", item_name="sword"))
+
+    def test_detailed_function(self):
+
+        class Item:
+
+            def __init__(self, item_id, name):
+                self.item_id = item_id
+                self.name = name
+
+            def get_id(self):
+                return self.item_id
+
+            def get_name(self):
+                return self.name
+
+        def get_deter(quality):
+            if quality > 5:
+                return "a_masterwork"
+            else:
+                return "a_poor"
+
+        def obj_fun(s, name, params):
+            item_name = params["item_name"]  # fallback which must always be available
+            if "item" in params and params["item"]:
+                item_name = params["item"].get_name()
+            q = get_deter(params["quality"])
+            grammar = s._get_raw_grammar("entity_" + item_name)
+            if grammar:
+                q += "#" + grammar
+
+            return "${" + q + "} ${entity_" + item_name + "}"
+
+        self.pys.register_function("object_info", obj_fun)
+
+        self.assertEqual("wspaniale wykonany młotek",
+                         self.pys.t("object_info", item=Item(1, "hammer"), item_name="hammer", quality=10))
+
+        self.assertEqual("wspaniale wykonana różdżka",
+                         self.pys.t("object_info", item=Item(2, "wand"), item_name="wand", quality=10))
+
+    def test_variants(self):
+
+        self.assertEqual("Byłem dziś w sklepie",
+                         self.pys.t("being_in_shop", variant="m"))
+
+        self.assertEqual("Byłam dziś w sklepie",
+                         self.pys.t("being_in_shop", variant="f"))
+
+        self.assertEqual("Byłem dziś w sklepie",
+                         self.pys.t("being_in_shop", variant="yeti"))

@@ -1,7 +1,7 @@
 __author__ = 'aleksander chrabaszcz'
 
 import unittest
-from pyslate2.parser import PyLexer, PyParser, InnerTag, Placeholder
+from pyslate2.parser import PyLexer, PyParser, InnerTag, Placeholder, Variants
 
 
 class LexerTest(unittest.TestCase):
@@ -107,3 +107,8 @@ class ParserTest(unittest.TestCase):
         self.assertEqual(["You see ", InnerTag(["char_info"], tag_id="giver"), " give ",
                           InnerTag(["entity_", Placeholder("item_name"), "#u"]), " to ",
                           InnerTag(["char_info"], tag_id="taker"), "."], result)
+
+    def test_variadic(self):
+        result = self.parser.parse("Kupił%{gen:m>em|f>am} kosiarkę.")
+        print(result)
+        self.assertEqual(["Kupił", Variants({"m": "em", "f": "am"}, "m", tag_id="gen"), " kosiarkę."], result)
