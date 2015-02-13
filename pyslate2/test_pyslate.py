@@ -129,6 +129,42 @@ class BackendStub():
             "en": "I was in shop",
             "pl": "Był%{m>em|f>am} dziś w sklepie",
         },
+        "talking_the_same": {
+            "en": "I told %{sb:m>him|f>her} it's stupid and %{sb:m>|f>s}he told me the same.",
+            "pl": "Powiedział%{me:m>em|f>am} %{sb:m>mu|f>jej}, że to głupie, a on%{sb:m>|f>a} powiedział%{sb:m>|f>a} mi to samo.",
+        },
+        "talking_the_same2": {
+            "en": "I told ${sb:form_him} it's stupid and %{sb:suffix_he} told me the same.",
+            "pl": "Powiedział${suffix_em#%{me}} ${form_him#%{sb}}, że to głupie, a ${form_he#%{sb}} powiedział${suffix_did_form#%{sb}} mi to samo.",
+        },
+        # region helpers needed for variants emulation
+        "suffix_em#f": {
+            "pl": "am",
+        },
+        "suffix_em#m": {
+            "pl": "em",
+        },
+        "form_him#f": {
+            "pl": "jej",
+        },
+        "form_him#m": {
+            "pl": "mu",
+        },
+        "form_he#f": {
+            "pl": "ona",
+        },
+        "form_he#m": {
+            "pl": "on",
+        },
+        "suffix_did_form#f": {
+            "pl": "a",
+        },
+        "suffix_did_form#m": {
+            "pl": "",
+        },
+        # endregion helpers needed for variants emulation
+
+
     }
     # endregion
     """
@@ -226,17 +262,12 @@ class TestTranslationsPolish(unittest.TestCase):
 
         class Item:
 
-            def __init__(self, item_id, name):
+            def __init__(self, item_id, name, quality=0):
                 self.item_id = item_id
                 self.name = name
+                self.quality = quality
 
-            def get_id(self):
-                return self.item_id
-
-            def get_name(self):
-                return self.name
-
-        def get_deter(quality):
+        def get_quality_tag(quality):
             if quality > 5:
                 return "a_masterwork"
             else:
@@ -244,22 +275,28 @@ class TestTranslationsPolish(unittest.TestCase):
 
         def obj_fun(s, name, params):
             item_name = params["item_name"]  # fallback which must always be available
+            quality_tag = ""
+            grammar = ""
             if "item" in params and params["item"]:
-                item_name = params["item"].get_name()
-            q = get_deter(params["quality"])
-            grammar = s._get_raw_grammar("entity_" + item_name)
-            if grammar:
-                q += "#" + grammar
+                item_name = params["item"].name
+                quality_tag = get_quality_tag(params["item"].quality)
+                grammar = s._get_raw_grammar("entity_" + item_name)
 
-            return "${" + q + "} ${entity_" + item_name + "}"
+            if quality_tag:
+                quality_tag = "${" + quality_tag + ("#" + grammar if grammar else "") + "} "
+
+            return quality_tag + "${entity_" + item_name + "}"
 
         self.pys.register_function("object_info", obj_fun)
 
         self.assertEqual("wspaniale wykonany młotek",
-                         self.pys.t("object_info", item=Item(1, "hammer"), item_name="hammer", quality=10))
+                         self.pys.t("object_info", item=Item(1, "hammer", quality=10), item_name="hammer"))
 
         self.assertEqual("wspaniale wykonana różdżka",
-                         self.pys.t("object_info", item=Item(2, "wand"), item_name="wand", quality=10))
+                         self.pys.t("object_info", item=Item(2, "wand", quality=10), item_name="wand"))
+
+        self.assertEqual("różdżka",
+                         self.pys.t("object_info", item=None, item_name="wand"))  # fallback
 
     def test_variants(self):
 
@@ -271,3 +308,23 @@ class TestTranslationsPolish(unittest.TestCase):
 
         self.assertEqual("Byłem dziś w sklepie",
                          self.pys.t("being_in_shop", variant="yeti"))
+
+        self.assertEqual("Powiedziałam mu, że to głupie, a on powiedział mi to samo.",
+                         self.pys.t("talking_the_same", me="f", sb="m"))
+
+        self.assertEqual("Powiedziałam jej, że to głupie, a ona powiedziała mi to samo.",
+                         self.pys.t("talking_the_same", me="f", sb="f"))
+
+        self.assertEqual("Powiedziałem mu, że to głupie, a on powiedział mi to samo.",
+                         self.pys.t("talking_the_same", me="m", sb="m"))
+
+    def test_variants_emulation(self):
+        self.assertEqual("Powiedziałem mu, że to głupie, a on powiedział mi to samo.",
+                         self.pys.t("talking_the_same2", me="m", sb="m"))
+
+        self.assertEqual("Powiedziałem mu, że to głupie, a on powiedział mi to samo.",
+                         self.pys.t("talking_the_same2", me="m", sb="m"))
+
+        self.assertEqual("Powiedziałem mu, że to głupie, a on powiedział mi to samo.",
+                         self.pys.t("talking_the_same2", me="m", sb="m"))
+

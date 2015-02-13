@@ -1,7 +1,6 @@
 import string
 from ply import lex, yacc
 
-
 class PyLexer:
 
     tokens = (
@@ -107,13 +106,30 @@ class PyParser:
         else:
             p[0] = Variants(p[2][0], p[2][1])
 
-    def p_variants_variant(self, p):
-        """variants_variant : plaintext LT plaintext PIPE variants_variant
-                            | plaintext LT plaintext"""
-        p[0] = {p[1]: p[3]}
-        if len(p) == 6:
-            p[0].update(p[5][0])
-        p[0] = (p[0], p[1])  # tuple with dict and its first key
+    def p_variants_variant_next(self, p):
+        """variants_variant : plaintext LT plaintext PIPE variants_variant"""
+        variants_dict = {p[1]: p[3]}
+        variants_dict.update(p[5][0])
+        p[0] = (variants_dict, p[1])  # tuple with dict and its first key
+
+    def p_variants_variant_last(self, p):
+        """variants_variant : plaintext LT plaintext"""
+        variants_dict = {p[1]: p[3]}
+        p[0] = (variants_dict, p[1])  # tuple with dict and its first key
+
+    def p_variants_variant_part_next(self, p):
+        """variants_variant : plaintext LT PIPE variants_variant"""
+        variants_dict = {p[1]: ""}
+        variants_dict.update(p[4][0])
+        p[0] = (variants_dict, p[1])  # tuple with dict and its first key
+
+    def p_variants_variant_empty_next(self, p):
+        """variants_variant : PIPE variants_variant"""
+        variants_dict = {"": ""}
+        variants_dict.update(p[2][0])
+        p[0] = (variants_dict, "")
+
+    # TODO variants_varaint must be able to be empty, otherwise it's hard to have "PIPE" as last element etc
 
     def p_inner_tag(self, p):
         """inner_tag : DOL_LBRACE inner_tag_name RBRACE
