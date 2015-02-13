@@ -109,6 +109,6 @@ class ParserTest(unittest.TestCase):
                           InnerTag(["char_info"], tag_id="taker"), "."], result)
 
     def test_variadic(self):
-        result = self.parser.parse("Kupił%{gen:m>em|f>am} kosiarkę.")
+        result = self.parser.parse("Kupił%{gen:m!em|f!am} kosiarkę.")
         print(result)
         self.assertEqual(["Kupił", Variants({"m": "em", "f": "am"}, "m", tag_id="gen"), " kosiarkę."], result)

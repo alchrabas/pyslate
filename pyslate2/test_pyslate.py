@@ -127,11 +127,11 @@ class BackendStub():
         },
         "being_in_shop": {
             "en": "I was in shop",
-            "pl": "Był%{m>em|f>am} dziś w sklepie",
+            "pl": "Był%{m?em|f?am} dziś w sklepie",
         },
         "talking_the_same": {
-            "en": "I told %{sb:m>him|f>her} it's stupid and %{sb:m>|f>s}he told me the same.",
-            "pl": "Powiedział%{me:m>em|f>am} %{sb:m>mu|f>jej}, że to głupie, a on%{sb:m>|f>a} powiedział%{sb:m>|f>a} mi to samo.",
+            "en": "I told %{sb:m?him|f?her} it's stupid and %{sb:m?|f?s}he told me the same.",
+            "pl": "Powiedział%{me:m?em|f?am} %{sb:m?mu|f?jej}, że to głupie, a on%{sb:m?|f?a} powiedział%{sb:m?|f?a} mi to samo.",
         },
         "talking_the_same2": {
             "en": "I told ${sb:form_him} it's stupid and %{sb:suffix_he} told me the same.",
@@ -199,6 +199,15 @@ class BackendStub():
     entity_elk: ło{n>ś|a>sia}
 
     Spotykasz ${animal:entity_%{animal}#a}, a następnie atakujesz %{animal:gen_he#a}
+
+
+
+
+
+
+
+
+
     """
 
 
@@ -319,12 +328,23 @@ class TestTranslationsPolish(unittest.TestCase):
                          self.pys.t("talking_the_same", me="m", sb="m"))
 
     def test_variants_emulation(self):
-        self.assertEqual("Powiedziałem mu, że to głupie, a on powiedział mi to samo.",
-                         self.pys.t("talking_the_same2", me="m", sb="m"))
 
         self.assertEqual("Powiedziałem mu, że to głupie, a on powiedział mi to samo.",
                          self.pys.t("talking_the_same2", me="m", sb="m"))
 
-        self.assertEqual("Powiedziałem mu, że to głupie, a on powiedział mi to samo.",
-                         self.pys.t("talking_the_same2", me="m", sb="m"))
+        self.assertEqual("Powiedziałem jej, że to głupie, a ona powiedziała mi to samo.",
+                         self.pys.t("talking_the_same2", me="m", sb="f"))
 
+        self.assertEqual("Powiedziałam jej, że to głupie, a ona powiedziała mi to samo.",
+                         self.pys.t("talking_the_same2", me="f", sb="f"))
+
+        """
+
+            Jeśli item to m to wypisz em, a jeśli f to wypisz am
+            %{item:m?em|f?am}
+            %{item:m!em|f!am}
+            %{item:m'em|f'am}
+            %{item:m/em|f/am}
+            %{item:m>em|f>am}
+
+        """

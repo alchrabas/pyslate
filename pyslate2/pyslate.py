@@ -110,3 +110,22 @@ class Pyslate:
         else:
             return node.variants[node.first_key]
 
+
+class PyslateHelper:
+
+    def __init__(self, pyslate):
+        self.pyslate = pyslate
+
+    def translation(self, tag_name):
+        pass
+
+    def translation_and_grammar(self, tag_name):
+        pass
+
+    def grammar(self, tag_name):
+        pass
+
+
+
+
+

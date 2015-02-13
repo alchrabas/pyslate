@@ -11,7 +11,7 @@ class PyLexer:
         'RBRACE',
         'ESCAPED',
         'PIPE',
-        'LT',
+        'QUESTION',
     )
 
     def t_DOL_LBRACE(self, t):
@@ -36,13 +36,13 @@ class PyLexer:
             t.type = "PLAINTEXT"
         return t
 
-    def t_LT(self, t):
-        r'>'
+    def t_QUESTION(self, t):
+        r'\?'
         if not self.nesting_depth:
             t.type = "PLAINTEXT"
         return t
 
-    t_PLAINTEXT = r'([^\$%{}\\:|>]|[^\$%}\\:|>]{|[\$%][^{}\\:|>])+'
+    t_PLAINTEXT = r'([^\$%{}\\:|?]|[^\$%}\\:|?]{|[\$%][^{}\\:|?])+'
 
     def t_RBRACE(self, t):
         r'}'
@@ -107,18 +107,18 @@ class PyParser:
             p[0] = Variants(p[2][0], p[2][1])
 
     def p_variants_variant_next(self, p):
-        """variants_variant : plaintext LT plaintext PIPE variants_variant"""
+        """variants_variant : plaintext QUESTION plaintext PIPE variants_variant"""
         variants_dict = {p[1]: p[3]}
         variants_dict.update(p[5][0])
         p[0] = (variants_dict, p[1])  # tuple with dict and its first key
 
     def p_variants_variant_last(self, p):
-        """variants_variant : plaintext LT plaintext"""
+        """variants_variant : plaintext QUESTION plaintext"""
         variants_dict = {p[1]: p[3]}
         p[0] = (variants_dict, p[1])  # tuple with dict and its first key
 
     def p_variants_variant_part_next(self, p):
-        """variants_variant : plaintext LT PIPE variants_variant"""
+        """variants_variant : plaintext QUESTION PIPE variants_variant"""
         variants_dict = {p[1]: ""}
         variants_dict.update(p[4][0])
         p[0] = (variants_dict, p[1])  # tuple with dict and its first key
