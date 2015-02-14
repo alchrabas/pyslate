@@ -19,7 +19,6 @@ class BackendStub():
                         return BackendStub.TAGS[tag_name]["grammar"][language]
                     else:
                         return None
-        return None
 
     # region constants
     TAGS = {
@@ -39,8 +38,11 @@ class BackendStub():
         "entity_sword": {
             "en": "a sword",
         },
+        "entity_sword#m": {
+            "en": "%{number} swords",
+        },
         "entity_sword#p": {
-            "en": "${number} swords",
+            "en": "swords",
         },
         "entity_sword#a": {
             "pl": "miecza",
@@ -64,7 +66,7 @@ class BackendStub():
             "en": "a carrot",
             "pl": "marchewka",
         },
-        "entity_carrot#p": {  # plural = many
+        "entity_carrot#m": {  # many
             "en": "%{number} carrots",
             "pl": "%{number} marchewek",
         },
@@ -76,8 +78,11 @@ class BackendStub():
             "pl": "trochę marchewek",
         },
         "entity_carrot#o": {  # other
-            "en": "${number} of a carrot",
-            "pl": "${number} marchewki",
+            "pl": "%{number} marchewki",
+        },
+        "entity_beetroot": {
+            "en": "beetroot%{tag_v:s?|m?s}",
+            "pl": "%{number} burak%{tag_v:s?|f?i|m?ów|o?a}",
         },
         "action_give_others": {
             "en": "You see ${giver:char_info} give ${entity_%{item_name}#u} to ${taker:char_info}.",
@@ -163,40 +168,58 @@ class BackendStub():
             "pl": "",
         },
         # endregion helpers needed for variants emulation
+        "buying_the_pizza": {
+            "en": "I've bought the pizza.",
+            "pl": "Kupił%{tag_v:m?e|f?a}m pizzę.",
+        },
+        "missing_placeholder": {
+            "pl": "lala %{hehe}",
+        },
+        "missing_tag": {
+            "pl": "lala ${hehe}",
+        },
 
 
     }
     # endregion
     """
 
-    [empty] - 1
-    f - a few [2,4]
-    p - 5+
-    u - undefined
-    o - other e.g. 1.5
+    -- odmiana liczby mnogiej
+
+    ->  [empty] - 1             np. 1 marchewka
+        f - a few [2,4]         np. 3 marchewki
+    ->  m - 5+                  np. 5 marchewek
+        u - undefined           np. trochę karchewek
+        o - other e.g. 1.5      np. 4.5 marchewki
+    ->  p - bez określonego     np. marchewki
 
     -- odmiana przedmiotów
 
-    [empty]  - nominative (mianownik)
-    a - accusative (biernik)
+    ->  [empty]  - nominative (mianownik)  np. miecz
+        g - genitiv (dopełniacz)           np. miecza
+        d - dativ (celownik)               np. mieczowi
+    ->  a - accusative (biernik)           np. miecz
+        b - ablative (narzędnik)           np. mieczem
+        l - locative (miejscownik)         np. mieczu
+        v - vocative (wołacz)              np. mieczu
 
 
-    Kupił%{gender:m>eś|f>aś} nowiutk{item_g:m>i|f>ą|p>ie} ${entity_${item_name}}. # no dobra, to się nie może zdarzyć
+    Kupił%{gender:m?eś|f?aś} nowiutk{item_g:m?i|f?ą|p?ie} ${entity_${item_name}}. # no dobra, to się nie może zdarzyć
 
 
-    You have bought a%{item:v>n|} ${item:entity_%{item_name}}. item_name="apron"
+    You have bought a%{item:v?n|} ${item:entity_%{item_name}}. item_name="apron"
     entity_apron
 
-    Wersja skrócona, bazuje na określonym argumencie kluczowym "variant":
-    Kupił%{m>eś|f>aś}
+    Wersja skrócona, bazuje na z góry określonym argumencie kluczowym "variant":
+    Kupił%{m?eś|f?aś}
 
 
     You attack an elk.
 
     entity_elk: elk
-    entity_elk#a: %{an>an|}elk   variant=an
+    entity_elk#a: %{|an?an} elk   variant=an
 
-    entity_elk: ło{n>ś|a>sia}
+    entity_elk: ło{n?ś|a?sia}
 
     Spotykasz ${animal:entity_%{animal}#a}, a następnie atakujesz %{animal:gen_he#a}
 
@@ -209,7 +232,6 @@ class BackendStub():
 
 
     """
-
 
 
 class TestTranslationsEnglish(unittest.TestCase):
@@ -230,9 +252,10 @@ class TestTranslationsEnglish(unittest.TestCase):
         self.assertEqual("10 carrots", self.pys.t("entity_carrot", number=10))
         self.assertEqual("4 carrots", self.pys.t("entity_carrot", number=4))
         self.assertEqual("a carrot", self.pys.t("entity_carrot", number=1))
+        self.assertEqual("1.3 carrots", self.pys.t("entity_carrot", number=1.3))
 
     def test_replacement(self):
-        self.assertEqual("Welcome! I have  swords.", self.pys.t("item_ownership", item_name="sword"))
+        self.assertEqual("Welcome! I have swords.", self.pys.t("item_ownership", item_name="sword"))
 
     def test_recursion(self):
         self.pys.register_function("char_info", lambda self, name, params: "John" if params['char_id'] == 1 else "Edd")
@@ -255,13 +278,21 @@ class TestTranslationsPolish(unittest.TestCase):
 
     def setUp(self):
         self.pys = Pyslate("pl", BackendStub())
-        self.pys.set_fallback_language("pl", "en") # it should be unnecessary
+        self.pys.set_fallback_language("pl", "en")  # it should be unnecessary
 
     def test_numbers(self):
-        self.assertEqual("10 marchewek", self.pys.t("entity_carrot#p", number=10))
+        self.assertEqual("10 marchewek", self.pys.t("entity_carrot#m", number=10))
         self.assertEqual("10 marchewek", self.pys.t("entity_carrot", number=10))
         self.assertEqual("4 marchewki", self.pys.t("entity_carrot", number=4))
         self.assertEqual("marchewka", self.pys.t("entity_carrot", number=1))
+        self.assertEqual("1,5 marchewki", self.pys.t("entity_carrot", number=1.5))
+
+    def test_numbers_variants(self):
+        self.assertEqual("10 buraków", self.pys.t("entity_beetroot#m", number=10))
+        self.assertEqual("10 buraków", self.pys.t("entity_beetroot", number=10))
+        self.assertEqual("4 buraki", self.pys.t("entity_beetroot", number=4))
+        self.assertEqual("1 burak", self.pys.t("entity_beetroot", number=1))
+        self.assertEqual("1,5 buraka", self.pys.t("entity_beetroot", number=1.5))
 
     def test_hunt(self):
         self.assertEqual("Atakujesz łosia przy pomocy miecza.",
@@ -304,6 +335,10 @@ class TestTranslationsPolish(unittest.TestCase):
         self.assertEqual("wspaniale wykonana różdżka",
                          self.pys.t("object_info", item=Item(2, "wand", quality=10), item_name="wand"))
 
+        self.assertEqual("kiepski młotek",
+                         self.pys.t("object_info", item=Item(3, "hammer", quality=3), item_name="hammer"))
+
+
         self.assertEqual("różdżka",
                          self.pys.t("object_info", item=None, item_name="wand"))  # fallback
 
@@ -327,8 +362,17 @@ class TestTranslationsPolish(unittest.TestCase):
         self.assertEqual("Powiedziałem mu, że to głupie, a on powiedział mi to samo.",
                          self.pys.t("talking_the_same", me="m", sb="m"))
 
-    def test_variants_emulation(self):
+    def test_variants_default(self): # use first left key from variants tag
+        self.assertEqual("Powiedziałem mu, że to głupie, a on powiedział mi to samo.",
+                         self.pys.t("talking_the_same"))
 
+        self.assertEqual("Powiedziałam mu, że to głupie, a on powiedział mi to samo.",
+                         self.pys.t("talking_the_same", me="f"))
+
+        self.assertEqual("Powiedziałem jej, że to głupie, a ona powiedziała mi to samo.",
+                         self.pys.t("talking_the_same", me="Xd", sb="f"))
+
+    def test_variants_emulation(self):
         self.assertEqual("Powiedziałem mu, że to głupie, a on powiedział mi to samo.",
                          self.pys.t("talking_the_same2", me="m", sb="m"))
 
@@ -338,13 +382,19 @@ class TestTranslationsPolish(unittest.TestCase):
         self.assertEqual("Powiedziałam jej, że to głupie, a ona powiedziała mi to samo.",
                          self.pys.t("talking_the_same2", me="f", sb="f"))
 
-        """
+    def test_tag_variant(self):
+        self.assertEqual("Kupiłem pizzę.",
+                         self.pys.t("buying_the_pizza#m"))
 
-            Jeśli item to m to wypisz em, a jeśli f to wypisz am
-            %{item:m?em|f?am}
-            %{item:m!em|f!am}
-            %{item:m'em|f'am}
-            %{item:m/em|f/am}
-            %{item:m>em|f>am}
+        self.assertEqual("Kupiłam pizzę.",
+                         self.pys.t("buying_the_pizza#f"))
 
-        """
+        self.assertEqual("Kupiłem pizzę.",
+                         self.pys.t("buying_the_pizza"))
+
+    def test_missing_tag(self):
+        self.assertEqual("lala [MISSING VALUE FOR 'hehe']",
+                         self.pys.t("missing_placeholder"))
+
+        self.assertEqual("lala [MISSING TAG 'hehe']",
+                         self.pys.t("missing_tag"))

@@ -3,38 +3,33 @@ __author__ = 'aleksander chrabaszcz'
 from pyslate2.backend import PyslateJsonBackend
 from pyslate2.parser import PyParser
 
-# global fallback
-BASE_LANGAUGE = "en"
+class PyslateConfig:
 
-FALLBACKS = {
-    "pl": "en",
-}
+    def __init__(self):
+        # global fallback
+        self.BASE_LANGAUGE = "en"
 
-ALLOW_RECURSIVE_TAGS = True
+        self.FALLBACKS = {
+            "pl": "en",
+        }
 
+        self.ALLOW_RECURSIVE_TAGS = True
 
-BACKEND_CLASS = PyslateJsonBackend
+        self.BACKEND_CLASS = PyslateJsonBackend
 
-ALLOW_CACHE = False
-CACHE_CLASS = None
+        self.ALLOW_CACHE = False
+        self.CACHE_CLASS = None
 
+        self.PARSER_CLASS = PyParser
 
-PARSER_CLASS = PyParser
+        self.ALLOW_SPECIAL_TAGS = {
+            "NUMBER": True,
+        }
 
-ALLOW_SPECIAL_TAGS = {
-    "NUMBER": True,
-}
+        self.DISABLE_NUMBER_FOR_VARIANT_TAGS = False
 
-DISABLE_NUMBER_FOR_VARIANT_TAGS = False
+        self.NUMBER_FALLBACK_LANGUAGE = "en"
 
-#
-# lambdas used to decide about variant of tag which consits of a %{number} placeholder
-#
-NUMBERS = {
-    "en": lambda n: "" if n == 1 else "p",
-    "pl": lambda n: "" if n == 1 else ("f" if n % 10 in [2, 3, 4] and n % 100 not in [12, 13, 14] else "p"),
-}
+        self.ALLOW_GRAMMAR_VARIANTS = True
 
-NUMBER_FALLBACK_LANGUAGE = "en"
-
-ALLOW_GRAMMAR_VARIANTS = True
+        self.LOCALE_FORMAT_NUMBERS = True

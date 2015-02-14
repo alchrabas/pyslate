@@ -1,7 +1,7 @@
 __author__ = 'aleksander chrabaszcz'
 
 import unittest
-from pyslate2.parser import PyLexer, PyParser, InnerTag, Placeholder, Variants
+from pyslate2.parser import PyLexer, PyParser, InnerTag, Placeholder, Variants, PyslateException
 
 
 class LexerTest(unittest.TestCase):
@@ -74,7 +74,7 @@ class ParserTest(unittest.TestCase):
     def test_escape(self):
 
         result = self.parser.parse("\%{}")
-        # escaped, so it should be treated as plaintext, end bracked has no open, so needn't be escaped...
+        # escaped, so it should be treated as plaintext, end brace has no open, so needn't be escaped...
         self.assertEqual(['%{}'], result)
 
         result = self.parser.parse("\%{\}")
@@ -82,25 +82,25 @@ class ParserTest(unittest.TestCase):
         self.assertEqual(['%{}'], result)
 
     def test_invalid(self):
-        result = self.parser.parse("%{")
+
         # unclosed tag, so it shouldn't be parsed
-        self.assertEqual(None, result)
+        with self.assertRaises(PyslateException):
+            result = self.parser.parse("%{")
 
-        result = self.parser.parse("${${a}}")
         # recursive inner tags are not allowed
-        self.assertEqual([], result)
+        with self.assertRaises(PyslateException):
+            result = self.parser.parse("${${a}}")
 
-        result = self.parser.parse("%{%{a}}")
-        # recursive placeholders are not allowed, but it might change TODO reconsider it
-        self.assertEqual([], result)
+        with self.assertRaises(PyslateException):
+            result = self.parser.parse("%{%{a}}")
 
     def test_complicated(self):
         result = self.parser.parse("${entity_%{item}}")
         self.assertEqual([InnerTag(["entity_", Placeholder("item")])], result)
 
-        result = self.parser.parse("%{hehe_${aaa}}")
         # placeholder name based on inner tag is not allowed
-        self.assertEqual([], result)
+        with self.assertRaises(PyslateException):
+            result = self.parser.parse("%{hehe_${aaa}}")
 
     def test_named_inner_tags(self):
         result = self.parser.parse("You see ${giver:char_info} give ${entity_%{item_name}#u} to ${taker:char_info}.")
@@ -109,6 +109,6 @@ class ParserTest(unittest.TestCase):
                           InnerTag(["char_info"], tag_id="taker"), "."], result)
 
     def test_variadic(self):
-        result = self.parser.parse("Kupił%{gen:m!em|f!am} kosiarkę.")
+        result = self.parser.parse("Kupił%{gen:m?em|f?am} kosiarkę.")
         print(result)
         self.assertEqual(["Kupił", Variants({"m": "em", "f": "am"}, "m", tag_id="gen"), " kosiarkę."], result)

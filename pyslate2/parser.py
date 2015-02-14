@@ -85,7 +85,7 @@ class PyParser:
 
     def p_expression(self, p):
         """expression : plaintext expression
-                      | variants_variant expression
+                      | variants expression
                       | inner_tag expression
                       | pholder_tag expression
                       | empty"""
@@ -99,37 +99,30 @@ class PyParser:
         p[0] = Placeholder(p[2])
 
     def p_variants_tag(self, p):
-        """pholder_tag : PERC_LBRACE variants_variant RBRACE
-                       | PERC_LBRACE plaintext COLON variants_variant RBRACE """
+        """pholder_tag : PERC_LBRACE variants RBRACE
+                       | PERC_LBRACE plaintext COLON variants RBRACE """
         if len(p) == 6:
             p[0] = Variants(p[4][0], p[4][1], tag_id=p[2])
         else:
             p[0] = Variants(p[2][0], p[2][1])
 
     def p_variants_variant_next(self, p):
-        """variants_variant : plaintext QUESTION plaintext PIPE variants_variant"""
-        variants_dict = {p[1]: p[3]}
-        variants_dict.update(p[5][0])
-        p[0] = (variants_dict, p[1])  # tuple with dict and its first key
+        """variants : variant PIPE variants
+                    | variant"""
+        variants_dict = p[1][0]
+        if len(p) == 4:
+            variants_dict.update(p[3][0])
+        p[0] = (variants_dict, p[1][1])  # tuple with dict and its first key
 
     def p_variants_variant_last(self, p):
-        """variants_variant : plaintext QUESTION plaintext"""
+        """variant : plaintext QUESTION plaintext"""
         variants_dict = {p[1]: p[3]}
         p[0] = (variants_dict, p[1])  # tuple with dict and its first key
 
     def p_variants_variant_part_next(self, p):
-        """variants_variant : plaintext QUESTION PIPE variants_variant"""
+        """variant : plaintext QUESTION"""
         variants_dict = {p[1]: ""}
-        variants_dict.update(p[4][0])
         p[0] = (variants_dict, p[1])  # tuple with dict and its first key
-
-    def p_variants_variant_empty_next(self, p):
-        """variants_variant : PIPE variants_variant"""
-        variants_dict = {"": ""}
-        variants_dict.update(p[2][0])
-        p[0] = (variants_dict, "")
-
-    # TODO variants_varaint must be able to be empty, otherwise it's hard to have "PIPE" as last element etc
 
     def p_inner_tag(self, p):
         """inner_tag : DOL_LBRACE inner_tag_name RBRACE
@@ -160,21 +153,22 @@ class PyParser:
         if len(p) == 3:
             p[0] += p[2]
 
-
     def p_empty(self, p):
         """empty : """
         p[0] = None
 
     def p_error(self, p):
-        print("Unable to parse the string!", p)
+        raise PyslateException(self.data)
 
     def __init__(self):
         self.tokens = PyLexer.tokens
+        self.data = None
         self.lexer = PyLexer()
         self.lexer.build()
         self.parser = yacc.yacc(module=self, debug=1)
 
     def parse(self, data, **kwargs):
+        self.data = data
         return self.parser.parse(data, lexer=self.lexer, **kwargs)
 
 
@@ -212,3 +206,8 @@ class Variants:
 
     def __repr__(self):
         return "variants(" + str(self.variants) + ", " + self.first_key + ")"
+
+
+class PyslateException(Exception):
+    def __init__(self, tag):
+        self.tag = tag
