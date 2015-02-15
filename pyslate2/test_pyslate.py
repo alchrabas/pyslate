@@ -1,4 +1,5 @@
 import unittest
+from pyslate2.config import PyslateConfig
 from pyslate2.pyslate import Pyslate
 
 
@@ -398,3 +399,15 @@ class TestTranslationsPolish(unittest.TestCase):
 
         self.assertEqual("lala [MISSING TAG 'hehe']",
                          self.pys.t("missing_tag"))
+
+
+class TestConfigPolishTranslations(unittest.TestCase):
+
+    def test_no_inner_tags(self):
+        config = PyslateConfig()
+        config.ALLOW_INNER_TAGS = False
+        self.pys = Pyslate("pl", backend=BackendStub(), config=config)
+
+        self.assertEqual("${welcome} I have ${entity_sword#p}.",
+                         self.pys.t("item_ownership", item_name="sword"))
+

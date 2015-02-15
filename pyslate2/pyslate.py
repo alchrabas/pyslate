@@ -1,7 +1,7 @@
 from pyslate2.config import PyslateConfig
 from pyslate2.locales import LOCALES
 from pyslate2.parser import InnerTag, Placeholder, Variants
-
+import numbers
 
 class Pyslate:
 
@@ -10,8 +10,9 @@ class Pyslate:
 
         self.language = language
         self.backend = backend if backend else self.config.BACKEND_CLASS()
+        self.cache = config.CACHE_CLASS() if self.config.ALLOW_CACHE else None
         self.fallbacks = {}
-        self.global_fallback = "en"
+        self.global_fallback = config.GLOBAL_FALLBACK_LANGUAGE
         self.functions = {}
         self.parser = config.PARSER_CLASS()
 
@@ -43,13 +44,24 @@ class Pyslate:
 
     def localize(self, value):
         if not self.config.LOCALE_FORMAT_NUMBERS:
-            return value
+            return str(value)
         if isinstance(value, float):
-            locale_data = self._first_left_value(LOCALES, self._get_languages())
-            return locale_data["format"]["float"](value)
+            locale_data = self._first_left_value(LOCALES, [self.language, self.config.NUMBER_FALLBACK_LANGUAGE])
+            return self._format_float(value, locale_data["format"]["decimal_point"])
+        if isinstance(value, numbers.Integral):
+            return str(value)
+        else: # TODO date and time should be formatted too
+            return str(value)
+
+    def _format_float(self, n, decimal_point):
+        formatted_float = "{:.3f}".format(n).rstrip("0").rstrip(".")
+        if decimal_point != ".":
+            formatted_float = formatted_float.replace(".", decimal_point)
+        return formatted_float
 
     t = translate
     l = localize
+
 
     def set_fallback_language(self, base_language, fallback_language):
         self.fallbacks[base_language] = fallback_language
@@ -74,12 +86,12 @@ class Pyslate:
         if "#" in tag_name:
             requested_tags += [tag_name.partition("#")[0]]
 
-        languages = self._get_languages()
-
-        ee = self.backend.get_content(requested_tags, languages)
-        if ee is None:
-            ee = "[MISSING TAG '{0}']".format(requested_tags[0])
-        return ee
+        retrieved_content = self.backend.get_content(requested_tags, self._get_languages())
+        if retrieved_content is None:
+            retrieved_content = "[MISSING TAG '{0}']".format(requested_tags[0])
+        elif self.config.ALLOW_CACHE:
+            self.cache.save(tag_name, self.language, retrieved_content)
+        return retrieved_content
 
     def _get_raw_grammar(self, tag_name):
         """Gets and returns grammar from backend considering all possible tag and language fallbacks
@@ -94,6 +106,8 @@ class Pyslate:
     def traverse(self, node, kwargs):
         if type(node) is InnerTag:
             tag_name = "".join([self.traverse(child, kwargs) for child in node.contents])
+            if not self.config.ALLOW_INNER_TAGS:  # when inner tags are disabled then print them as-is
+                return "${" + tag_name + "}"
             final_kwargs = kwargs
 
             if node.tag_id:
@@ -105,6 +119,8 @@ class Pyslate:
         elif type(node) is Placeholder:
             return self._replace_placeholder(node, kwargs)
         elif type(node) is Variants:
+            if not self.config.ALLOW_VARIANTS_STRUCTURE:
+                return ""
             return self._replace_variants(node, kwargs)
         elif type(node) is str:
             return node
@@ -126,11 +142,6 @@ class Pyslate:
             return node.variants[kwargs[param_name]]
         else:
             return node.variants[node.first_key]
-
-    class Tag():
-
-        def __init__(self, name):
-            self.name = name
 
 
 class PyslateHelper:
