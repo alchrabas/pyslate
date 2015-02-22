@@ -9,7 +9,6 @@ class PyLexer:
         'COLON',
         'PLAINTEXT',
         'RBRACE',
-        'ESCAPED',
         'PIPE',
         'QUESTION',
     )

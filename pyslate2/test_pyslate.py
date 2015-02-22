@@ -3,6 +3,42 @@ from pyslate2.config import PyslateConfig
 from pyslate2.pyslate import Pyslate
 
 
+class Item:
+    def __init__(self, item_id, name, quality=0):
+        self.item_id = item_id
+        self.name = name
+        self.quality = quality
+
+
+def get_quality_tag(quality):
+    if quality > 5:
+        return "a_masterwork"
+    else:
+        return "a_poor"
+
+
+def obj_fun(helper, name, params):
+    item_name = params["item_name"]  # fallback which must always be available
+    quality_tag = ""
+    grammar = ""
+    case = ""
+
+    if "#" in name:
+        case += name.partition("#")[2]
+
+    if "item" in params and params["item"]:
+        item_name = params["item"].name
+        quality_tag = get_quality_tag(params["item"].quality)
+        grammar = helper.grammar("entity_" + item_name) if helper.grammar("entity_" + item_name) else ""
+
+    grammar += case
+
+    if quality_tag:
+        quality_tag = "${" + quality_tag + ("#" + grammar if grammar else "") + "} "
+
+    return quality_tag + "${entity_" + item_name + ("#" + case if case else "") + "}"
+
+
 class BackendStub():
 
     def get_content(self, tag_names, languages):
@@ -123,6 +159,9 @@ class BackendStub():
         "a_poor#f": {
             "pl": "kiepska",
         },
+        "a_poor#mg": {
+            "pl": "kiepskiego",
+        },
         "entity_wand": {
             "en": "wand",
             "pl": "różdżka",
@@ -179,8 +218,27 @@ class BackendStub():
         "missing_tag": {
             "pl": "lala ${hehe}",
         },
-
-
+        "event_hit_others": {
+            "pl": "Widzisz, że ${attacker:char_info} uderzył%{attacker:m?|f?a} ${victim:char_info}.",
+        },
+        "event_hit_others_weapon": {
+            "pl": "Widzisz, że ${attacker:char_info} uderzył%{attacker:m?|f?a} ${victim:char_info} używając ${object_info#g}.",
+        },
+        "info_victim": {
+            "pl": "Ofiara wypadku to %{victim:f?kobieta|m?mężczyzna}",
+        },
+        "entity_doughroller": {
+            "pl": "wałek",
+            "grammar": {
+                "pl": "m",
+            }
+        },
+        "entity_doughroller#g": {
+            "pl": "wałka",
+            "grammar": {
+                "pl": "m",
+            }
+        },
     }
     # endregion
     """
@@ -301,33 +359,6 @@ class TestTranslationsPolish(unittest.TestCase):
 
     def test_detailed_function(self):
 
-        class Item:
-
-            def __init__(self, item_id, name, quality=0):
-                self.item_id = item_id
-                self.name = name
-                self.quality = quality
-
-        def get_quality_tag(quality):
-            if quality > 5:
-                return "a_masterwork"
-            else:
-                return "a_poor"
-
-        def obj_fun(s, name, params):
-            item_name = params["item_name"]  # fallback which must always be available
-            quality_tag = ""
-            grammar = ""
-            if "item" in params and params["item"]:
-                item_name = params["item"].name
-                quality_tag = get_quality_tag(params["item"].quality)
-                grammar = s._get_raw_grammar("entity_" + item_name)
-
-            if quality_tag:
-                quality_tag = "${" + quality_tag + ("#" + grammar if grammar else "") + "} "
-
-            return quality_tag + "${entity_" + item_name + "}"
-
         self.pys.register_function("object_info", obj_fun)
 
         self.assertEqual("wspaniale wykonany młotek",
@@ -382,6 +413,26 @@ class TestTranslationsPolish(unittest.TestCase):
 
         self.assertEqual("Powiedziałam jej, że to głupie, a ona powiedziała mi to samo.",
                          self.pys.t("talking_the_same2", me="f", sb="f"))
+
+    def test_variants_with_grammar_from_inner_tag(self):
+        def char_info(helper, name, params):
+            char_name = "Rysiek" if params["char_id"] == 1 else "Grażyna"
+            helper.return_grammar("m" if char_name == "Rysiek" else "f")
+            return char_name
+
+        self.pys.register_function("char_info", char_info)
+
+        self.assertEqual("Widzisz, że Rysiek uderzył Grażyna.",
+                         self.pys.t("event_hit_others", groups={"attacker": {"char_id": 1}, "victim": {"char_id": 3}}))
+
+        self.assertEqual("Widzisz, że Grażyna uderzyła Rysiek.",
+                         self.pys.t("event_hit_others", groups={"attacker": {"char_id": 3}, "victim": {"char_id": 1}}))
+
+        self.pys.register_function("object_info", obj_fun)
+
+        self.assertEqual("Widzisz, że Grażyna uderzyła Rysiek używając kiepskiego wałka.",
+                         self.pys.t("event_hit_others_weapon", groups={"attacker": {"char_id": 3}, "victim": {"char_id": 1}},
+                                    item=Item(13, "doughroller", quality=2), item_name="doughroller"))
 
     def test_tag_variant(self):
         self.assertEqual("Kupiłem pizzę.",
