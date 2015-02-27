@@ -434,6 +434,10 @@ class TestTranslationsPolish(unittest.TestCase):
                          self.pys.t("event_hit_others_weapon", groups={"attacker": {"char_id": 3}, "victim": {"char_id": 1}},
                                     item=Item(13, "doughroller", quality=2), item_name="doughroller"))
 
+        # "f" should be default, but it may be overwritten by incorrect implementation of the variant tag in the test above
+        self.assertEqual("Ofiara wypadku to kobieta.", self.pys.t("info_victim"))
+        self.assertEqual("Ofiara wypadku to mężczyzna.", self.pys.t("info_victim", victim="m"))
+
     def test_tag_variant(self):
         self.assertEqual("Kupiłem pizzę.",
                          self.pys.t("buying_the_pizza#m"))

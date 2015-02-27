@@ -3,6 +3,7 @@ from pyslate2.locales import LOCALES
 from pyslate2.parser import InnerTag, Placeholder, Variants
 import numbers
 
+
 class Pyslate:
 
     def __init__(self, language, backend=None, config=PyslateConfig()):
@@ -148,7 +149,6 @@ class Pyslate:
         param_name = "variant"
         if node.tag_id:
             param_name = node.tag_id
-
 
         print("ZAPAMIETANE: ", self.tags_grammar)
         if param_name in kwargs and kwargs[param_name] in node.variants:
