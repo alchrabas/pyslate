@@ -6,7 +6,7 @@ import numbers
 
 class Pyslate:
 
-    def __init__(self, language, backend=None, config=PyslateConfig()):
+    def __init__(self, language, backend=None, config=PyslateConfig(), context={}):
         self.config = config
 
         self.language = language
@@ -16,7 +16,7 @@ class Pyslate:
         self.global_fallback = config.GLOBAL_FALLBACK_LANGUAGE
         self.functions = {}
         self.parser = config.PARSER_CLASS()
-        self.tags_grammar = {} # todo
+        self.context = context
 
     def translate(self, tag_name, **kwargs):
         return self._translate(tag_name, **kwargs)[0]
@@ -39,7 +39,7 @@ class Pyslate:
             t9n, grammar = self._get_raw_content(tag_name), self._get_raw_grammar(tag_name)
 
         nodes = self.parser.parse(t9n)
-        print(nodes)
+
         t9n = self.traverse(nodes, kwargs)
 
         return t9n, grammar
@@ -70,12 +70,17 @@ class Pyslate:
     t = translate
     l = localize
 
-
     def set_fallback_language(self, base_language, fallback_language):
         self.fallbacks[base_language] = fallback_language
 
     def set_global_fallback(self, fallback_language):
         self.global_fallback = fallback_language
+
+    def set_context(self, context):
+        self.context = context
+
+    def append_to_context(self, **kwargs):
+        self.context.update(kwargs)
 
     def _get_languages(self):
         languages = [self.language]
@@ -140,7 +145,6 @@ class Pyslate:
             return text, {}
         return text, {node.tag_id: grammar}
 
-
     def _replace_placeholder_or_variant(self, node, kwargs, grammars):
         if type(node) is str:  # just return the string
             return node
@@ -154,20 +158,25 @@ class Pyslate:
             raise PyslateException("invalid node: " + str(type(node)) + " in parsed text")
 
     def _replace_placeholder(self, node, kwargs):
+        if node.contents not in kwargs and node.contents not in self.context:
+            return "[MISSING VALUE FOR '{0}']".format(node.contents)
+
+        value = ""
         if node.contents in kwargs:
             value = kwargs[node.contents]
-            if isinstance(value, float):
-                value = self.localize(value)
-            return str(value)
-        return "[MISSING VALUE FOR '{0}']".format(node.contents)
+        elif node.contents in self.context:
+            value = kwargs[node.contents]
+
+        if isinstance(value, float):
+            value = self.localize(value)
+
+        return str(value)
 
     def _replace_variants(self, node, kwargs, grammars):
         param_name = "variant"
         if node.tag_id:
             param_name = node.tag_id
 
-        if grammars:
-            print("ZAPAMIETANE: ", grammars)
         if param_name in kwargs and kwargs[param_name] in node.variants:
             return node.variants[kwargs[param_name]]
         elif param_name in grammars and grammars[param_name] in node.variants:

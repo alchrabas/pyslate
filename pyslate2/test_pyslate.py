@@ -456,9 +456,7 @@ class TestTranslationsPolish(unittest.TestCase):
 
         def fun_tajnosc(helper, name, params):
             text = helper.translation("tajnosc")
-            print(text)
             item_grammar = helper.grammar("entity_" + params["item_name"])
-            print(item_grammar)
             helper.return_grammar(item_grammar)
             return text
 
