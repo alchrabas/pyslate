@@ -1,6 +1,6 @@
 from pyslate2.config import PyslateConfig
 from pyslate2.locales import LOCALES
-from pyslate2.parser import InnerTag, Placeholder, Variants
+from pyslate2.parser import InnerTag, Placeholder, Variants, PyslateException
 import numbers
 
 
@@ -40,7 +40,7 @@ class Pyslate:
 
         nodes = self.parser.parse(t9n)
         print(nodes)
-        t9n = "".join([self.traverse(node, kwargs) for node in nodes])
+        t9n = self.traverse(nodes, kwargs)
 
         return t9n, grammar
 
@@ -111,31 +111,47 @@ class Pyslate:
         languages = self._get_languages()
         return self.backend.get_grammar(requested_tags, languages)
 
-    def traverse(self, node, kwargs):
-        if type(node) is InnerTag:
-            tag_name = "".join([self.traverse(child, kwargs) for child in node.contents])
-            if not self.config.ALLOW_INNER_TAGS:  # when inner tags are disabled then print them as-is
-                return "${" + tag_name + "}"
-            final_kwargs = kwargs
+    def traverse(self, nodes, kwargs):
+        nodes_with_inner = []
+        grammars = {}
+        for node in nodes:
+            text, grammar = self._replace_inner_tag_or_pass(node, kwargs)
+            nodes_with_inner.append(text)
+            grammars.update(grammar)
+        nodes = [self._replace_placeholder_or_variant(node, kwargs, grammars) for node in nodes_with_inner]
+        return "".join(nodes)
 
-            if node.tag_id:
-                if "groups" in kwargs:
-                    final_kwargs = dict(kwargs)
-                    del final_kwargs["groups"]
-                    final_kwargs.update(kwargs["groups"][node.tag_id])
+    def _replace_inner_tag_or_pass(self, node, kwargs):
+        if type(node) is not InnerTag:  # do nothing
+            return node, {}
+        tag_name = self.traverse(node.contents, kwargs)
+        if not self.config.ALLOW_INNER_TAGS:  # when inner tags are disabled then print them as-is
+            return "${" + tag_name + "}", {}
+        final_kwargs = kwargs
 
-            text, grammar = self._translate(tag_name, **final_kwargs)
-            if node.tag_id:
-                self.tags_grammar[node.tag_id] = grammar
-            return text
+        if node.tag_id:
+            if "groups" in kwargs:
+                final_kwargs = dict(kwargs)
+                del final_kwargs["groups"]
+                final_kwargs.update(kwargs["groups"][node.tag_id])
+
+        text, grammar = self._translate(tag_name, **final_kwargs)
+        if not node.tag_id:
+            return text, {}
+        return text, {node.tag_id: grammar}
+
+
+    def _replace_placeholder_or_variant(self, node, kwargs, grammars):
+        if type(node) is str:  # just return the string
+            return node
         elif type(node) is Placeholder:
             return self._replace_placeholder(node, kwargs)
         elif type(node) is Variants:
-            if not self.config.ALLOW_VARIANTS_STRUCTURE:
+            if not self.config.ALLOW_VARIANTS_STRUCTURE:  # todo
                 return ""
-            return self._replace_variants(node, kwargs)
-        elif type(node) is str:
-            return node
+            return self._replace_variants(node, kwargs, grammars)
+        else:
+            raise PyslateException("invalid node: " + str(type(node)) + " in parsed text")
 
     def _replace_placeholder(self, node, kwargs):
         if node.contents in kwargs:
@@ -145,16 +161,17 @@ class Pyslate:
             return str(value)
         return "[MISSING VALUE FOR '{0}']".format(node.contents)
 
-    def _replace_variants(self, node, kwargs):
+    def _replace_variants(self, node, kwargs, grammars):
         param_name = "variant"
         if node.tag_id:
             param_name = node.tag_id
 
-        print("ZAPAMIETANE: ", self.tags_grammar)
+        if grammars:
+            print("ZAPAMIETANE: ", grammars)
         if param_name in kwargs and kwargs[param_name] in node.variants:
             return node.variants[kwargs[param_name]]
-        elif param_name in self.tags_grammar and self.tags_grammar[param_name] in node.variants:
-            return node.variants[self.tags_grammar[param_name]]
+        elif param_name in grammars and grammars[param_name] in node.variants:
+            return node.variants[grammars[param_name]]
         else:
             return node.variants[node.first_key]
 
@@ -166,7 +183,7 @@ class PyslateHelper:
         self.returned_grammar = None
 
     def translation(self, tag_name):
-        self.pyslate._get_raw_content(tag_name)
+        return self.pyslate._get_raw_content(tag_name)
 
     def translation_and_grammar(self, tag_name):
         return self.translation(tag_name), self.grammar(tag_name)

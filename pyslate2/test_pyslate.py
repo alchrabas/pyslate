@@ -225,13 +225,22 @@ class BackendStub():
             "pl": "Widzisz, że ${attacker:char_info} uderzył%{attacker:m?|f?a} ${victim:char_info} używając ${object_info#g}.",
         },
         "info_victim": {
-            "pl": "Ofiara wypadku to %{victim:f?kobieta|m?mężczyzna}",
+            "pl": "Ofiara wypadku to %{victim:f?kobieta|m?mężczyzna}.",
         },
         "entity_doughroller": {
             "pl": "wałek",
             "grammar": {
                 "pl": "m",
             }
+        },
+        "char_victim": {
+            "pl": "${tajnosc} Jest %{victim:x?[NO DATA]|f?fajna|m?fajny|n?fajne}.",
+        },
+        "char_victim2": {
+            "pl": "${victim:fun_tajnosc} Jest %{victim:x?[NO DATA]|f?fajna|m?fajny|n?fajne}.",
+        },
+        "tajnosc": {
+            "pl": "Zniszczono %{victim:f?nową|m?nowy|n?nowe} ${victim:entity_%{item_name}}.",
         },
         "entity_doughroller#g": {
             "pl": "wałka",
@@ -434,9 +443,27 @@ class TestTranslationsPolish(unittest.TestCase):
                          self.pys.t("event_hit_others_weapon", groups={"attacker": {"char_id": 3}, "victim": {"char_id": 1}},
                                     item=Item(13, "doughroller", quality=2), item_name="doughroller"))
 
-        # "f" should be default, but it may be overwritten by incorrect implementation of the variant tag in the test above
+        # "f" should be default, but it may be overwritten by the variant tag in the test above
+        # in case of incorrect implementation that uses global context
         self.assertEqual("Ofiara wypadku to kobieta.", self.pys.t("info_victim"))
         self.assertEqual("Ofiara wypadku to mężczyzna.", self.pys.t("info_victim", victim="m"))
+
+        # it should be IMPOSSIBLE to get grammar from context of its inner tag
+        self.assertEqual("Zniszczono nowy wałek. Jest [NO DATA].", self.pys.t("char_victim", item_name="doughroller"))
+
+    # correct way of doing the example from above is to use custom function which returns the grammar for specific item
+    def test_variants_with_grammar_from_inner_tag_by_function(self):
+
+        def fun_tajnosc(helper, name, params):
+            text = helper.translation("tajnosc")
+            print(text)
+            item_grammar = helper.grammar("entity_" + params["item_name"])
+            print(item_grammar)
+            helper.return_grammar(item_grammar)
+            return text
+
+        self.pys.register_function("fun_tajnosc", fun_tajnosc)
+        self.assertEqual("Zniszczono nowy wałek. Jest fajny.", self.pys.t("char_victim2", item_name="doughroller"))
 
     def test_tag_variant(self):
         self.assertEqual("Kupiłem pizzę.",
