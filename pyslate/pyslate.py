@@ -202,6 +202,3 @@ class PyslateHelper:
 
     def return_grammar(self, grammar):
         self.returned_grammar = grammar
-
-
-
