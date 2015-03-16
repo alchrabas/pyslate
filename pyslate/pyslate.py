@@ -1,6 +1,6 @@
-from pyslate2.config import PyslateConfig
-from pyslate2.locales import LOCALES
-from pyslate2.parser import InnerTag, Placeholder, Variants, PyslateException
+from pyslate.config import PyslateConfig
+from pyslate.locales import LOCALES
+from pyslate.parser import InnerTag, Placeholder, Variants, PyslateException
 import numbers
 
 

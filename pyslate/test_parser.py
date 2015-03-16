@@ -1,7 +1,7 @@
 __author__ = 'aleksander chrabaszcz'
 
 import unittest
-from pyslate2.parser import PyLexer, PyParser, InnerTag, Placeholder, Variants, PyslateException
+from pyslate.parser import PyLexer, PyParser, InnerTag, Placeholder, Variants, PyslateException
 
 
 class LexerTest(unittest.TestCase):
