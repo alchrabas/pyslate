@@ -110,5 +110,4 @@ class ParserTest(unittest.TestCase):
 
     def test_variadic(self):
         result = self.parser.parse("Kupił%{gen:m?em|f?am} kosiarkę.")
-        print(result)
         self.assertEqual(["Kupił", Variants({"m": "em", "f": "am"}, "m", tag_id="gen"), " kosiarkę."], result)
