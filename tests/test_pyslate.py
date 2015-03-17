@@ -1,6 +1,6 @@
 import unittest
-from pyslate2.config import DefaultConfig
-from pyslate2.pyslate import Pyslate
+from pyslate.config import DefaultConfig
+from pyslate.pyslate import Pyslate
 
 
 class Item:

@@ -1,8 +1,8 @@
 __author__ = 'Aleksander Chrabaszcz'
-from pyslate2.cache import SimpleMemoryCache
+from pyslate.cache import SimpleMemoryCache
 
-from pyslate2.backend import PyslateJsonBackend
-from pyslate2.parser import PyParser
+from pyslate.backend import PyslateJsonBackend
+from pyslate.parser import PyParser
 
 # DO NOT ALTER THIS FILE!!!
 # DO NOT ALTER THIS FILE!!!

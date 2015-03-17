@@ -1,8 +1,8 @@
 from collections import namedtuple
 import datetime
-from pyslate2.config import DefaultConfig
-from pyslate2.locales import LOCALES
-from pyslate2.parser import InnerTagField, VariableField, SwitchField, PyslateException
+from pyslate.config import DefaultConfig
+from pyslate.locales import LOCALES
+from pyslate.parser import InnerTagField, VariableField, SwitchField, PyslateException
 import numbers
 
 
@@ -197,6 +197,7 @@ class Pyslate:
 
         if isinstance(value, float):
             value = self.localize(value)
+
         return str(value)
 
     def _replace_switch_fields(self, node, kwargs, grammars):
