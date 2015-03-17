@@ -201,7 +201,7 @@ class SwitchField:
         self.tag_id = tag_id
 
     def __eq__(self, other):
-        return self.cases == other.variants and self.first_key == other.first_key
+        return self.cases == other.cases and self.first_key == other.first_key
 
     def __repr__(self):
         return "variants(" + str(self.cases) + ", " + self.first_key + ")"

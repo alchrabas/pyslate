@@ -1,7 +1,7 @@
 __author__ = 'aleksander chrabaszcz'
 
 import unittest
-from pyslate.parser import PyLexer, PyParser, InnerTag, Placeholder, Variants, PyslateException
+from pyslate.parser import PyLexer, PyParser, InnerTagField, VariableField, SwitchField, PyslateException
 
 
 class LexerTest(unittest.TestCase):
@@ -110,4 +110,5 @@ class ParserTest(unittest.TestCase):
 
     def test_variadic(self):
         result = self.parser.parse("Kupił%{gen:m?em|f?am} kosiarkę.")
+
         self.assertEqual(["Kupił", SwitchField({"m": "em", "f": "am"}, "m", tag_id="gen"), " kosiarkę."], result)
