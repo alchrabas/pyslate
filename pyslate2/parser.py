@@ -95,15 +95,15 @@ class PyParser:
 
     def p_pholder_tag(self, p):
         """pholder_tag : PERC_LBRACE plaintext RBRACE"""
-        p[0] = Placeholder(p[2])
+        p[0] = VariableField(p[2])
 
     def p_variants_tag(self, p):
         """pholder_tag : PERC_LBRACE variants RBRACE
                        | PERC_LBRACE plaintext COLON variants RBRACE """
         if len(p) == 6:
-            p[0] = Variants(p[4][0], p[4][1], tag_id=p[2])
+            p[0] = SwitchField(p[4][0], p[4][1], tag_id=p[2])
         else:
-            p[0] = Variants(p[2][0], p[2][1])
+            p[0] = SwitchField(p[2][0], p[2][1])
 
     def p_variants_variant_next(self, p):
         """variants : variant PIPE variants
@@ -127,9 +127,9 @@ class PyParser:
         """inner_tag : DOL_LBRACE inner_tag_name RBRACE
                      | DOL_LBRACE plaintext COLON inner_tag_name RBRACE"""
         if len(p) == 6:
-            p[0] = InnerTag(p[4], tag_id=p[2])
+            p[0] = InnerTagField(p[4], tag_id=p[2])
         else:
-            p[0] = InnerTag(p[2])
+            p[0] = InnerTagField(p[2])
 
     def p_inner_tag_name(self, p):
         """inner_tag_name : plaintext inner_tag_cont
@@ -171,7 +171,7 @@ class PyParser:
         return self.parser.parse(data, lexer=self.lexer, **kwargs)
 
 
-class InnerTag:
+class InnerTagField:
     def __init__(self, contents, tag_id=None):
         self.contents = contents
         self.tag_id = tag_id
@@ -183,7 +183,7 @@ class InnerTag:
         return "inner tag (" + str(self.contents) + ", " + str(self.tag_id) + ")"
 
 
-class Placeholder:
+class VariableField:
     def __init__(self, contents):
         self.contents = contents
 
@@ -194,17 +194,17 @@ class Placeholder:
         return "placeholder(" + str(self.contents) + ")"
 
 
-class Variants:
-    def __init__(self, variants, first_key, tag_id=None):
+class SwitchField:
+    def __init__(self, cases, first_key, tag_id=None):
         self.first_key = first_key
-        self.variants = variants
+        self.cases = cases
         self.tag_id = tag_id
 
     def __eq__(self, other):
-        return self.variants == other.variants and self.first_key == other.first_key
+        return self.cases == other.variants and self.first_key == other.first_key
 
     def __repr__(self):
-        return "variants(" + str(self.variants) + ", " + self.first_key + ")"
+        return "variants(" + str(self.cases) + ", " + self.first_key + ")"
 
 
 class PyslateException(Exception):

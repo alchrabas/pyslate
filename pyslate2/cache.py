@@ -1,7 +1,7 @@
 __author__ = 'Aleksander Chrabaszcz'
 
 
-class PyslateCache:
+class SimpleMemoryCache:
 
     def __init__(self):
         self.cache = {}

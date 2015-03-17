@@ -1,5 +1,5 @@
 import unittest
-from pyslate2.config import PyslateConfig
+from pyslate2.config import DefaultConfig
 from pyslate2.pyslate import Pyslate
 
 
@@ -341,6 +341,23 @@ class TestTranslationsEnglish(unittest.TestCase):
         self.assertEqual("You attack an elk using a sword.",
                          self.pys.t("hunting_hunter", animal="elk", item_name="sword"))
 
+    def test_deterministic_function(self):
+
+        calls_count = 0
+
+        def fun(helper, tag_name, params):
+            nonlocal calls_count
+            calls_count += 1
+            return ":)"
+
+        self.pys.register_function("fun", fun, is_deterministic=True)
+
+        self.assertEqual(":)", self.pys.t("fun"))
+        self.assertEqual(":)", self.pys.t("fun"))
+        self.assertEqual(":)", self.pys.t("fun"))
+
+        self.assertEqual(1, calls_count)  # make sure that function was called just once
+
 
 class TestTranslationsPolish(unittest.TestCase):
 
@@ -484,7 +501,7 @@ class TestTranslationsPolish(unittest.TestCase):
 class TestConfigPolishTranslations(unittest.TestCase):
 
     def test_no_inner_tags(self):
-        config = PyslateConfig()
+        config = DefaultConfig()
         config.ALLOW_INNER_TAGS = False
         self.pys = Pyslate("pl", backend=BackendStub(), config=config)
 

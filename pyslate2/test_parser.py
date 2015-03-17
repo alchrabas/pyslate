@@ -1,7 +1,7 @@
 __author__ = 'aleksander chrabaszcz'
 
 import unittest
-from pyslate2.parser import PyLexer, PyParser, InnerTag, Placeholder, Variants, PyslateException
+from pyslate2.parser import PyLexer, PyParser, InnerTagField, VariableField, SwitchField, PyslateException
 
 
 class LexerTest(unittest.TestCase):
@@ -66,10 +66,10 @@ class ParserTest(unittest.TestCase):
         self.assertEqual(['aaa'], result)
 
         result = self.parser.parse("${aaa}")
-        self.assertEqual([InnerTag(['aaa'])], result)
+        self.assertEqual([InnerTagField(['aaa'])], result)
 
         result = self.parser.parse("%{aaa}")
-        self.assertEqual([Placeholder('aaa')], result)
+        self.assertEqual([VariableField('aaa')], result)
 
     def test_escape(self):
 
@@ -96,7 +96,7 @@ class ParserTest(unittest.TestCase):
 
     def test_complicated(self):
         result = self.parser.parse("${entity_%{item}}")
-        self.assertEqual([InnerTag(["entity_", Placeholder("item")])], result)
+        self.assertEqual([InnerTagField(["entity_", VariableField("item")])], result)
 
         # placeholder name based on inner tag is not allowed
         with self.assertRaises(PyslateException):
@@ -104,11 +104,11 @@ class ParserTest(unittest.TestCase):
 
     def test_named_inner_tags(self):
         result = self.parser.parse("You see ${giver:char_info} give ${entity_%{item_name}#u} to ${taker:char_info}.")
-        self.assertEqual(["You see ", InnerTag(["char_info"], tag_id="giver"), " give ",
-                          InnerTag(["entity_", Placeholder("item_name"), "#u"]), " to ",
-                          InnerTag(["char_info"], tag_id="taker"), "."], result)
+        self.assertEqual(["You see ", InnerTagField(["char_info"], tag_id="giver"), " give ",
+                          InnerTagField(["entity_", VariableField("item_name"), "#u"]), " to ",
+                          InnerTagField(["char_info"], tag_id="taker"), "."], result)
 
     def test_variadic(self):
         result = self.parser.parse("Kupił%{gen:m?em|f?am} kosiarkę.")
         print(result)
-        self.assertEqual(["Kupił", Variants({"m": "em", "f": "am"}, "m", tag_id="gen"), " kosiarkę."], result)
+        self.assertEqual(["Kupił", SwitchField({"m": "em", "f": "am"}, "m", tag_id="gen"), " kosiarkę."], result)
