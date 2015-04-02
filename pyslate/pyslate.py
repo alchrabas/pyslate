@@ -17,7 +17,11 @@ class Pyslate:
         self.cache = cache if cache else (config.CACHE_CLASS() if self.config.ALLOW_CACHE else None)
         self.fallbacks = {}
         self.global_fallback = config.GLOBAL_FALLBACK_LANGUAGE
+
+        self.decorators = {}
         self.functions = {}
+
+        # info about being deterministic and memory for pure functions is common for decorators and functions
         self.functions_deterministic = {}
         self.functions_memory = {}
 
@@ -36,6 +40,8 @@ class Pyslate:
             fallback = self._first_left_value_from(LOCALES, self._get_languages())["number_rule"](kwargs["number"])
             tag_name = tag_name.partition("#")[0] + "#" + fallback
 
+        decorators = tag_name.split("@")[1:]
+        tag_name = tag_name.split("@")[0]
         tag_base = tag_name.partition("#")[0]
         variant = tag_name.partition("#")[2]
         kwargs["tag_v"] = variant
@@ -43,21 +49,24 @@ class Pyslate:
         if tag_base in self.functions:
             if (self.functions_deterministic[tag_base]  # deterministic function so maybe result is already known
                     and tuple(sorted(kwargs.items())) in self.functions_memory[tag_name]):
-                t9n, grammar = self.functions_memory[tag_name][tuple(sorted(kwargs.items()))]
+                t9n, form = self.functions_memory[tag_name][tuple(sorted(kwargs.items()))]
             else:
                 helper = PyslateHelper(self)
                 t9n = self.functions[tag_base](helper, tag_name, kwargs)
-                grammar = helper.returned_grammar
+                form = helper.returned_form
                 if self.functions_deterministic[tag_base]:
-                    self.functions_memory[tag_name][tuple(sorted(kwargs.items()))] = (t9n, grammar)
+                    self.functions_memory[tag_name][tuple(sorted(kwargs.items()))] = (t9n, form)
         else:
-            t9n, grammar = self._get_raw_content(tag_name), self._get_raw_grammar(tag_name)
+            t9n, form = self._get_raw_content(tag_name), self._get_raw_form(tag_name)
 
         nodes = self.parser.parse(t9n)
 
         t9n = self.traverse(nodes, kwargs)
 
-        return t9n, grammar
+        for decorator_name in decorators:
+            t9n = self._call_decorator(decorator_name, t9n)
+
+        return t9n, form
 
     def _first_left_value_from(self, dictionary, keys):
         for key in keys:
@@ -103,7 +112,16 @@ class Pyslate:
     def append_to_context(self, **kwargs):
         self.context.update(kwargs)
 
+    def register_decorator(self, decorator_name, function, is_deterministic=False):
+        if decorator_name in self.functions:
+            del self.functions[decorator_name]
+        self.decorators[decorator_name] = function
+        self.functions_deterministic[decorator_name] = is_deterministic
+        self.functions_memory[decorator_name] = {}
+
     def register_function(self, tag_name, function, is_deterministic=False):
+        if tag_name in self.decorators:
+            del self.functions[tag_name]
         self.functions[tag_name] = function
         self.functions_deterministic[tag_name] = is_deterministic
         self.functions_memory[tag_name] = {}
@@ -134,24 +152,24 @@ class Pyslate:
         languages += [self.global_fallback]
         return languages
 
-    def _get_raw_grammar(self, tag_name):
-        """Gets and returns grammar from backend considering all possible tag and language fallbacks
-        Returns none if no grammar is set"""
+    def _get_raw_form(self, tag_name):
+        """Gets and returns grammatical form from backend considering all possible tag and language fallbacks
+        Returns none if no form is set"""
         requested_tags = [tag_name]
         if "#" in tag_name:
             requested_tags += [tag_name.partition("#")[0]]
 
         languages = self._get_languages()
-        return self.backend.get_grammar(requested_tags, languages)
+        return self.backend.get_form(requested_tags, languages)
 
     def traverse(self, nodes, kwargs):
         nodes_with_inner = []
-        grammars = {}
+        forms = {}
         for node in nodes:
-            text, grammar = self._replace_inner_tag_or_pass(node, kwargs)
+            text, form = self._replace_inner_tag_or_pass(node, kwargs)
             nodes_with_inner.append(text)
-            grammars.update(grammar)
-        nodes = [self._replace_variable_or_switch_field(node, kwargs, grammars) for node in nodes_with_inner]
+            forms.update(form)
+        nodes = [self._replace_variable_or_switch_field(node, kwargs, forms) for node in nodes_with_inner]
         return "".join(nodes)
 
     def _replace_inner_tag_or_pass(self, node, kwargs):
@@ -168,12 +186,12 @@ class Pyslate:
                 del final_kwargs["groups"]
                 final_kwargs.update(kwargs["groups"][node.tag_id])
 
-        text, grammar = self._translate(tag_name, **final_kwargs)
+        text, form = self._translate(tag_name, **final_kwargs)
         if not node.tag_id:
             return text, {}
-        return text, {node.tag_id: grammar}
+        return text, {node.tag_id: form}
 
-    def _replace_variable_or_switch_field(self, node, kwargs, grammars):
+    def _replace_variable_or_switch_field(self, node, kwargs, forms):
         if type(node) is str:  # just return the string
             return node
         elif type(node) is VariableField:
@@ -181,7 +199,7 @@ class Pyslate:
         elif type(node) is SwitchField:
             if not self.config.ALLOW_SWITCH_FIELDS:
                 return ""
-            return self._replace_switch_fields(node, kwargs, grammars)
+            return self._replace_switch_fields(node, kwargs, forms)
         else:
             raise PyslateException("invalid node: " + str(type(node)) + " in parsed text")
 
@@ -195,41 +213,47 @@ class Pyslate:
         elif node.contents in self.context:
             value = kwargs[node.contents]
 
+        for decorator_name in node.decorators:
+            value = self._call_decorator(decorator_name, value)
+
         if isinstance(value, float):
             value = self.localize(value)
 
         return str(value)
 
-    def _replace_switch_fields(self, node, kwargs, grammars):
+    def _replace_switch_fields(self, node, kwargs, forms):
         param_name = "variant"
         if node.tag_id:
             param_name = node.tag_id
 
         if param_name in kwargs and kwargs[param_name] in node.cases:
             return node.cases[kwargs[param_name]]
-        elif param_name in grammars and grammars[param_name] in node.cases:
-            return node.cases[grammars[param_name]]
+        elif param_name in forms and forms[param_name] in node.cases:
+            return node.cases[forms[param_name]]
         else:
             return node.cases[node.first_key]
+
+    def _call_decorator(self, decorator_name, value):
+        return self.decorators[decorator_name](value)
 
 
 class PyslateHelper:
 
     def __init__(self, pyslate):
         self.pyslate = pyslate
-        self.returned_grammar = None
+        self.returned_form = None
 
     def translation(self, tag_name):
         return self.pyslate._get_raw_content(tag_name)
 
-    def translation_and_grammar(self, tag_name):
-        return self.translation(tag_name), self.grammar(tag_name)
+    def translation_and_form(self, tag_name):
+        return self.translation(tag_name), self.form(tag_name)
 
-    def grammar(self, tag_name):
-        return self.pyslate._get_raw_grammar(tag_name)
+    def form(self, tag_name):
+        return self.pyslate._get_raw_form(tag_name)
 
-    def return_grammar(self, grammar):
-        self.returned_grammar = grammar
+    def return_form(self, form):
+        self.returned_form = form
 
 
 

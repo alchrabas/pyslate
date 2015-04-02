@@ -20,7 +20,7 @@ def get_quality_tag(quality):
 def obj_fun(helper, name, params):
     item_name = params["item_name"]  # fallback which must always be available
     quality_tag = ""
-    grammar = ""
+    form = ""
     case = ""
 
     if "#" in name:
@@ -29,12 +29,12 @@ def obj_fun(helper, name, params):
     if "item" in params and params["item"]:
         item_name = params["item"].name
         quality_tag = get_quality_tag(params["item"].quality)
-        grammar = helper.grammar("entity_" + item_name) if helper.grammar("entity_" + item_name) else ""
+        form = helper.form("entity_" + item_name) if helper.form("entity_" + item_name) else ""
 
-    grammar += case
+    form += case
 
     if quality_tag:
-        quality_tag = "${" + quality_tag + ("#" + grammar if grammar else "") + "} "
+        quality_tag = "${" + quality_tag + ("#" + form if form else "") + "} "
 
     return quality_tag + "${entity_" + item_name + ("#" + case if case else "") + "}"
 
@@ -48,12 +48,12 @@ class BackendStub():
                     return BackendStub.TAGS[tag_name][language]
         return None
 
-    def get_grammar(self, tag_names, languages):
+    def get_form(self, tag_names, languages):
         for language in languages:
             for tag_name in tag_names:
                 if language in BackendStub.TAGS.get(tag_name, {}):
-                    if "grammar" in BackendStub.TAGS[tag_name] and language in BackendStub.TAGS[tag_name]["grammar"]:
-                        return BackendStub.TAGS[tag_name]["grammar"][language]
+                    if "form" in BackendStub.TAGS[tag_name] and language in BackendStub.TAGS[tag_name]["form"]:
+                        return BackendStub.TAGS[tag_name]["form"][language]
                     else:
                         return None
 
@@ -74,6 +74,7 @@ class BackendStub():
         },
         "entity_sword": {
             "en": "a sword",
+            "pl": "miecz",
         },
         "entity_sword#m": {
             "en": "%{number} swords",
@@ -165,7 +166,7 @@ class BackendStub():
         "entity_wand": {
             "en": "wand",
             "pl": "różdżka",
-            "grammar": {
+            "form": {
                 "en": "c",
                 "pl": "f",
             }
@@ -229,7 +230,7 @@ class BackendStub():
         },
         "entity_doughroller": {
             "pl": "wałek",
-            "grammar": {
+            "form": {
                 "pl": "m",
             }
         },
@@ -244,7 +245,7 @@ class BackendStub():
         },
         "entity_doughroller#g": {
             "pl": "wałka",
-            "grammar": {
+            "form": {
                 "pl": "m",
             }
         },
@@ -383,6 +384,14 @@ class TestTranslationsPolish(unittest.TestCase):
         self.assertEqual("Atakujesz łosia przy pomocy miecza.",
                          self.pys.t("hunting_hunter", animal="elk", item_name="sword"))
 
+    def test_decorators(self):
+
+        self.pys.register_decorator("capitalize", str.capitalize)
+
+        self.assertEqual("miecz", self.pys.t("entity_sword"))
+        self.assertEqual("Miecz", self.pys.t("entity_sword@capitalize"))
+
+
     def test_detailed_function(self):
 
         self.pys.register_function("object_info", obj_fun)
@@ -440,10 +449,10 @@ class TestTranslationsPolish(unittest.TestCase):
         self.assertEqual("Powiedziałam jej, że to głupie, a ona powiedziała mi to samo.",
                          self.pys.t("talking_the_same2", me="f", sb="f"))
 
-    def test_variants_with_grammar_from_inner_tag(self):
+    def test_variants_with_grammatical_form_from_inner_tag(self):
         def char_info(helper, name, params):
             char_name = "Rysiek" if params["char_id"] == 1 else "Grażyna"
-            helper.return_grammar("m" if char_name == "Rysiek" else "f")
+            helper.return_form("m" if char_name == "Rysiek" else "f")
             return char_name
 
         self.pys.register_function("char_info", char_info)
@@ -465,16 +474,17 @@ class TestTranslationsPolish(unittest.TestCase):
         self.assertEqual("Ofiara wypadku to kobieta.", self.pys.t("info_victim"))
         self.assertEqual("Ofiara wypadku to mężczyzna.", self.pys.t("info_victim", victim="m"))
 
-        # it should be IMPOSSIBLE to get grammar from context of its inner tag
+        # it should be IMPOSSIBLE to get form from context of its inner tag, because it's local to InnerTagField
         self.assertEqual("Zniszczono nowy wałek. Jest [NO DATA].", self.pys.t("char_victim", item_name="doughroller"))
 
-    # correct way of doing the example from above is to use custom function which returns the grammar for specific item
-    def test_variants_with_grammar_from_inner_tag_by_function(self):
+    # correct way of doing the example from above is to use custom function
+    # which returns the grammatical form for specific item
+    def test_variants_with_form_from_inner_tag_by_function(self):
 
         def fun_tajnosc(helper, name, params):
             text = helper.translation("tajnosc")
-            item_grammar = helper.grammar("entity_" + params["item_name"])
-            helper.return_grammar(item_grammar)
+            item_form = helper.form("entity_" + params["item_name"])
+            helper.return_form(item_form)
             return text
 
         self.pys.register_function("fun_tajnosc", fun_tajnosc)

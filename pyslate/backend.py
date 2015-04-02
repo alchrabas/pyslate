@@ -11,5 +11,5 @@ class PyslateJsonBackend:
     def get_content(self, tag_names, languages):
         return [PyslateJsonBackend.TAGS[tag_name][languages]for tag_name in tag_names]
 
-    def get_grammar(self, tag_names, languages):
+    def get_form(self, tag_names, languages):
         pass
