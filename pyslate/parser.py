@@ -48,7 +48,8 @@ class PyLexer:
             t.type = "PLAINTEXT"
         return t
 
-    t_PLAINTEXT = r'([^\$@%{}\\:|?]|[^\$%}\\:|?]{|[\$@%][^{}\\:|?])+'  #
+    # not any special OR LBRACE after not (dollar or percent) OR (dollar or percent) but not any special after
+    t_PLAINTEXT = r'([^\$@%{}\\:|?]|[^\$%}\\:|?@]{|[\$%][^{}\\:|?@])+'
 
     def t_RBRACE(self, t):
         r'}'
@@ -147,7 +148,7 @@ class PyParser:
     def p_inner_tag_name(self, p):
         """inner_tag_name : plaintext inner_tag_cont
                           | pholder_tag inner_tag_cont"""
-        p[0] = [p[1]] + p[2][0], p[2][1]
+        p[0] = [[p[1]] + p[2][0], p[2][1]]
 
     def p_inner_tag_cont(self, p):
         """inner_tag_cont : plaintext inner_tag_cont
@@ -164,6 +165,7 @@ class PyParser:
         p[0] = []
         if len(p) == 4:
             p[0] = [p[2]] + p[3]
+
 
     def p_plaintext(self, p):
         """plaintext : PLAINTEXT plaintext

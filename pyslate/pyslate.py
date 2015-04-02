@@ -33,15 +33,26 @@ class Pyslate:
         self.context = context
 
     def translate(self, tag_name, **kwargs):
-        return self._translate(tag_name, **kwargs)[0]
+        # treat main specified tag as inner tag
+        tag_name = "${" + tag_name + "}"
+
+        # parse it to get tag key, remove (unnecessary) id and take its decorators
+        inner_tag_node = self.parser.parse(tag_name)[0]
+        tag_name = inner_tag_node.contents[0]
+
+        t9n = self._translate(tag_name, **kwargs)[0]
+
+        for decorator_name in inner_tag_node.decorators:
+            t9n = self._call_decorator(decorator_name, t9n)
+
+        return t9n
 
     def _translate(self, tag_name, **kwargs):
+
         if "number" in kwargs and not (self.config.DISABLE_NUMBER_FOR_TAG_KEYS_WITH_VARIANT and "#" in tag_name):
             fallback = self._first_left_value_from(LOCALES, self._get_languages())["number_rule"](kwargs["number"])
             tag_name = tag_name.partition("#")[0] + "#" + fallback
 
-        decorators = tag_name.split("@")[1:]
-        tag_name = tag_name.split("@")[0]
         tag_base = tag_name.partition("#")[0]
         variant = tag_name.partition("#")[2]
         kwargs["tag_v"] = variant
@@ -62,9 +73,6 @@ class Pyslate:
         nodes = self.parser.parse(t9n)
 
         t9n = self.traverse(nodes, kwargs)
-
-        for decorator_name in decorators:
-            t9n = self._call_decorator(decorator_name, t9n)
 
         return t9n, form
 
@@ -187,6 +195,10 @@ class Pyslate:
                 final_kwargs.update(kwargs["groups"][node.tag_id])
 
         text, form = self._translate(tag_name, **final_kwargs)
+
+        for decorator_name in node.decorators:
+            text = self._call_decorator(decorator_name, text)
+
         if not node.tag_id:
             return text, {}
         return text, {node.tag_id: form}
@@ -234,7 +246,8 @@ class Pyslate:
             return node.cases[node.first_key]
 
     def _call_decorator(self, decorator_name, value):
-        return self.decorators[decorator_name](value)
+        decorator = self.decorators[decorator_name]
+        return decorator(value)
 
 
 class PyslateHelper:

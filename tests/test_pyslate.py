@@ -387,10 +387,20 @@ class TestTranslationsPolish(unittest.TestCase):
     def test_decorators(self):
 
         self.pys.register_decorator("capitalize", str.capitalize)
+        self.pys.register_decorator("upper", str.upper)
+
+        def pokemon(value):
+            res = ""
+            for char_pos in range(len(value)):
+                res += value[char_pos].upper() if char_pos % 2 == 0 else value[char_pos]
+            return res
+
+        self.pys.register_decorator("pokemon", pokemon)
 
         self.assertEqual("miecz", self.pys.t("entity_sword"))
         self.assertEqual("Miecz", self.pys.t("entity_sword@capitalize"))
-
+        self.assertEqual("MIECZ", self.pys.t("entity_sword@upper"))
+        self.assertEqual("MiEcZ", self.pys.t("entity_sword@pokemon"))
 
     def test_detailed_function(self):
 
