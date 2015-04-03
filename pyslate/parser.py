@@ -93,7 +93,7 @@ class PyParser:
 
     precedence = (
         ('left', 'QUESTION'),
-        ('left', 'PLAINTEXT'),
+        ('right', 'PLAINTEXT'),
     )
 
     def p_expression(self, p):

@@ -73,7 +73,7 @@ class ParserTest(unittest.TestCase):
 
     def test_escape(self):
 
-        result = self.parser.parse("\%{}")
+        result = self.parser.parse("\%{}", debug=True)
         # escaped, so it should be treated as plaintext, end brace has no open, so needn't be escaped...
         self.assertEqual(['%{}'], result)
 

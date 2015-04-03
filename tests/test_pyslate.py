@@ -395,12 +395,16 @@ class TestTranslationsPolish(unittest.TestCase):
                 res += value[char_pos].upper() if char_pos % 2 == 0 else value[char_pos]
             return res
 
+        def add_dots(value):
+            return "".join([char + "." for char in value])
+
         self.pys.register_decorator("pokemon", pokemon)
+        self.pys.register_decorator("add_dots", add_dots)
 
         self.assertEqual("miecz", self.pys.t("entity_sword"))
         self.assertEqual("Miecz", self.pys.t("entity_sword@capitalize"))
         self.assertEqual("MIECZ", self.pys.t("entity_sword@upper"))
-        self.assertEqual("MiEcZ", self.pys.t("entity_sword@pokemon"))
+        self.assertEqual("M.i.E.c.Z.", self.pys.t("entity_sword@pokemon@add_dots"))
 
     def test_detailed_function(self):
 
