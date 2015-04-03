@@ -75,21 +75,23 @@ class DefaultConfig:
         self.ALLOW_CACHE = False
 
         """
-        When ALLOW_CACHE is True, then this field contains cache class used by Pyslate.
+        When ALLOW_CACHE is True, and the cache is not specified in Pyslate constroctor's keyword-argument,
+        then this field contains cache class used by Pyslate.
         You can see the API of the default implementation to create your own.
-        IMPORTANT! This class must have a default (parameter-less) constructor.
+        IMPORTANT! If you supply a cache this way, then the class must have a default (parameter-less) constructor.
         """
         self.CACHE_CLASS = SimpleMemoryCache
 
         """
         Contains class used as a parser of tag value to get AST with plaintext and variable, inner tag and switch fields
+        It's used if you don't specify own parser instance in Pyslate constroctor's keyword-argument.
         Default implementation is done using PLY.
         """
         self.PARSER_CLASS = PyParser
 
         """
         If true, then it will prevent executing special number code (selecting correct variant
-            for specified %{number} placeholder) if specified tag name already contains a variant.
+            for specified %{number} placeholder) if a specified tag key already contains a variant.
         """
         self.DISABLE_NUMBER_FOR_TAG_KEYS_WITH_VARIANT = False
 
@@ -103,6 +105,18 @@ class DefaultConfig:
         If enabled, then special switch field: "%{opt1?ans1|opt2?and2}" will be enabled, e.g.
         this one will print "ans1" when the value of a "variant" argument is "opt1" and
         will print "ans2" when value is "opt2". If "variant" is none of these, then first-left answer is used.
-        If disabled, then all switch fields in tag values WILL BE CONVERTED into empty string!
+        If disabled, then all switch fields in tag values WILL BE CONVERTED INTO EMPTY STRINGS!
         """
         self.ALLOW_SWITCH_FIELDS = True
+
+        self.GLOBAL_DECORATORS = {
+            "capitalize": str.capitalize,
+            "upper": str.upper,
+            "lower": str.lower,
+        }
+
+        self.LANGUAGE_SPECIFIC_DECORATORS = {
+            "en": {
+                "article": lambda name: ("an " if name[0].lower() in "aeiou" else "a ") + name,
+            }
+        }

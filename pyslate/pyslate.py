@@ -8,26 +8,34 @@ import numbers
 
 class Pyslate:
 
-    def __init__(self, language, backend=None, config=DefaultConfig(), context=None, cache=None):
+    def __init__(self, language, backend=None, config=DefaultConfig(), context=None, cache=None, parser=None):
         self.config = config
 
         self.language = language
         self.backend = backend if backend else self.config.BACKEND_CLASS()
-        config.ALLOW_CACHE = cache is not None or config.ALLOW_CACHE
         self.cache = cache if cache else (config.CACHE_CLASS() if self.config.ALLOW_CACHE else None)
         self.fallbacks = {}
         self.global_fallback = config.GLOBAL_FALLBACK_LANGUAGE
 
         self.decorators = {}
+
         self.functions = {}
 
         # info about being deterministic and memory for pure functions is common for decorators and functions
         self.functions_deterministic = {}
         self.functions_memory = {}
 
-        self.parser = config.PARSER_CLASS()
+        # load default available decorators
+        for decorator_name in config.GLOBAL_DECORATORS:
+            self.register_decorator(decorator_name, config.GLOBAL_DECORATORS[decorator_name])
+        for language in config.LANGUAGE_SPECIFIC_DECORATORS:
+            decorators_for_language = config.LANGUAGE_SPECIFIC_DECORATORS[language]
+            for decorator_name in decorators_for_language:
+                self.register_decorator(decorator_name, decorators_for_language[decorator_name], language=language)
 
-        if context is None: # handle default value
+        self.parser = parser if parser else config.PARSER_CLASS()
+
+        if context is None:  # handle default value
             context = {}
 
         self.context = context
@@ -58,15 +66,17 @@ class Pyslate:
         kwargs["tag_v"] = variant
 
         if tag_base in self.functions:
+            function_language = self._first_left_key_from(self.functions[tag_base], self._get_languages())
             if (self.functions_deterministic[tag_base]  # deterministic function so maybe result is already known
-                    and tuple(sorted(kwargs.items())) in self.functions_memory[tag_name]):
-                t9n, form = self.functions_memory[tag_name][tuple(sorted(kwargs.items()))]
+                    and tuple([function_language] + sorted(kwargs.items())) in self.functions_memory[tag_name]):
+                t9n, form = self.functions_memory[tag_name][tuple([function_language] + sorted(kwargs.items()))]
             else:
                 helper = PyslateHelper(self)
-                t9n = self.functions[tag_base](helper, tag_name, kwargs)
+                function_for_language = self._first_left_value_from(self.functions[tag_base], self._get_languages())
+                t9n = function_for_language(helper, tag_name, kwargs)
                 form = helper.returned_form
                 if self.functions_deterministic[tag_base]:
-                    self.functions_memory[tag_name][tuple(sorted(kwargs.items()))] = (t9n, form)
+                    self.functions_memory[tag_name][tuple([function_language] + sorted(kwargs.items()))] = (t9n, form)
         else:
             t9n, form = self._get_raw_content(tag_name), self._get_raw_form(tag_name)
 
@@ -80,6 +90,12 @@ class Pyslate:
         for key in keys:
             if key in dictionary:
                 return dictionary[key]
+        return None
+
+    def _first_left_key_from(self, dictionary, keys):
+        for key in keys:
+            if key in dictionary:
+                return key
         return None
 
     def localize(self, value):
@@ -120,17 +136,31 @@ class Pyslate:
     def append_to_context(self, **kwargs):
         self.context.update(kwargs)
 
-    def register_decorator(self, decorator_name, function, is_deterministic=False):
+    def register_decorator(self, decorator_name, function, is_deterministic=False, language=None):
         if decorator_name in self.functions:
             del self.functions[decorator_name]
-        self.decorators[decorator_name] = function
+
+        if not language:
+            language = self.global_fallback
+
+        if decorator_name not in self.decorators:  # no such decorator for any language yet, so create a dict for it
+            self.decorators[decorator_name] = {}
+        self.decorators[decorator_name][language] = function
+
         self.functions_deterministic[decorator_name] = is_deterministic
         self.functions_memory[decorator_name] = {}
 
-    def register_function(self, tag_name, function, is_deterministic=False):
+    def register_function(self, tag_name, function, is_deterministic=False, language=None):
         if tag_name in self.decorators:
-            del self.functions[tag_name]
-        self.functions[tag_name] = function
+            del self.decorators[tag_name]
+
+        if not language:
+            language = self.global_fallback
+
+        if tag_name not in self.decorators:  # no such decorator for any language yet, so create a dict for it
+            self.functions[tag_name] = {}
+        self.functions[tag_name][language] = function
+
         self.functions_deterministic[tag_name] = is_deterministic
         self.functions_memory[tag_name] = {}
 
@@ -246,8 +276,18 @@ class Pyslate:
             return node.cases[node.first_key]
 
     def _call_decorator(self, decorator_name, value):
-        decorator = self.decorators[decorator_name]
-        return decorator(value)
+        try:
+            decorator_language = self._first_left_key_from(self.decorators[decorator_name], self._get_languages())
+
+            if (self.functions_deterministic[decorator_name]  # deterministic function so maybe result is already known
+                    and tuple([decorator_language, value]) in self.functions_memory[decorator_name]):
+                return self.functions_memory[decorator_name][tuple([decorator_language, value])]
+
+            decorator = self.decorators[decorator_name][decorator_language]
+            return decorator(value)
+        except KeyError:
+            raise PyslateException("No decorator with name '{}' for main language or any of its fallbacks {}".
+                                   format(decorator_name, self._get_languages()))
 
 
 class PyslateHelper:

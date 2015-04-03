@@ -1,5 +1,6 @@
 import unittest
 from pyslate.config import DefaultConfig
+from pyslate.parser import PyslateException
 from pyslate.pyslate import Pyslate
 
 
@@ -129,11 +130,11 @@ class BackendStub():
             "en": "You give ${object_info} to ${char_info}.",
         },
         "hunting_hunter": {
-            "en": "You attack ${entity_%{animal}} using ${entity_%{item_name}}.",
+            "en": "You attack ${entity_%{animal}@article} using ${entity_%{item_name}}.",
             "pl": "Atakujesz ${entity_%{animal}#a} przy pomocy ${entity_%{item_name}#a}.",
         },
         "entity_elk": {
-            "en": "an elk",
+            "en": "elk",
             "pl": "łoś",
         },
         "entity_elk#a": {
@@ -276,13 +277,6 @@ class BackendStub():
     Kupił%{gender:m?eś|f?aś} nowiutk{item_g:m?i|f?ą|p?ie} ${entity_${item_name}}. # no dobra, to się nie może zdarzyć
 
 
-    You have bought a%{item:v?n|} ${item:entity_%{item_name}}. item_name="apron"
-    entity_apron
-
-    Wersja skrócona, bazuje na z góry określonym argumencie kluczowym "variant":
-    Kupił%{m?eś|f?aś}
-
-
     You attack an elk.
 
     entity_elk: elk
@@ -323,26 +317,32 @@ class TestTranslationsEnglish(unittest.TestCase):
         self.assertEqual("a carrot", self.pys.t("entity_carrot", number=1))
         self.assertEqual("1.3 carrots", self.pys.t("entity_carrot", number=1.3))
 
-    def test_replacement(self):
+    def test_replacement(self):  # using a variant specified in a function
         self.assertEqual("Welcome! I have swords.", self.pys.t("item_ownership", item_name="sword"))
 
-    def test_recursion(self):
-        self.pys.register_function("char_info", lambda self, name, params: "John" if params['char_id'] == 1 else "Edd")
+    def test_recursion(self):  # complicated example of using custom functions
+        self.pys.register_function("char_info",
+                                   lambda helper, name, params: "John" if params['char_id'] == 1 else "Edd")
         self.assertEqual("You see John give some carrots to Edd.",
                          self.pys.t("action_give_others", item_name="carrot", groups={"giver": {"char_id": 1},
                                                                                       "taker": {"char_id": 2},
                                                                                       }))
 
     def test_recursion_fun(self):
-        self.pys.register_function("object_info", lambda self, name, params: "a note 'trololo'" if params['item_id'] == 3 else "ERROR")
-        self.pys.register_function("char_info", lambda self, name, params: "Edd" if params['char_id'] == 2 else "John")
+        self.pys.register_function("object_info",
+                                   lambda helper, name, params: "a note 'trololo'" if params['item_id'] == 3 else "ERR")
+        self.pys.register_function("char_info",
+                                   lambda helper, name, params: "Edd" if params['char_id'] == 2 else "John")
         self.assertEqual("You give a note 'trololo' to Edd.", self.pys.t("action_give_giver", item_id=3, char_id=2))
 
     def test_hunt(self):
         self.assertEqual("You attack an elk using a sword.",
                          self.pys.t("hunting_hunter", animal="elk", item_name="sword"))
 
-    def test_deterministic_function(self):
+    def test_decorator(self):  # using one of already included decorators
+        self.assertEqual("WELCOME! I HAVE SWORDS.", self.pys.t("item_ownership@upper", item_name="sword"))
+
+    def test_deterministic_function(self):  # deterministic funs are run once and result of their execution is memorized
 
         calls_count = 0
 
@@ -385,9 +385,7 @@ class TestTranslationsPolish(unittest.TestCase):
                          self.pys.t("hunting_hunter", animal="elk", item_name="sword"))
 
     def test_decorators(self):
-
-        self.pys.register_decorator("capitalize", str.capitalize)
-        self.pys.register_decorator("upper", str.upper)
+        # decorators are
 
         def pokemon(value):
             res = ""
@@ -406,8 +404,27 @@ class TestTranslationsPolish(unittest.TestCase):
         self.assertEqual("MIECZ", self.pys.t("entity_sword@upper"))
         self.assertEqual("M.i.E.c.Z.", self.pys.t("entity_sword@pokemon@add_dots"))
 
-    def test_detailed_function(self):
+    def test_decorators_and_functions(self):  # funs and decorators use the same namespace, so they overwrite each other
 
+        self.pys.register_decorator("capitalize", str.capitalize)
+        self.pys.register_function("capitalize",
+                                   lambda helper, name, params: helper.translation("entity_sword").capitalize())
+        # decorator should now be overwritten
+
+        self.assertEqual("Miecz", self.pys.t("capitalize"))
+        with self.assertRaises(PyslateException):
+            self.pys.t("entity_sword@capitalize")  # decorator no longer exists
+
+    def test_language_specific_decorator(self):  # trying to use decorator which is available thanks to fallback rules
+
+        self.assertEqual("a miecz", self.pys.t("entity_sword@article"))
+
+        self.pys.register_decorator("strlen", lambda x: str(len(x)), language="es")
+        with self.assertRaises(PyslateException):
+            self.pys.t("entity_sword@strlen")
+
+
+    def test_detailed_function(self):  # function allows for a special behaviour when you call it like a tag
         self.pys.register_function("object_info", obj_fun)
 
         self.assertEqual("wspaniale wykonany młotek",
@@ -419,11 +436,10 @@ class TestTranslationsPolish(unittest.TestCase):
         self.assertEqual("kiepski młotek",
                          self.pys.t("object_info", item=Item(3, "hammer", quality=3), item_name="hammer"))
 
-
         self.assertEqual("różdżka",
                          self.pys.t("object_info", item=None, item_name="wand"))  # fallback
 
-    def test_variants(self):
+    def test_switch_field(self):  # for fusional languages (e.g. slavic) the suffix is often based on grammatical gender
 
         self.assertEqual("Byłem dziś w sklepie",
                          self.pys.t("being_in_shop", variant="m"))
@@ -443,7 +459,7 @@ class TestTranslationsPolish(unittest.TestCase):
         self.assertEqual("Powiedziałem mu, że to głupie, a on powiedział mi to samo.",
                          self.pys.t("talking_the_same", me="m", sb="m"))
 
-    def test_variants_default(self): # use first left key from variants tag
+    def test_switch_field_default(self):  # if there's no matching key in switch, then use first-left one
         self.assertEqual("Powiedziałem mu, że to głupie, a on powiedział mi to samo.",
                          self.pys.t("talking_the_same"))
 
@@ -453,7 +469,7 @@ class TestTranslationsPolish(unittest.TestCase):
         self.assertEqual("Powiedziałem jej, że to głupie, a ona powiedziała mi to samo.",
                          self.pys.t("talking_the_same", me="Xd", sb="f"))
 
-    def test_variants_emulation(self):
+    def test_switch_field_emulation(self):  # there's example of how to emulate switch-fields behaviour (very verbose)
         self.assertEqual("Powiedziałem mu, że to głupie, a on powiedział mi to samo.",
                          self.pys.t("talking_the_same2", me="m", sb="m"))
 
@@ -463,7 +479,8 @@ class TestTranslationsPolish(unittest.TestCase):
         self.assertEqual("Powiedziałam jej, że to głupie, a ona powiedziała mi to samo.",
                          self.pys.t("talking_the_same2", me="f", sb="f"))
 
-    def test_variants_with_grammatical_form_from_inner_tag(self):
+    # sometimes switch variant is based on form taken from inner tag
+    def test_switch_field_with_grammatical_form_from_inner_tag(self):
         def char_info(helper, name, params):
             char_name = "Rysiek" if params["char_id"] == 1 else "Grażyna"
             helper.return_form("m" if char_name == "Rysiek" else "f")
@@ -491,8 +508,8 @@ class TestTranslationsPolish(unittest.TestCase):
         # it should be IMPOSSIBLE to get form from context of its inner tag, because it's local to InnerTagField
         self.assertEqual("Zniszczono nowy wałek. Jest [NO DATA].", self.pys.t("char_victim", item_name="doughroller"))
 
-    # correct way of doing the example from above is to use custom function
-    # which returns the grammatical form for specific item
+    # correct way of doing the example from above is to use a custom function
+    # which returns the grammatical form for a specific item
     def test_variants_with_form_from_inner_tag_by_function(self):
 
         def fun_tajnosc(helper, name, params):
@@ -514,6 +531,7 @@ class TestTranslationsPolish(unittest.TestCase):
         self.assertEqual("Kupiłem pizzę.",
                          self.pys.t("buying_the_pizza"))
 
+    # that's what should happen when there's no required base tag in this or in fallback language
     def test_missing_tag(self):
         self.assertEqual("lala [MISSING VALUE FOR 'hehe']",
                          self.pys.t("missing_placeholder"))
