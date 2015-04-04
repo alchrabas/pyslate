@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 import pyslate
 
-with open('README.rst', 'rt') as f:
+with open('README.md', 'rt') as f:
     long_description = f.read()
 
 setup(
