@@ -1,5 +1,5 @@
-pyslate
-=======
+pyslate - WORK IN PROGRESS, NOT TO BE USED YET
+==============================================
 
 A python library for maintaining grammatically correct translations for multiple
 languages.
@@ -35,7 +35,7 @@ Then in a file where you need a translation:
 >>> pys_en = Pyslate("en", backend=PyslateJsonBackend("translations.json"))
 >>> print(pys_en.translate("hello_world"))
 >>>
->>> pys_pl = Pyslate("en", backend=PyslateJsonBackend("translations.json"))
+>>> pys_pl = Pyslate("pl", backend=PyslateJsonBackend("translations.json"))
 >>> print(pys_pl.translate("hello_world"))
 ```
 You should see:
@@ -44,16 +44,14 @@ You should see:
 
 It works!
 
-So the most basic use it to specify a tag and call it using Pyslate.translate method. To make it more handy you can use Pyslate.t abbreviation.
+So the most basic use it to create a pyslate object for a selected language and then request translation
+of a specific tag using a `Pyslate.translate()` method. To make it more handy you can use `Pyslate.t` abbreviation.
 
 More complicated example
 ========================
 Change translation file into:
 ```
 {
-    "hello_world": {
-        "en": "Hello world!",
-    },
     "introduction": {
         "en": "Hello! %{m?His|f?Her} name is %{name}."
     }
