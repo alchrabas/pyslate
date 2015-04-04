@@ -22,8 +22,9 @@ Simple example
 Define a translation file 'translations.json':
 ```
 {
-"hello_world": {
-    "en": "Hello world!"
+    "hello_world": {
+        "en": "Hello world!",
+        "pl": "Witaj świecie!"
     }
 }
 ```
@@ -31,11 +32,15 @@ Define a translation file 'translations.json':
 Then in a file where you need a translation:
 ```
 >>> from pyslate import Pyslate, PyslateJsonBackend
->>> pys = Pyslate("pl", backend=PyslateJsonBackend("translations.json"))
->>> print(pys.translate("hello_world"))
+>>> pys_en = Pyslate("en", backend=PyslateJsonBackend("translations.json"))
+>>> print(pys_en.translate("hello_world"))
+>>>
+>>> pys_pl = Pyslate("en", backend=PyslateJsonBackend("translations.json"))
+>>> print(pys_pl.translate("hello_world"))
 ```
 You should see:
 > Hello world!
+> Witaj świecie!
 
 It works!
 
