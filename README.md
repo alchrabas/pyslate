@@ -16,6 +16,7 @@ I included all features I found important, but also many more:
  - support for special structures to use by translator directly in translation text
  - powerful fallback abilities in case that some variant of tag is missing
  - possibility injecting Python code into translations using decorators and custom functions
+ - support for languages significantly different than English, based on practical knowledge and years of experience
 
 Simple example
 --------------
@@ -150,3 +151,63 @@ So, in short, "m" form is taken from an inner tag and used in switch field to pr
 The use-case for such mechanism look quite slim for English, however it's very important in many languages,
 where every noun has a grammatical form which can, for example, affect form of adjectives.
 
+Tag variants
+------------
+It may happen that one tag is available in more than one form, which can for example mean different suffix based on
+its context in the sentence. It's hard to be shown in English, so I'll put an example in Polish:
+```json
+{
+    "having": {
+        "en": "I have ${item_stone}.",
+        "pl": "Mam ${item_stone}."
+    },
+    "not_having": {
+        "en": "I don't have ${item_stone}",
+        "pl": "Mam ${item_stone#g}"
+    },
+    "stone": {
+        "en": "a stone",
+        "pl": "kamień"
+    },
+    "stone#g": {
+        "pl": "kamienia"
+    }
+}
+```
+
+```
+>>> pys_en.t("not_having")
+I don't have a stone.
+>>> pys_pl.t("not_having")
+Nie mam kamienia.
+```
+Let's take a look at the tag value of "not_having". In English it looks almost the same as "having",
+but in Polish inner tag for item_stone has "#g" suffix, which makes it point at different tag. That is the tag's variant, whose value has different suffix.
+What's the advantage of doing it instead of having own tag naming convention (e.g. "stone_g")?
+The first thing is previously highlighted fallback ability. When some tag key contains variant which is unavailable in the database, then the more basic form is used.
+That's why the most basic form (singular nominative) should be defined without any variant.
+In case of lack of tag key and its basic form for a specified language, the tag or its base form is searched for in the fallback language.
+Fallback mechanism is big and details can be found [here](). 
+As you see, it's possible to adapt translations to the specified language without any programmer's knowledge what language is going to be introduced.
+All can be managed in translation system by creating tags with correct variants.
+
+Formatting numbers
+------------------
+When you translate number being an interpolated variable then you must decide if the used noun should be singular or plural.
+It's so common that almost every translation system is able to take care of that.
+
+```json
+{
+    "having_flower": {
+        "en": "I have a flower",
+    },
+    "having_flower#p": {
+        "en": "I have %{number} flowers",
+    },
+}
+```
+
+>>> pys.t("having_flower", number=1)
+I have a flower.
+>>> pys.t("having_flower", number=5)
+I have 5 flowers.

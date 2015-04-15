@@ -123,6 +123,15 @@ class BackendStub():
             "en": "beetroot%{tag_v:s?|m?s}",
             "pl": "%{number} burak%{tag_v:s?|f?i|m?ów|o?a}",
         },
+        "having_flowers": {
+            "en": "I have %{number} ${entity_flower#%{tag_v}}",
+        },
+        "entity_flower": {
+            "en": "flower",
+        },
+        "entity_flower#p": {
+            "en": "flowers",
+        },
         "action_give_others": {
             "en": "You see ${giver:char_info} give ${entity_%{item_name}#u} to ${taker:char_info}.",
         },
@@ -273,6 +282,7 @@ class BackendStub():
         l - locative (miejscownik)         np. mieczu
         v - vocative (wołacz)              np. mieczu
 
+    m, f, n
 
     Kupił%{gender:m?eś|f?aś} nowiutk{item_g:m?i|f?ą|p?ie} ${entity_${item_name}}. # no dobra, to się nie może zdarzyć
 
