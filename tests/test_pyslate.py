@@ -311,7 +311,6 @@ class TestTranslationsEnglish(unittest.TestCase):
 
     def setUp(self):
         self.pys = Pyslate("en", BackendStub())
-        self.pys.set_fallback_language("en", "en")
 
     def test_simple(self):
         # pl translation is available so it should be used
@@ -374,7 +373,7 @@ class TestTranslationsPolish(unittest.TestCase):
 
     def setUp(self):
         self.pys = Pyslate("pl", BackendStub())
-        self.pys.set_fallback_language("pl", "en")  # it should be unnecessary
+        self.pys.fallbacks["pl"] = "en"  # it's not necessary
 
     def test_numbers(self):
         self.assertEqual("10 marchewek", self.pys.t("entity_carrot#m", number=10))

@@ -194,7 +194,7 @@ All can be managed in translation system by creating tags with correct variants.
 Formatting numbers
 ------------------
 When you translate number being an interpolated variable then you must decide if the used noun should be singular or plural.
-It's so common that almost every translation system is able to take care of that.
+Pyslate supports that easily by a special `number` variable:
 
 ```json
 {
@@ -207,7 +207,88 @@ It's so common that almost every translation system is able to take care of that
 }
 ```
 
+```
 >>> pys.t("having_flower", number=1)
 I have a flower.
 >>> pys.t("having_flower", number=5)
 I have 5 flowers.
+```
+These two forms are sufficient for English, but for many other languages it's not enough.
+For example words can have different suffixes when there's a few of them and there's many of them.
+In Polish there are three possibilities: singular (1), a few (2, 3, 4, 102, 103, 104...) and many (all the rest). 
+The word "kwiat*ka*" (genitive form of "kwiat*ek*" ["a flower"]) has the following plural forms: "kwiatka", "kwiatki", "kwiatków".
+```json
+{
+    "having_flower": {
+        "pl": "Mam kwiatka",
+    },
+    "having_flower#e": {
+        "pl": "Mam %{number} kwiatki.",
+    },
+    "having_flower#p": {
+        "pl": "Mam %{number} kwiatków.",
+    }
+}
+```
+[(Every language can have different rules](http://unicode.org/repos/cldr-tmp/trunk/diff/supplemental/language_plural_rules.html),
+so it's easy to configure them in `locales.py` file.
+
+Custom functions
+----------------
+If none of previously mentioned options was a solution for your problem, then custom functions come to the reascue.
+It's possible to create a meta-tag being in fact a custom python function which has access and can do almost everything then return a translated tag.
+```json
+{
+    "product_presentation": {
+        "en": "I'd like to present you a new product. It's ${product}.",
+    },
+    "car_personal": {
+        "en": "a personal car"
+    }
+    "car_van": {
+        "en": "a delivery van"
+    },
+    "product_template": {
+        "en": "${type} produced by ${producer}"
+    }
+}
+```
+Then we have to create a custom function for a "product" inner tag field. Note this example can't be run by you in interactive shell,
+as it features connecting to some imaginary database.
+
+```
+>>> def product1(helper, name, params):
+>>>    product_id = params["product_id"]
+>>>    product = db.Product.get(product_id)
+>>>    result = ""
+>>>    if product.capacity >= 1000:
+>>>        result += "${car_van}"
+>>>    else:
+>>>        result += "${car_personal}"
+>>>    result += " produced by " + product.producer
+>>>    return result
+
+>>> def product2(helper, name, params):
+>>>    product_id = params["product_id"]
+>>>    product = db.Product.get(product_id)
+>>>    if product.capacity >= 1000:
+>>>        car_type = "car_van"
+>>>    else:
+>>>        car_type = "car_personal"
+>>>    return helper.translate("product_template", type=car_type, producer=product.producer)
+```
+
+Both implementations do exactly the same: get kwarg argument "product_id", query the database for a product and print some data related to it.
+The first implementation uses simple string concatenation, however it works only for English, as it hardcodes some text and order of words.
+It's much better to do things like in the function "product2". It uses helper object to translate a tag using some template, whose variable fields are set by data got inside of the function.
+This way you can almost be sure that you'll never have to alter custom functions to make it work for some language.
+Ok, so we like product2 better. Let's register that function:
+```
+>>> pys.register_function("product", product2)
+```
+Now let's assume the product with id 7 is a product with capacity 2000 produced by Audi.
+```
+>>> pys.t("product_presentation", product_id=7)
+I'd like to present you a new product. It's a delivery van produced by Audi.
+```
+It works great. Please note if you need lots of custom functions in your code, then maybe your problem shouldn't tried to be solved using an i18n library.
