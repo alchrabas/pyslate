@@ -244,7 +244,7 @@ It's possible to create a meta-tag being in fact a custom python function which 
     },
     "car_personal": {
         "en": "a personal car"
-    }
+    },
     "car_van": {
         "en": "a delivery van"
     },
@@ -257,18 +257,7 @@ Then we have to create a custom function for a "product" inner tag field. Note t
 as it features connecting to some imaginary database.
 
 ```
->>> def product1(helper, name, params):
->>>    product_id = params["product_id"]
->>>    product = db.Product.get(product_id)
->>>    result = ""
->>>    if product.capacity >= 1000:
->>>        result += "${car_van}"
->>>    else:
->>>        result += "${car_personal}"
->>>    result += " produced by " + product.producer
->>>    return result
-
->>> def product2(helper, name, params):
+>>> def product_fun(helper, name, params):
 >>>    product_id = params["product_id"]
 >>>    product = db.Product.get(product_id)
 >>>    if product.capacity >= 1000:
@@ -278,17 +267,42 @@ as it features connecting to some imaginary database.
 >>>    return helper.translate("product_template", type=car_type, producer=product.producer)
 ```
 
-Both implementations do exactly the same: get kwarg argument "product_id", query the database for a product and print some data related to it.
-The first implementation uses simple string concatenation, however it works only for English, as it hardcodes some text and order of words.
-It's much better to do things like in the function "product2". It uses helper object to translate a tag using some template, whose variable fields are set by data got inside of the function.
+It gets kwarg argument "product_id", query the database for a product and print some data related to it.
+Then it uses special helper object supplied by pyslate to translate a "product_template" tag, whose variable fields are set by data got inside of the function.
 This way you can almost be sure that you'll never have to alter custom functions to make it work for some language.
-Ok, so we like product2 better. Let's register that function:
+In general, every custom function should return a string which is a value of this pseudo-tag.
+Let's register that function:
 ```
->>> pys.register_function("product", product2)
+>>> pys.register_function("product", product_fun)
 ```
 Now let's assume the product with id 7 is a product with capacity 2000 produced by Audi.
 ```
 >>> pys.t("product_presentation", product_id=7)
 I'd like to present you a new product. It's a delivery van produced by Audi.
 ```
-It works great. Please note if you need lots of custom functions in your code, then maybe your problem shouldn't tried to be solved using an i18n library.
+It works great.
+Please note if you need lots of custom functions in your code, then maybe any i18n library isn't a correct solution for your kind of problem.
+You shouldn't also misuse Pyslate as a templating designer, because any real (like jinja2) would do it better.
+
+Integration with templating engines
+-----------------------------------
+Most likely your application uses some template system to separate logic from the presentation.
+As there are probably lots of static messages in your template files that need to be translated, then you need a way to
+call pyslate directly from it.
+Considering short tags and easy API it's very simple to integrate with template languages.
+I'll show how to get Pyslate work with Flask-Jinja2, but it's just as easy for any other templating language which allows defining custom functions.
+
+Flask-Jinja2 integration
+========================
+`app.jinja_env.globals` contains the dict of all global variables of jinja2 being used by flask application `app`.
+So all you need to do, assuming variable `pyslate` holds instance of class Pyslate is:
+```
+app.jinja_env.globals.update(t=lambda *args, **kwargs: pyslate.t(*args, **kwargs))
+```
+It registers a "t" function which is a lambda passing all the translations to pyslate object.
+Does the one below work too? 
+```
+app.jinja_env.globals.update(t=pyslate.t)
+app.jinja_env.globals.update(l=pyslate.l)
+```
+
