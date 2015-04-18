@@ -522,8 +522,9 @@ class TestTranslationsPolish(unittest.TestCase):
     def test_variants_with_form_from_inner_tag_by_function(self):
 
         def fun_tajnosc(helper, name, params):
-            text = helper.translation("tajnosc")
+            text = helper.translation("tajnosc", **params)
             item_form = helper.form("entity_" + params["item_name"])
+
             helper.return_form(item_form)
             return text
 
