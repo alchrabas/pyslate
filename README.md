@@ -292,8 +292,8 @@ call pyslate directly from it.
 Considering short tags and easy API it's very simple to integrate with template languages.
 I'll show how to get Pyslate work with Flask-Jinja2, but it's just as easy for any other templating language which allows defining custom functions.
 
-Flask-Jinja2 integration
-========================
+### Flask-Jinja2 integration
+
 `app.jinja_env.globals` contains the dict of all global variables of jinja2 being used by flask application `app`.
 So all you need to do, assuming variable `pyslate` holds instance of class Pyslate is:
 ```
