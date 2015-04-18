@@ -7,11 +7,26 @@ import numbers
 
 
 class Pyslate:
+    """
+    Main class responsible for all the translation and localization. When constructed it's necessary to set language,
+    backend. It's possible to set custom config, context dict and instance of cache class.
+    """
 
     def __init__(self, language, backend=None, config=DefaultConfig(), context=None, cache=None, parser=None):
+        """
+        Constructor
+        :param language: see language field
+        :param backend: see backend field
+        :param config: see config field
+        :param context: see context field
+        :param cache: see cache field
+        :param parser: see parser field
+        :return: object of Pyslate class
+        """
+
         self.config = config
         """
-        Object having the same fields as config.DefaultConfig class, which specify all configurable parameters
+        Object having the same fields as config.DefaultConfig class, which specifies all configurable parameters
         """
 
         self.language = language
@@ -19,13 +34,15 @@ class Pyslate:
         Language used by an instance of Pyslate as a main language.
         """
 
-        self.backend = backend if backend else self.config.BACKEND_CLASS()
+        if backend is None:
+            raise AssertionError("no pyslate backend is specified")
+        self.backend = backend
         """
         Backend object is responsible for supplying values of tags for specified key and language
         from a persistent storage. It doesn't make any further processing nor doesn't interpret data.
         """
 
-        self.cache = cache if cache else (config.CACHE_CLASS() if self.config.ALLOW_CACHE else None)
+        self.cache = cache
         """
         Object responsible for caching. It must implement the same methods as cache.SimpleMemoryCache.
         If cache is not needed, then it can be None.

@@ -62,32 +62,19 @@ class DefaultConfig:
         translation: "root_tag" => "I want ${item_cookie#p}!"
         """
 
-        self.BACKEND_CLASS = PyslateJsonBackend
-        """
-        Reference for a backend class which supplies tag values.
-        If backend is not specified in Pyslate constructor's keyword-argument,
-        then it's instantiated using a default constructor.
-        IMPORTANT! This class must have a default (parameter-less) constructor.
-        """
-
         self.ALLOW_CACHE = False
         """
-        Specifies if instance of Pyslate should cache any data.
-        If true then self.CACHE_CLASS should reference a class being its implementation.
-        """
+        Specifies if instance of Pyslate should cache any data..
 
-        self.CACHE_CLASS = SimpleMemoryCache
-        """
-        When ALLOW_CACHE is True, and the cache is not specified in Pyslate constroctor's keyword-argument,
-        then this field contains cache class used by Pyslate.
-        You can see the API of the default implementation to create your own.
+        When ALLOW_CACHE is True, then the cache needs to be specified as a keyword argument in Pyslate constructor.
+        You can see the API of the cache.SimpleMemoryCache to create your own implementation.
         IMPORTANT! If you supply a cache this way, then the class must have a default (parameter-less) constructor.
         """
 
         self.PARSER_CLASS = PyParser
         """
         Contains class used as a parser of tag value to get AST with plaintext and variable, inner tag and switch fields
-        It's used if you don't specify own parser instance in Pyslate constroctor's keyword-argument.
+        It's used if you don't specify own parser instance in Pyslate constructor's keyword-argument.
         Default implementation is done using PLY.
         """
 
