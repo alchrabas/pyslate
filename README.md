@@ -264,7 +264,7 @@ as it features connecting to some imaginary database.
 >>>        car_type = "car_van"
 >>>    else:
 >>>        car_type = "car_personal"
->>>    return helper.translate("product_template", type=car_type, producer=product.producer)
+>>>    return helper.translation("product_template", type=car_type, producer=product.producer)
 ```
 
 It gets kwarg argument "product_id", query the database for a product and print some data related to it.
@@ -289,20 +289,22 @@ Integration with templating engines
 Most likely your application uses some template system to separate logic from the presentation.
 As there are probably lots of static messages in your template files that need to be translated, then you need a way to
 call pyslate directly from it.
-Considering short tags and easy API it's very simple to integrate with template languages.
-I'll show how to get Pyslate work with Flask-Jinja2, but it's just as easy for any other templating language which allows defining custom functions.
+Considering short tag keys and easy to use interface it's very simple to integrate with any template language.
+I'll show how to get Pyslate work with Jinja2 and Flask-Jinja2, but it's just as easy for any other templating language which allows defining custom functions.
 
-### Flask-Jinja2 integration
-
-`app.jinja_env.globals` contains the dict of all global variables of jinja2 being used by flask application `app`.
-So all you need to do, assuming variable `pyslate` holds instance of class Pyslate is:
+### Jinja2 integration
+For Jinja integration you need to get access to Jinja's env globals and register two new functions there:
 ```
-app.jinja_env.globals.update(t=lambda *args, **kwargs: pyslate.t(*args, **kwargs))
-```
-It registers a "t" function which is a lambda passing all the translations to pyslate object.
-Does the one below work too? 
-```
-app.jinja_env.globals.update(t=pyslate.t)
-app.jinja_env.globals.update(l=pyslate.l)
+env = Environment(loader=FileSystemLoader('/path/to/templates'))
+env.globals["t"] = pyslate.t
+env.globals["l"] = pyslate.l
 ```
 
+In Flask it's just as easy. `app.jinja_env.globals` contains the dict of all global variables of jinja2 being used by Flask application `app`.
+So all you need to do, assuming instance of Pyslate is stored in `g.pys` is:
+```
+app.jinja_env.globals.update(t=lambda *args, **kwargs: g.pys.t(*args, **kwargs))
+app.jinja_env.globals.update(l=lambda *args, **kwargs: g.pys.l(*args, **kwargs))
+```
+It registers functions "t" and "l" which are lambdas delegating all the translations to pyslate object.
+I've used lambda, because flask's `g` is accessible only when processing the request while this registration si better to be done during the application startup.
