@@ -200,10 +200,10 @@ class Pyslate:
         return formatted_float
 
     t = translate
-    "py:method::translate"
+    "Alias for :obj:`translate`"
 
     l = localize
-    "py:method::localize"
+    "Alias for :obj:`localize`"
 
     def register_decorator(self, decorator_name, function, is_deterministic=False, language=None):
         """

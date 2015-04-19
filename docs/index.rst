@@ -3,23 +3,17 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to pyslate's documentation!
-===================================
+Pyslate - WORK IN PROGRESS, NOT TO BE USED YET
+==============================================
 
-Contents:
+WORK IN PROGRESS, NOT TO BE USED YET
 
 .. toctree::
    :maxdepth: 2
+   
+   user-guide
+   api
 
-AUTODOC:
-
-.. automodule:: pyslate
-   :members:
-   :undoc-members:
-
-.. automodule:: pyslate.parser
-   :members:
-   :undoc-members:
 
 Indices and tables
 ==================

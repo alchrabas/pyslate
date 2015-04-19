@@ -68,7 +68,8 @@ class DefaultConfig:
 
         When ALLOW_CACHE is True, then the cache needs to be specified as a keyword argument in Pyslate constructor.
         You can see the API of the cache.SimpleMemoryCache to create your own implementation.
-        IMPORTANT! If you supply a cache this way, then the class must have a default (parameter-less) constructor.
+        
+        **IMPORTANT:** If you supply a cache this way, then the class must have a default (parameter-less) constructor.
         """
 
         self.PARSER_CLASS = PyParser
