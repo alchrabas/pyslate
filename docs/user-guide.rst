@@ -23,15 +23,25 @@ supplying a different tag value in the same location, which is specified by the 
 All examples will use a simple syntax:
 TAG_KEY: TAG_VALUE
 
+
 Hello message
 -------------
-English
-hello: Hello guys!
+
+.. list-table:: *English*
+   :widths: 20 80
+   :stub-columns: 1
+
+   * - hello
+     - Hello guys!
 
 It's easy. You read the value of the "hello" tag and provide a translation.
 
-Pirate English
-hello: Ahoy comrades!
+.. list-table:: *Pirate English*
+   :widths: 20 80
+   :stub-columns: 1
+
+   * - hello
+     - Ahoy comrades!
 
 That's exactly what users will see, so there's no need to show any examples.
 
@@ -74,10 +84,16 @@ of noun when "number" is 2, which appends "-es" instead of "-s" to the end of th
 We assume the programmer already took care of specifying pluralization rules for our language, so all we have to do is learning what letter is used when the "number" is 2.
 After a short look onto cheatsheet (TODO LINK) we learn that in such situation the variant is "#t" (Two). Okay, here we go.
 
-Pirate English:
-rum_barrel: I'ave a barrel o' best rum.
-rum_barrel#t: I'ave %{number} barreles o' best rum.
-rum_barrel#h: I'ave %{number} barrels o' best rum.
+.. list-table:: *Pirate English*
+   :widths: 20 80
+   :stub-columns: 1
+
+   * - rum_barrel
+     - I'ave a barrel o' best rum.
+   * - rum_barrel#t
+     - I'ave %{number} barreles o' best rum.
+   * - rum_barrel#h
+     - I'ave %{number} barrels o' best rum.
 
 Now some examples:
 English:
