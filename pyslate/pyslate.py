@@ -360,10 +360,10 @@ class Pyslate:
         if node.tag_id:
             param_name = node.tag_id
 
-        if param_name in kwargs and kwargs[param_name] in node.cases:
-            return node.cases[kwargs[param_name]]
-        elif param_name in forms and forms[param_name] in node.cases:
-            return node.cases[forms[param_name]]
+        if param_name in kwargs and self._contained_in(kwargs[param_name], node.cases) is not False:
+            return self._contained_in(kwargs[param_name], node.cases)
+        elif param_name in forms and self._contained_in(forms[param_name], node.cases) is not False:
+            return self._contained_in(forms[param_name], node.cases)
         else:
             return node.cases[node.first_key]
 
@@ -380,6 +380,12 @@ class Pyslate:
         except KeyError:
             raise PyslateException("No decorator with name '{}' for main language or any of its fallbacks {}".
                                    format(decorator_name, self._get_languages()))
+
+    def _contained_in(self, param, cases):
+        for case_key in cases.keys():
+            if case_key in param:
+                return cases[case_key]
+        return False
 
 
 class PyslateHelper:

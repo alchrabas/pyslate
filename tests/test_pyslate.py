@@ -259,21 +259,24 @@ class BackendStub():
                 "pl": "m",
             }
         },
+        "doing_this_cookie": {
+            "pl": "Zrobiłem %{cookie:x?temu|p?tym} ciasteczk%{cookie:x?o|g?om}.",
+        },
     }
     # endregion
     """
 
-    -- odmiana liczby mnogiej
-
+    -- plural forms
     ->  [empty] - 1             np. 1 marchewka
-        f - a few [2,4]         np. 3 marchewki
-    ->  m - 5+                  np. 5 marchewek
+        z - zero [0] (Arabic)   np. 0 marchewek
+        t - two [2] (Arabic)    np. 2 marchewki
+        e - a few [2,4]         np. 3 marchewki
+    ->  h - mucH 5+                  np. 5 marchewek
         u - undefined           np. trochę karchewek
         o - other e.g. 1.5      np. 4.5 marchewki
     ->  p - bez określonego     np. marchewki
 
-    -- odmiana przedmiotów
-
+    -- noun cases
     ->  [empty]  - nominative (mianownik)  np. miecz
         g - genitiv (dopełniacz)           np. miecza
         d - dativ (celownik)               np. mieczowi
@@ -282,7 +285,15 @@ class BackendStub():
         l - locative (miejscownik)         np. mieczu
         v - vocative (wołacz)              np. mieczu
 
+    --gender forms
     m, f, n
+
+
+    mnf - gender
+    gdablv - cases
+    sehuop - numbers
+
+    cijkqrtwxyz - not used
 
     Kupił%{gender:m?eś|f?aś} nowiutk{item_g:m?i|f?ą|p?ie} ${entity_${item_name}}. # no dobra, to się nie może zdarzyć
 
@@ -487,6 +498,12 @@ class TestTranslationsPolish(unittest.TestCase):
 
         self.assertEqual("Powiedziałam jej, że to głupie, a ona powiedziała mi to samo.",
                          self.pys.t("talking_the_same2", me="f", sb="f"))
+
+    def test_switch_field_contained(self):
+        self.assertEqual("Zrobiłem tym ciasteczkom.", self.pys.t("doing_this_cookie", cookie="pg"))
+        self.assertEqual("Zrobiłem tym ciasteczko.", self.pys.t("doing_this_cookie", cookie="p"))
+        self.assertEqual("Zrobiłem temu ciasteczkom.", self.pys.t("doing_this_cookie", cookie="g"))
+        self.assertEqual("Zrobiłem temu ciasteczko.", self.pys.t("doing_this_cookie", cookie=""))
 
     # sometimes switch variant is based on form taken from inner tag
     def test_switch_field_with_grammatical_form_from_inner_tag(self):

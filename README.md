@@ -257,14 +257,14 @@ Then we have to create a custom function for a "product" inner tag field. Note t
 as it features connecting to some imaginary database.
 
 ```
->>> def product_fun(helper, name, params):
->>>    product_id = params["product_id"]
->>>    product = db.Product.get(product_id)
->>>    if product.capacity >= 1000:
->>>        car_type = "car_van"
->>>    else:
->>>        car_type = "car_personal"
->>>    return helper.translation("product_template", type=car_type, producer=product.producer)
+def product_fun(helper, name, params):
+    product_id = params["product_id"]
+    product = db.Product.get(product_id)
+    if product.capacity >= 1000:
+    car_type = "car_van"
+    else:
+        car_type = "car_personal"
+    return helper.translation("product_template", type=car_type, producer=product.producer)
 ```
 
 It gets kwarg argument "product_id", query the database for a product and print some data related to it.
@@ -308,3 +308,4 @@ app.jinja_env.globals.update(l=lambda *args, **kwargs: g.pys.l(*args, **kwargs))
 ```
 It registers functions "t" and "l" which are lambdas delegating all the translations to pyslate object.
 I've used lambda, because flask's `g` is accessible only when processing the request while this registration si better to be done during the application startup.
+
