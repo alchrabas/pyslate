@@ -128,8 +128,8 @@ class Pyslate:
     def _translate(self, tag_name, **kwargs):
 
         if "number" in kwargs and not (self.config.DISABLE_NUMBER_FOR_TAG_KEYS_WITH_VARIANT and "#" in tag_name):
-            fallback = self._first_left_value_from(LOCALES, self._get_languages())["number_rule"](kwargs["number"])
-            tag_name = tag_name.partition("#")[0] + "#" + fallback
+            number_variant = self._first_left_value_from(LOCALES, self._get_languages())["number_rule"](kwargs["number"])
+            tag_name = tag_name.partition("#")[0] + "#" + number_variant
 
         tag_base = tag_name.partition("#")[0]
         variant = tag_name.partition("#")[2]
@@ -177,19 +177,20 @@ class Pyslate:
         :param value: value to be localized
         :return: string representation of the value, localized if being instance of the supported types
         """
+        locale_data = self._first_left_value_from(LOCALES, self._get_languages())
         if not self.config.LOCALE_FORMAT_NUMBERS:
             return str(value)
         if isinstance(value, float):
-            locale_data = self._first_left_value_from(LOCALES, self._get_languages())
+
             return self._format_float(value, locale_data["format"]["decimal_point"])
         if isinstance(value, numbers.Integral):
             return str(value)
         if isinstance(value, datetime.datetime):
-            return str(value)
+            return value.strftime(locale_data["format"]["datetime"])
         if isinstance(value, datetime.date):
-            return str(value)
-        if isinstance(value, datetime.time):  # todo
-            return str(value)
+            return value.strftime(locale_data["format"]["date"])
+        if isinstance(value, datetime.time):
+            return value.strftime(locale_data["format"]["time"])
         else:
             return str(value)
 
