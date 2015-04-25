@@ -1,15 +1,15 @@
 __author__ = 'Aleksander Chrabaszcz'
-from pyslate.cache import SimpleMemoryCache
+from .cache import SimpleMemoryCache
 
-from pyslate.backend import PyslateJsonBackend
-from pyslate.parser import PyParser
+from .backend import PyslateJsonBackend
+from .parser import PyParser
 
 # DO NOT ALTER THIS FILE!!!
 # DO NOT ALTER THIS FILE!!!
 # DO NOT ALTER THIS FILE!!!
 
 
-class DefaultConfig:
+class DefaultConfig(object):
     """
     DO NOT ALTER THIS CLASS!!!
 

@@ -1,12 +1,12 @@
 from collections import namedtuple
 import datetime
-from pyslate.config import DefaultConfig
-from pyslate.locales import LOCALES
-from pyslate.parser import InnerTagField, VariableField, SwitchField, PyslateException
+from .config import DefaultConfig
+from .locales import LOCALES
+from .parser import InnerTagField, VariableField, SwitchField, PyslateException
 import numbers
 
 
-class Pyslate:
+class Pyslate(object):
     """
     Main class responsible for all the translation and localization. When constructed it's necessary to set language,
     backend. It's possible to set custom config, context dict and instance of cache class.
@@ -335,7 +335,7 @@ class Pyslate:
                 return ""
             return self._replace_switch_fields(node, kwargs, forms)
         else:
-            raise PyslateException("invalid node: " + str(type(node)) + " in parsed text")
+            raise PyslateException("invalid node: {} of type {} in parsed text".format(node, type(node)))
 
     def _replace_variable_fields(self, node, kwargs):
         if node.contents not in kwargs and node.contents not in self.context:
@@ -388,7 +388,7 @@ class Pyslate:
         return False
 
 
-class PyslateHelper:
+class PyslateHelper(object):
     """
     Class given as a first argument of the custom functions. It's a facade which allows for translating
     or getting a grammatical form for specified tag keys. It also allows for setting a grammatical form of an entity
