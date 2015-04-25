@@ -4,7 +4,7 @@ import json
 class PyslateJsonBackend(object):
 
     def __init__(self, file_name):
-        with open(file_name, "r") as file:
+        with open(file_name, "rt") as file:
             self.tags = json.loads(file.read())
 
     def get_content(self, tag_names, languages):
