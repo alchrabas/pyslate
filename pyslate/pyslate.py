@@ -15,6 +15,7 @@ class Pyslate(object):
     def __init__(self, language, backend=None, config=DefaultConfig(), context=None, cache=None, parser=None):
         """
         Constructor
+
         :param language: see language field
         :param backend: see backend field
         :param config: see config field
@@ -46,12 +47,12 @@ class Pyslate(object):
         """
         Object responsible for caching. It must implement the same methods as cache.SimpleMemoryCache.
         If cache is not needed, then it can be None.
-        Even if specified, cache may not be used when config.ALLOW_CACHE is False.
+        Even if specified, cache may not be used when ``config.ALLOW_CACHE`` is False.
         """
 
         self.fallbacks = {}
         """
-        Dict containing language fallbacks. e.g. dict {"pl": "en"} means
+        Dict containing language fallbacks. e.g. dict ``{"pl": "en"}`` means
         'when tag requested for "pl" is not available, then use a tag value for language "en"'
         """
 
@@ -97,8 +98,8 @@ class Pyslate(object):
             context = {}
         self.context = context
         """
-        Contains dict whose key-value pairs are values automatically appened to kwargs argument
-        of the "py:method::translate" method. They can later be used in variable or switch fields.
+        Contains dict whose key-value pairs are values automatically appended to kwargs argument
+        of the :obj:`translate` method. They can later be used in variable or switch fields.
         It's good to specify kwargs which need to be available globally, e.g. information about the person reading the text.
         """
 
@@ -107,6 +108,7 @@ class Pyslate(object):
         Method returning fully translated tag value for a specified tag_name using kwargs as a list of keyword arguments.
         If there's no tag value for specified language, then tag value for fallback language
         (or global fallback language) is used.
+
         :param tag_name: tag key which should be translated. It can contain decorators
         :param kwargs: arguments which can be interpolated into tag value
         :return: translated value for specified tag key.
@@ -127,7 +129,7 @@ class Pyslate(object):
 
     def _translate(self, tag_name, **kwargs):
 
-        if "number" in kwargs and not (self.config.DISABLE_NUMBER_FOR_TAG_KEYS_WITH_VARIANT and "#" in tag_name):
+        if "number" in kwargs and not ((not self.config.NUMBER_FOR_TAGS_WITH_VARIANT) and "#" in tag_name):
             fallback = self._first_left_value_from(LOCALES, self._get_languages())["number_rule"](kwargs["number"])
             tag_name = tag_name.partition("#")[0] + "#" + fallback
 
@@ -174,6 +176,7 @@ class Pyslate(object):
         Currently it guarantees to correctly localize the following types:
         float, datetime.date, datetime.datetime, datetime.time
         If value cannot be localized then its string representation is returned.
+
         :param value: value to be localized
         :return: string representation of the value, localized if being instance of the supported types
         """
@@ -209,12 +212,13 @@ class Pyslate(object):
         """
         Registers a new decorator which will be available in the translation system.
         Overwrites any other decorator or function with the same name.
+
         :param decorator_name: name of the decorator available in the translation system
         :param function: a function whose only argument is input string string and returns an altered string
         :param is_deterministic: if True then return value of the decorator for specified arguments will be cached
-        to be reused in the future. Keep it disabled unless you really know you need it.
+               to be reused in the future. Keep it disabled unless you really know you need it.
         :param language: language for which decorator will be available, If unspecified then it's available for all languages
-        :return:
+
         """
         if decorator_name in self._functions:
             del self._functions[decorator_name]
@@ -233,15 +237,17 @@ class Pyslate(object):
         """
         Registers a new custom function which will be available in the translation system.
         Overwrites any other decorator or function with the same name.
+
         :param tag_name: name base tag key for which the function is accessible in an inner tag field. See the examples.
         :param function: function with 3 arguments:
             - a helper (instance of PyslateHelper), which is a facade for translating specified tags or setting grammatical form of the custom function
             - tag_name
-            - params (kwargs arguments specified in Pyslate.translate)
+            - params (keyword arguments specified in Pyslate.translate)
+
         :param is_deterministic: if True then return value and grammatical form of the function for specified arguments
-        will be cached to be reused in the future. Keep it disabled unless you really know you need it.
+               will be cached to be reused in the future. Keep it disabled unless you really know you need it.
         :param language: language for which function will be available. If unspecified then it's available for all languages
-        :return:
+
         """
         if tag_name in self._decorators:
             del self._decorators[tag_name]
@@ -425,6 +431,7 @@ class PyslateHelper(object):
         """
         Specifies grammatical form of the entity represented by the custom function.
         It can later be retrieved by other fields of the tag value.
+
         :param form: grammatical form of this custom function
         """
         self.returned_form = form

@@ -6,10 +6,11 @@ Pyslate API reference
 Config variables
 ----------------
 
-.. automodule:: pyslate.config
+.. autoclass:: pyslate.config.DefaultConfig
    :members:
 
 
+      
 pyslate module
 --------------
 

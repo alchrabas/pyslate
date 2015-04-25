@@ -12,6 +12,7 @@ WORK IN PROGRESS, NOT TO BE USED YET
    :maxdepth: 2
    
    user-guide
+   user-reference
    api
 
 
