@@ -1,7 +1,7 @@
 __author__ = 'Aleksander Chrabaszcz'
 
 
-class SimpleMemoryCache:
+class SimpleMemoryCache(object):
 
     def __init__(self):
         self.cache = {}

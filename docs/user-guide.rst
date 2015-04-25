@@ -1,9 +1,12 @@
+.. _user-guide:
+
 User guide
 ==========
 Managing translations from the perspective of the translator.
 
 Introduction
-============
+------------
+
 If you are a programmer who knows how to use Pyslate in code - forget everything about it. If you aren't - that's better.
 Now you'll learn how to translate the messages when you have no idea about its programmatic context.
 
@@ -20,20 +23,29 @@ supplying a different tag value in the same location, which is specified by the 
 All examples will use a simple syntax:
 TAG_KEY: TAG_VALUE
 
+
 Hello message
-=============
-English
-hello: Hello guys!
+-------------
+
+
+::
+
+    hello:  Hello guys
 
 It's easy. You read the value of the "hello" tag and provide a translation.
 
-Pirate English
-hello: Ahoy comrades!
+.. list-table:: *Pirate English*
+   :widths: 20 80
+   :stub-columns: 1
+
+   * - hello
+     - Ahoy comrades!
 
 That's exactly what users will see, so there's no need to show any examples.
 
 Interpolated variables
-======================
+----------------------
+
 Sometimes it's necessary to mention in the message something specified from outside.
 Just think about a message dialog 'Do you want to remove a file "mypicture.png"?'
 This file name is not always the same so there must be a way for programmer
@@ -53,7 +65,7 @@ file_removal: Do ye want to scuttle a file "${file_name}"?
 Example is easy to guess, so let's go on.
 
 Interpolated variables - numbers
-================================
+--------------------------------
 
 Of course, the values interpolated into the variable fields can be also the numbers.
 
@@ -70,10 +82,16 @@ of noun when "number" is 2, which appends "-es" instead of "-s" to the end of th
 We assume the programmer already took care of specifying pluralization rules for our language, so all we have to do is learning what letter is used when the "number" is 2.
 After a short look onto cheatsheet (TODO LINK) we learn that in such situation the variant is "#t" (Two). Okay, here we go.
 
-Pirate English:
-rum_barrel: I'ave a barrel o' best rum.
-rum_barrel#t: I'ave %{number} barreles o' best rum.
-rum_barrel#h: I'ave %{number} barrels o' best rum.
+.. list-table:: *Pirate English*
+   :widths: 20 80
+   :stub-columns: 1
+
+   * - rum_barrel
+     - I'ave a barrel o' best rum.
+   * - rum_barrel#t
+     - I'ave %{number} barreles o' best rum.
+   * - rum_barrel#h
+     - I'ave %{number} barrels o' best rum.
 
 Now some examples:
 English:
@@ -92,7 +110,8 @@ Curious what language has a different pluralization when there are exactly two i
 And we are prepared for that.
 
 Switch fields - different forms of the same text
-================================================
+------------------------------------------------
+
 Now it's time for another special structure, which is called a switch field.
 It's denoted '%{identifier:option1?answer1|option2?answer2}' which means "if value for 'identifier' is equal to 'option1' then show 'answer1',
 if 'identifier' is equal to 'option2' then use 'answer2'. If none of these, then use the first answer from the left - 'answer1' in this case.
@@ -117,7 +136,8 @@ Arr! I'ave a saber, a well sharp'd one.
 Arr! I'ave a saber, which be goin' to be sharp'd before I sail out.
 
 Inner tag fields
-================
+----------------
+
 Now it's time for the last special structure available - a inner tag field.
 In short, it allows you to mention and get value of another tag in any position in the text you like.
 It's denoted ${tag_name}, where tag_name is any of available tag keys.
@@ -145,7 +165,8 @@ I was eatin' breakfast. 'twas really jolly.
 I was eatin' supper. 'twas really jolly.
 
 Variable tag field in inner tag field
-=====================================
+-------------------------------------
+
 We need to go deeper.
 
 English
@@ -177,7 +198,8 @@ Ahoy! Look at a nice firearm.
 Another success, now something what our Pirate English will not cope with.
 
 Switch field and inner tag field cooperation
-============================================
+--------------------------------------------
+
 The already presented features are enough for our Pirate English example, but it can't be denied that Pirate English
 looks quite similar to English. All the difference in it is changing a few words, but some real languages are much more different.
 I'm speaking about fusional languages. If you are not working with them, then you don't have to read further, but you may still find it interesting.

@@ -1,4 +1,4 @@
-pyslate - WORK IN PROGRESS, NOT TO BE USED YET
+Pyslate - WORK IN PROGRESS, NOT TO BE USED YET
 ==============================================
 
 A Python library for maintaining grammatically correct translations for multiple
@@ -21,7 +21,7 @@ I included all features I found important, but also many more:
 Simple example
 --------------
 
-Define a translation file 'translations.json':
+Define a translation file `translations.json`:
 ```json
 {
     "hello_world": {
@@ -44,7 +44,7 @@ Witaj świecie!
 
 It works!
 
-So the most basic use it to create a pyslate object for a selected language and then request translation
+So the most basic use it to create a Pyslate object for a selected language and then request translation
 of a specific tag using a `Pyslate.translate()` method. To make it more handy you can use `Pyslate.t` abbreviation. The JSON backend is used as an example, there are other storage options available.
 
 More complicated example
@@ -66,9 +66,9 @@ Hello! His name is John.
 Hello! Her name is Judy.
 ```
 
-There are two new things here: `%{name}` is a variable field where actual name (specified as a kwarg for `t()` method) is interpolated.
+There are two new things here: `%{name}` is a variable field where actual name (specified as a keyword argument for `t()` method) is interpolated.
 The second is `%{m?His|f?Her}` structure, called a switch field, which means:
-if "variant" kwarg is "m", then print "His", if variant kwarg is "f" then print "Her". If none of these is true, then the first one is used as fallback.
+if `variant` keyword argument is "m", then print "His", if `variant` keyword argument is "f" then print "Her". If none of these is true, then the first one is used as fallback.
 It's easily possible to change pieces of translation based on context variables. That's great for English,
 but it's often even more important for [fusional languages](https://en.wikipedia.org/wiki/Fusional_language) (like Polish) where word suffixes can vary in different forms.
 
@@ -230,7 +230,7 @@ The word "kwiat*ka*" (genitive form of "kwiat*ek*" ["a flower"]) has the followi
     }
 }
 ```
-[(Every language can have different rules](http://unicode.org/repos/cldr-tmp/trunk/diff/supplemental/language_plural_rules.html),
+[Every language can have different rules](http://unicode.org/repos/cldr-tmp/trunk/diff/supplemental/language_plural_rules.html),
 so it's easy to configure them in `locales.py` file.
 
 Custom functions
@@ -253,48 +253,54 @@ It's possible to create a meta-tag being in fact a custom python function which 
     }
 }
 ```
-Then we have to create a custom function for a "product" inner tag field. Note this example can't be run by you in interactive shell,
-as it features connecting to some imaginary database.
+Then we have to create a custom function for a "product" inner tag field:
 
-```
+```python
 def product_fun(helper, name, params):
     product_id = params["product_id"]
-    product = db.Product.get(product_id)
-    if product.capacity >= 1000:
+    product_db = {
+            1: dict(producer='BMW', capacity=1200),
+            7: dict(producer='Audi', capacity=2000)
+        }
+    product = product_db[product_id]
+    if product["capacity"] >= 1000:
     car_type = "car_van"
     else:
         car_type = "car_personal"
-    return helper.translation("product_template", type=car_type, producer=product.producer)
+    return helper.translation(
+        "product_template", 
+        type=car_type, 
+        producer=product["producer"])
 ```
 
-It gets kwarg argument "product_id", query the database for a product and print some data related to it.
-Then it uses special helper object supplied by pyslate to translate a "product_template" tag, whose variable fields are set by data got inside of the function.
+It gets keyword argument "product_id", query the database for a product and print some data related to it.
+Then it uses special helper object supplied by Pyslate to translate a "product_template" tag, whose variable fields are set by data got inside of the function.
 This way you can almost be sure that you'll never have to alter custom functions to make it work for some language.
 In general, every custom function should return a string which is a value of this pseudo-tag.
 Let's register that function:
 ```
 >>> pys.register_function("product", product_fun)
 ```
-Now let's assume the product with id 7 is a product with capacity 2000 produced by Audi.
+
+Now let's use it:
 ```
 >>> pys.t("product_presentation", product_id=7)
 I'd like to present you a new product. It's a delivery van produced by Audi.
 ```
+
 It works great.
-Please note if you need lots of custom functions in your code, then maybe any i18n library isn't a correct solution for your kind of problem.
-You shouldn't also misuse Pyslate as a templating designer, because any real (like jinja2) would do it better.
+Note that if you need lots of custom functions in your code, then possibly you should not use a translation library for this task.
+You also shouldn't misuse Pyslate as a templating engine, if you need to put placeholders into larger documents, use Jinja2 or similar library.
 
 Integration with templating engines
 -----------------------------------
-Most likely your application uses some template system to separate logic from the presentation.
-As there are probably lots of static messages in your template files that need to be translated, then you need a way to
-call pyslate directly from it.
+If you use a templating engine, there are probably lots of static messages in your template files that need to be translated and you need a way to call Pyslate directly from them.
 Considering short tag keys and easy to use interface it's very simple to integrate with any template language.
 I'll show how to get Pyslate work with Jinja2 and Flask-Jinja2, but it's just as easy for any other templating language which allows defining custom functions.
 
 ### Jinja2 integration
 For Jinja integration you need to get access to Jinja's env globals and register two new functions there:
-```
+```python
 env = Environment(loader=FileSystemLoader('/path/to/templates'))
 env.globals["t"] = pyslate.t
 env.globals["l"] = pyslate.l
@@ -308,4 +314,3 @@ app.jinja_env.globals.update(l=lambda *args, **kwargs: g.pys.l(*args, **kwargs))
 ```
 It registers functions "t" and "l" which are lambdas delegating all the translations to pyslate object.
 I've used lambda, because flask's `g` is accessible only when processing the request while the function registration is better to be done during the application startup.
-

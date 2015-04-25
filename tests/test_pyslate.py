@@ -1,3 +1,4 @@
+# encoding: utf-8
 import unittest
 import datetime
 from pyslate.config import DefaultConfig
@@ -365,11 +366,10 @@ class TestTranslationsEnglish(unittest.TestCase):
 
     def test_deterministic_function(self):  # deterministic funs are run once and result of their execution is memorized
 
-        calls_count = 0
+        calls_count = [0]
 
         def fun(helper, tag_name, params):
-            nonlocal calls_count
-            calls_count += 1
+            calls_count[0] += 1
             return ":)"
 
         self.pys.register_function("fun", fun, is_deterministic=True)
@@ -378,7 +378,7 @@ class TestTranslationsEnglish(unittest.TestCase):
         self.assertEqual(":)", self.pys.t("fun"))
         self.assertEqual(":)", self.pys.t("fun"))
 
-        self.assertEqual(1, calls_count)  # make sure that function was called just once
+        self.assertEqual(1, calls_count[0])  # make sure that function was called just once
 
     def test_localization(self):  # en_US
         # date

@@ -1,7 +1,7 @@
 import string
 from ply import lex, yacc
 
-class PyLexer:
+class PyLexer(object):
 
     tokens = (
         'DOL_LBRACE',
@@ -89,7 +89,7 @@ class PyLexer:
         return list(self.lexer)
 
 
-class PyParser:
+class PyParser(object):
 
     precedence = (
         ('left', 'QUESTION'),
@@ -193,7 +193,7 @@ class PyParser:
         return self.parser.parse(data, lexer=self.lexer, **kwargs)
 
 
-class InnerTagField:
+class InnerTagField(object):
     def __init__(self, contents, tag_id=None, decorators=None):
         self.contents = contents
         self.tag_id = tag_id
@@ -208,7 +208,7 @@ class InnerTagField:
         return "innerTag(" + str(self.contents) + ", " + str(self.tag_id) + ", " + str(self.decorators) + ")"
 
 
-class VariableField:
+class VariableField(object):
     def __init__(self, contents, decorators=None):
         self.contents = contents
         self.decorators = decorators
@@ -222,7 +222,7 @@ class VariableField:
         return "variable(" + str(self.contents) + ")"
 
 
-class SwitchField:
+class SwitchField(object):
     def __init__(self, cases, first_key, tag_id=None):
         self.first_key = first_key
         self.cases = cases
@@ -237,4 +237,5 @@ class SwitchField:
 
 class PyslateException(Exception):
     def __init__(self, tag):
+        Exception.__init__(self, tag)
         self.tag = tag
