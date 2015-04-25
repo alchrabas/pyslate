@@ -168,7 +168,7 @@ class Pyslate:
                 return key
         return None
 
-    def localize(self, value):
+    def localize(self, value, short=False):
         """
         Method returning localized string representation of a value specified in the argument.
         Currently it guarantees to correctly localize the following types:
@@ -181,16 +181,18 @@ class Pyslate:
         if not self.config.LOCALE_FORMAT_NUMBERS:
             return str(value)
         if isinstance(value, float):
-
             return self._format_float(value, locale_data["format"]["decimal_point"])
         if isinstance(value, numbers.Integral):
             return str(value)
         if isinstance(value, datetime.datetime):
-            return value.strftime(locale_data["format"]["datetime"])
+            format_field = "datetime_short" if short else "datetime"
+            return value.strftime(locale_data["format"][format_field])
         if isinstance(value, datetime.date):
-            return value.strftime(locale_data["format"]["date"])
+            format_field = "date_short" if short else "date"
+            return value.strftime(locale_data["format"][format_field])
         if isinstance(value, datetime.time):
-            return value.strftime(locale_data["format"]["time"])
+            format_field = "time_short" if short else "time"
+            return value.strftime(locale_data["format"][format_field])
         else:
             return str(value)
 

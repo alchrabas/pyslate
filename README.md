@@ -307,5 +307,5 @@ app.jinja_env.globals.update(t=lambda *args, **kwargs: g.pys.t(*args, **kwargs))
 app.jinja_env.globals.update(l=lambda *args, **kwargs: g.pys.l(*args, **kwargs))
 ```
 It registers functions "t" and "l" which are lambdas delegating all the translations to pyslate object.
-I've used lambda, because flask's `g` is accessible only when processing the request while this registration si better to be done during the application startup.
+I've used lambda, because flask's `g` is accessible only when processing the request while the function registration is better to be done during the application startup.
 
