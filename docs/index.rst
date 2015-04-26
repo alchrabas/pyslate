@@ -14,6 +14,7 @@ WORK IN PROGRESS, NOT TO BE USED YET
    user-guide
    user-reference
    api
+   advanced_examples
 
 
 Indices and tables

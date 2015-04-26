@@ -269,19 +269,19 @@ class BackendStub():
     """
 
     -- plural forms
-    ->  [empty] - 1             np. 1 marchewka
-        z - zero [0] (Arabic)   np. 0 marchewek
-        t - two [2] (Arabic)    np. 2 marchewki
-        e - a few [2,4]         np. 3 marchewki
-    ->  h - mucH 5+                  np. 5 marchewek
-        u - undefined           np. trochę karchewek
-        o - other e.g. 1.5      np. 4.5 marchewki
-    ->  p - bez określonego     np. marchewki
+    ->  [empty] - 1             np. 1 carrot,     1 marchewka
+        z - zero [0] (Arabic)   np. 0 carrots,    0 marchewek
+        t - two [2] (Arabic)    np. 2 carrots,    2 marchewki
+        w - a feW [2,4]         np. 3 carrots,    3 marchewki
+    ->  y - manY 5+             np. 5 carrots,    5 marchewek
+        u - undefined           np. some carrots, trochę marchewek
+        o - other e.g. 1.5      np. 4.5 carrots,  4.5 marchewki
+    ->  p - bez określonego     np. carrots,      marchewki
 
     -- noun cases
     ->  [empty]  - nominative (mianownik)  np. miecz
-        g - genitiv (dopełniacz)           np. miecza
-        d - dativ (celownik)               np. mieczowi
+        g - genitive (dopełniacz)           np. miecza
+        d - dative (celownik)               np. mieczowi
     ->  a - accusative (biernik)           np. miecz
         b - ablative (narzędnik)           np. mieczem
         l - locative (miejscownik)         np. mieczu
@@ -293,9 +293,9 @@ class BackendStub():
 
     mnf - gender
     gdablv - cases
-    sehuop - numbers
+    sztwyuop - numbers
 
-    cijkqrtwxyz - not used
+    cehijkqrxy - not used
 
     Kupił%{gender:m?eś|f?aś} nowiutk{item_g:m?i|f?ą|p?ie} ${entity_${item_name}}. # no dobra, to się nie może zdarzyć
 

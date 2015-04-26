@@ -96,15 +96,15 @@ After a short look onto cheatsheet (TODO LINK) we learn that in such situation t
 Now some examples:
 
 .. admonition:: English Example
+    :class: Note
 
     | I posess a barrel of the finest rum.
     | I posess 2 barrels of the finest rum.
     | I posess 5 barrels of the finest rum.
     | I posess 17 barrels of the finest rum.
 
-
-
 .. admonition:: Pirate English Example
+    :class: Note
 
     | I'ave a barrel o' best rum.
     | I'ave 2 barreles o' best rum.
@@ -136,11 +136,13 @@ But we can translate answers, which are visible for users.
     sabre_statement => Arr! I'ave a saber, %{state:sharp?a well sharp'd one|blunt?which be goin' to be sharp'd before I sail out}.
 
 .. admonition:: English Example
+    :class: Note
 
     | I have a sabre, a finely sharped one.
     | I have a sabre, which is going to be sharpened soon.
 
 .. admonition:: Pirate English Example
+    :class: Note
 
     | Arr! I'ave a saber, a well sharp'd one.
     | Arr! I'ave a saber, which be goin' to be sharp'd before I sail out.
@@ -170,13 +172,15 @@ but there are complicated situations where using that is unavoidable.
     was_good:       => 'twas really jolly.
 
 .. admonition:: English Example
+    :class: Note
 
     | I was eating breakfast. It was really good.
     | I was eating supper. It was really good.
 
 .. admonition:: Pirate English Example
+    :class: Note
 
-    |  I was eatin' breakfast. 'twas really jolly.
+    | I was eatin' breakfast. 'twas really jolly.
     | I was eatin' supper. 'twas really jolly.
 
 Variable tag field in inner tag field
@@ -206,11 +210,13 @@ There cannot be any other in our Pirate language if there aren't such in origina
     state_gun:      => a nice firearm
 
 .. admonition:: English Example
+    :class: Note
 
     | Hey! Look at a sharp sabre.
     | Hey! Look at a shiny pistol.
 
 .. admonition:: Pirate English Example
+    :class: Note
 
     | Ahoy! Look at a sharp saber.
     | Ahoy! Look at a nice firearm.
@@ -283,4 +289,4 @@ So the full Polish translation looks like that:
                      form: m
 
 
-If you don't need it and don't understand that - it's nothing to worry about. But if you are translating to a fusional language then I hope you have learned how does it work.
+If you don't need it and don't understand that - it's nothing to worry about. But if you are translating to a fusional language then I hope you've learned how does it work.
