@@ -80,7 +80,7 @@ class DefaultConfig(object):
         Default: ``True``
         """
 
-        self.ALLOW_CACHE = False
+        self.ALLOW_CACHE = True
         """
         Specifies if instance of Pyslate should cache any data.
 
@@ -90,7 +90,7 @@ class DefaultConfig(object):
         .. NOTE::
            If you supply a cache this way, then the class must have a default (parameter-less) constructor.
 
-        Default: ``False``
+        Default: ``True``
         """
 
         self.PARSER_CLASS = PyParser
