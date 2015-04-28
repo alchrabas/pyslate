@@ -54,11 +54,11 @@ Even more, it's possible to mix these two ways of representing variants, especia
         "pl": "${number} filiżanek",
     }
 
-As you can see, for Polish you have to use a case different than nominative, but only for a singular form of a word "cup".
+As you can see, for Polish you have to use a different case (accusative), but only for a singular form of a word "cup".
 It's not necessary for a mug, though (no easy way to learn that, you just need to know that ;]).
-Another magic (which was already used somewhere else too) is having case "x?" in a switch field.
-"x" variant should usually be unused, so it cannot ever be matched. But it's first left case, so it can be matched
-in case nothing else can be matched. That's the case when you request the most basic form (singular).
+Another magic (which was already used somewhere else too) is having option "x?" in a switch field.
+"x" variant is required to be never used, so it cannot ever be matched in a standard way. But it's first left case, so it can be matched as default option
+in case nothing else can be matched. That's the case when you request the most basic form of a word (singular).
 
 Example 3 - Advanced tag variants
 ---------------------------------
