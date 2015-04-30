@@ -102,12 +102,13 @@ class DefaultConfig(object):
         Default: ``PyParser``
         """
 
-        self.NUMBER_FOR_TAGS_WITH_VARIANT = True
+        self.OVERWRITE_VARIANT_ON_NUMBER = False
         """
-        Enables executing special number code (selecting correct variant for specified ``%{number}`` placeholder)
-        if a specified tag key already contains a variant.
+        Enables completely overwriting the variant iwth a special number code (selecting correct
+        variant for specified ``%{number}`` placeholder) even if a specified tag key already contains a variant.
+        If set to false, then number variant is prepended as the first letter of the variant.
 
-        Default: ``True``
+        Default: ``False``
         """
 
         self.LOCALE_FORMAT_NUMBERS = True

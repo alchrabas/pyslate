@@ -270,13 +270,12 @@ class BackendStub():
 
     -- plural forms
     ->  [empty] - 1             np. 1 carrot,     1 marchewka
-        z - zero [0] (Arabic)   np. 0 carrots,    0 marchewek
-        t - two [2] (Arabic)    np. 2 carrots,    2 marchewki
+        z - zero [0]            np. 0 carrots,    0 marchewek
+        t - two [2]             np. 2 carrots,    2 marchewki
         w - a feW [2,4]         np. 3 carrots,    3 marchewki
     ->  y - manY 5+             np. 5 carrots,    5 marchewek
-        u - undefined           np. some carrots, trochę marchewek
-        o - other e.g. 1.5      np. 4.5 carrots,  4.5 marchewki
-    ->  p - bez określonego     np. carrots,      marchewki
+        u - undefined           np. carrots|some carrots, marchewki|trochę marchewek
+        p - other e.g. 1.5      np. 4.5 carrots,  4.5 marchewki
 
     -- noun cases
     ->  [empty]  - nominative (mianownik)  np. miecz

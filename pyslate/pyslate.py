@@ -129,9 +129,13 @@ class Pyslate(object):
 
     def _translate(self, tag_name, **kwargs):
 
-        if "number" in kwargs and not ((not self.config.NUMBER_FOR_TAGS_WITH_VARIANT) and "#" in tag_name):
+        if "number" in kwargs:
             number_variant = self._first_left_value_from(LOCALES, self._get_languages())["number_rule"](kwargs["number"])
-            tag_name = tag_name.partition("#")[0] + "#" + number_variant
+            base_variant_parts = tag_name.partition("#")
+            if self.config.OVERWRITE_VARIANT_ON_NUMBER:
+                tag_name = base_variant_parts[0] + "#" + number_variant
+            else:
+                tag_name = base_variant_parts[0] + "#" + number_variant + base_variant_parts[2]
 
 
         tag_base = tag_name.partition("#")[0]
@@ -273,7 +277,7 @@ class Pyslate(object):
         if "#" in tag_name:
             requested_tags += [tag_name.partition("#")[0]]
 
-        if self.config.ALLOW_CACHE:
+        if self.cache and self.config.ALLOW_CACHE:
             cached_content = self.cache.load(requested_tags[0], self._get_languages()[0])
             if cached_content is not None:
                 return cached_content
@@ -281,7 +285,7 @@ class Pyslate(object):
         retrieved_content = self.backend.get_content(requested_tags, self._get_languages())
         if retrieved_content is None:
             retrieved_content = "[MISSING TAG '{0}']".format(requested_tags[0])
-        elif self.config.ALLOW_CACHE:
+        elif self.cache and self.config.ALLOW_CACHE:
             self.cache.save(tag_name, self.language, retrieved_content)
         return retrieved_content
 
