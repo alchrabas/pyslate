@@ -73,16 +73,16 @@ class BackendStub():
             "en": "My name is %{name}",
         },
         "item_ownership": {
-            "en": "${welcome} I have ${entity_%{item_name}#p}.",
+            "en": "${welcome} I have ${entity_%{item_name}#u}.",
         },
         "entity_sword": {
             "en": "a sword",
             "pl": "miecz",
         },
-        "entity_sword#m": {
+        "entity_sword#p": {
             "en": "%{number} swords",
         },
-        "entity_sword#p": {
+        "entity_sword#u": {
             "en": "swords",
         },
         "entity_sword#a": {
@@ -96,7 +96,7 @@ class BackendStub():
             "en": "%{number} blocks of stone",
             "pl": "%{number} brył kamieni",
         },
-        "entity_stone#f": {  # a few
+        "entity_stone#w": {  # a few
             "pl": "%{number} bryły kamieni",
         },
         "entity_stone#u": {  # undefined
@@ -107,32 +107,20 @@ class BackendStub():
             "en": "a carrot",
             "pl": "marchewka",
         },
-        "entity_carrot#m": {  # many
+        "entity_carrot#p": {  # many
             "en": "%{number} carrots",
             "pl": "%{number} marchewek",
         },
-        "entity_carrot#f": {  # a few
+        "entity_carrot#w": {  # a few
             "pl": "%{number} marchewki",
         },
         "entity_carrot#u": {  # undefined
             "en": "some carrots",
             "pl": "trochę marchewek",
         },
-        "entity_carrot#o": {  # other
-            "pl": "%{number} marchewki",
-        },
         "entity_beetroot": {
-            "en": "beetroot%{tag_v:s?|m?s}",
-            "pl": "%{number} burak%{tag_v:s?|f?i|m?ów|o?a}",
-        },
-        "having_flowers": {
-            "en": "I have %{number} ${entity_flower#%{tag_v}}",
-        },
-        "entity_flower": {
-            "en": "flower",
-        },
-        "entity_flower#p": {
-            "en": "flowers",
+            "en": "beetroot%{tag_v:s?|p?s}",
+            "pl": "%{number} burak%{tag_v:s?|w?i|p?ów}",
         },
         "action_give_others": {
             "en": "You see ${giver:char_info} give ${entity_%{item_name}#u} to ${taker:char_info}.",
@@ -278,13 +266,13 @@ class BackendStub():
         p - other e.g. 1.5      np. 4.5 carrots,  4.5 marchewki
 
     -- noun cases
-    ->  [empty]  - nominative (mianownik)  np. miecz
+    ->  [empty]  - nominative (mianownik)   np. miecz
         g - genitive (dopełniacz)           np. miecza
         d - dative (celownik)               np. mieczowi
-    ->  a - accusative (biernik)           np. miecz
-        b - ablative (narzędnik)           np. mieczem
-        l - locative (miejscownik)         np. mieczu
-        v - vocative (wołacz)              np. mieczu
+    ->  a - accusative (biernik)            np. miecz
+        b - ablative (narzędnik)            np. mieczem
+        l - locative (miejscownik)          np. mieczu
+        v - vocative (wołacz)               np. mieczu
 
     --gender forms
     m, f, n
@@ -379,19 +367,19 @@ class TestTranslationsEnglish(unittest.TestCase):
 
         self.assertEqual(1, calls_count[0])  # make sure that function was called just once
 
-    def test_localization(self):  # en_US
+    def test_localization(self):  # en = en_GB
         # date
-        self.assertEqual("12/15/1999", self.pys.l(datetime.date(1999, 12, 15)))
-        self.assertEqual("11/1/2222", self.pys.l(datetime.date(2222, 11, 1)))
-        self.assertEqual("1/3/2", self.pys.l(datetime.date(2, 1, 3)))
+        self.assertEqual("15/12/1999", self.pys.l(datetime.date(1999, 12, 15)))
+        self.assertEqual("1/11/2222", self.pys.l(datetime.date(2222, 11, 1)))
+        self.assertEqual("3/1/2", self.pys.l(datetime.date(2, 1, 3)))
 
         # time
         self.assertEqual("2:11:37 AM", self.pys.l(datetime.time(2, 11, 37)))
         self.assertEqual("6:13:22 PM", self.pys.l(datetime.time(18, 13, 22)))
 
         # datetime
-        self.assertEqual("2:11:37 AM 12/7/1999", self.pys.l(datetime.datetime(1999, 12, 7, 2, 11, 37)))
-        self.assertEqual("6:13:22 PM 1/3/2128", self.pys.l(datetime.datetime(2128, 1, 3, 18, 13, 22)))
+        self.assertEqual("7/12/1999, 2:11:37 AM", self.pys.l(datetime.datetime(1999, 12, 7, 2, 11, 37)))
+        self.assertEqual("3/1/2128, 6:13:22 PM", self.pys.l(datetime.datetime(2128, 1, 3, 18, 13, 22)))
 
 
 class TestTranslationsPolish(unittest.TestCase):
@@ -401,18 +389,18 @@ class TestTranslationsPolish(unittest.TestCase):
         self.pys.fallbacks["pl"] = "en"  # it's not necessary
 
     def test_numbers(self):
-        self.assertEqual("10 marchewek", self.pys.t("entity_carrot#m", number=10))
+        self.assertEqual("10 marchewek", self.pys.t("entity_carrot#p", number=10))
         self.assertEqual("10 marchewek", self.pys.t("entity_carrot", number=10))
         self.assertEqual("4 marchewki", self.pys.t("entity_carrot", number=4))
         self.assertEqual("marchewka", self.pys.t("entity_carrot", number=1))
-        self.assertEqual("1,5 marchewki", self.pys.t("entity_carrot", number=1.5))
+        self.assertEqual("1,5 marchewek", self.pys.t("entity_carrot", number=1.5))  # might need polishing
 
     def test_numbers_variants(self):
-        self.assertEqual("10 buraków", self.pys.t("entity_beetroot#m", number=10))
+        self.assertEqual("10 buraków", self.pys.t("entity_beetroot#p", number=10))
         self.assertEqual("10 buraków", self.pys.t("entity_beetroot", number=10))
         self.assertEqual("4 buraki", self.pys.t("entity_beetroot", number=4))
         self.assertEqual("1 burak", self.pys.t("entity_beetroot", number=1))
-        self.assertEqual("1,5 buraka", self.pys.t("entity_beetroot", number=1.5))
+        self.assertEqual("1,5 buraków", self.pys.t("entity_beetroot", number=1.5))
 
     def test_hunt(self):
         self.assertEqual("Atakujesz łosia przy pomocy miecza.",
@@ -583,13 +571,13 @@ class TestTranslationsPolish(unittest.TestCase):
     def test_localization(self):
         self.assertEqual("15.12.1999", self.pys.l(datetime.date(1999, 12, 15)))
         self.assertEqual("1.11.2222", self.pys.l(datetime.date(2222, 11, 1)))
-        self.assertEqual("3.1.2", self.pys.l(datetime.date(2, 1, 3)))
+        self.assertEqual("3.01.2", self.pys.l(datetime.date(2, 1, 3)))
 
         self.assertEqual("2:11:37", self.pys.l(datetime.time(2, 11, 37)))
         self.assertEqual("18:13:22", self.pys.l(datetime.time(18, 13, 22)))
 
-        self.assertEqual("2:11:37 7.12.1999", self.pys.l(datetime.datetime(1999, 12, 7, 2, 11, 37)))
-        self.assertEqual("18:13:22 3.1.2128", self.pys.l(datetime.datetime(2128, 1, 3, 18, 13, 22)))
+        self.assertEqual("7.12.1999, 2:11:37", self.pys.l(datetime.datetime(1999, 12, 7, 2, 11, 37)))
+        self.assertEqual("3.01.2128, 18:13:22", self.pys.l(datetime.datetime(2128, 1, 3, 18, 13, 22)))
 
 
 class TestConfigPolishTranslations(unittest.TestCase):
@@ -599,6 +587,6 @@ class TestConfigPolishTranslations(unittest.TestCase):
         config.ALLOW_INNER_TAGS = False
         self.pys = Pyslate("pl", backend=BackendStub(), config=config)
 
-        self.assertEqual("${welcome} I have ${entity_sword#p}.",
+        self.assertEqual("${welcome} I have ${entity_sword#u}.",
                          self.pys.t("item_ownership", item_name="sword"))
 

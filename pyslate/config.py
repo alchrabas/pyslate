@@ -1,7 +1,5 @@
 __author__ = 'Aleksander Chrabaszcz'
-from .cache import SimpleMemoryCache
 
-from .backend import PyslateJsonBackend
 from .parser import PyParser
 
  #####    ####           #    #   ####    #####
@@ -100,15 +98,6 @@ class DefaultConfig(object):
         Default implementation is done using PLY parser generator.
 
         Default: ``PyParser``
-        """
-
-        self.OVERWRITE_VARIANT_ON_NUMBER = False
-        """
-        Enables completely overwriting the variant iwth a special number code (selecting correct
-        variant for specified ``%{number}`` placeholder) even if a specified tag key already contains a variant.
-        If set to false, then number variant is prepended as the first letter of the variant.
-
-        Default: ``False``
         """
 
         self.LOCALE_FORMAT_NUMBERS = True

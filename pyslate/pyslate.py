@@ -131,11 +131,13 @@ class Pyslate(object):
 
         if "number" in kwargs:
             number_variant = self._first_left_value_from(LOCALES, self._get_languages())["number_rule"](kwargs["number"])
+
             base_variant_parts = tag_name.partition("#")
-            if self.config.OVERWRITE_VARIANT_ON_NUMBER:
-                tag_name = base_variant_parts[0] + "#" + number_variant
-            else:
-                tag_name = base_variant_parts[0] + "#" + number_variant + base_variant_parts[2]
+            tag_name = base_variant_parts[0] + "#" + number_variant + base_variant_parts[2]
+
+            if tag_name[-1] == "#":
+                tag_name = tag_name[:-1]
+
 
 
         tag_base = tag_name.partition("#")[0]
@@ -275,7 +277,10 @@ class Pyslate(object):
 
         requested_tags = [tag_name]
         if "#" in tag_name:
-            requested_tags += [tag_name.partition("#")[0]]
+            tag_and_variant = tag_name.partition("#")
+            for i in range(len(tag_and_variant[2]) - 1, 0, -1):
+                requested_tags += [tag_and_variant[0] + tag_and_variant[1] + tag_and_variant[2][:i]]
+            requested_tags += [tag_and_variant[0]]
 
         if self.cache and self.config.ALLOW_CACHE:
             cached_content = self.cache.load(requested_tags[0], self._get_languages()[0])
