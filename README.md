@@ -1,8 +1,7 @@
-Pyslate - WORK IN PROGRESS, NOT TO BE USED YET
-==============================================
+Pyslate i18n library - WORK IN PROGRESS, NOT TO BE USED YET
+===========================================================
 
-A Python library for maintaining grammatically correct translations for multiple
-languages.
+A Python library for maintaining grammatically correct i18n
 
 What is it for?
 ---------------
@@ -14,9 +13,18 @@ I included all features I found important, but also many more:
  - i18n of text (tag values) based on their unique names (tag keys)
  - possibility to use different backends where translations are stored
  - support for special structures to use by translator directly in translation text
- - powerful fallback abilities in case that some variant of tag is missing
- - possibility injecting Python code into translations using decorators and custom functions
+ - powerful fallback capabilities in case some variant of tag is missing
+ - possibility of injecting Python code into translations using decorators and custom functions
  - support for languages significantly different than English, based on practical knowledge and years of experience
+
+What is it not for?
+-------------------
+
+It's possible to not use some of the features, but it's not intended to be used for the following: 
+ - when you are sure you don't need anything except literal text i18n
+ - when you'd like to use it as a templating engine
+ - when you'd like to make some lexical analysis
+ - when you'd like to create a natural language generator or a chatterbot 
 
 Simple example
 --------------

@@ -7,26 +7,22 @@ Managing translations from the perspective of the translator.
 Introduction
 ------------
 
-If you are a programmer who knows how to use use Pyslate functions in code - forget everything about it. If you aren't - that's better.
-Now you'll learn how to translate (internationalize&localize) the messages as a translator - when you have no idea about its programmatic context.
-
-As I cannot assume you know any language besides English, all the first examples will be translating English to Pirate English.
+In this article you'll learn how to translate (internationalize&localize) the messages as a translator - when you have no idea about its programmatic context.
 
 All these examples will be posted in the same form: a box with all tags in English, a box with all tags in Pirate English.
 Then there will be some examples of using these tags in the real-life context.
 
 .. Note::
-    Such examples are something you often don't have access to as a translator.
+    Such examples are something you usually don't have access to as a translator.
 
 | First I'll explain what tag is. Tag is a pair of text strings: a key and a value.
 | **Value** is the text visible for users of the program - the part you have to translate.
-| **Key** is text's identifier invisible for users - you should keep it the same, because translating is basically
-supplying a different tag value in the same key.
+| **Key** is text's identifier invisible for users - you should keep it the same, because translating is basically supplying a different tag value in the same key.
 | All examples will use the simple syntax: ``TAG_KEY => TAG_VALUE``
-
 
 Hello message
 -------------
+As I cannot assume you know any language besides English, we'll start with translating English to Pirate English.
 
 **English**
 ::
