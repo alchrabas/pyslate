@@ -15,8 +15,6 @@ WORK IN PROGRESS, NOT TO BE USED YET
    user-reference
    api
    advanced_examples
-   fallbacks
-
 
 Indices and tables
 ==================
