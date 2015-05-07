@@ -15,10 +15,12 @@ Then there will be some examples of using these tags in the real-life context.
 .. Note::
     Such examples are something you usually don't have access to as a translator.
 
-| First I'll explain what tag is. Tag is a pair of text strings: a key and a value.
-| **Value** is the text visible for users of the program - the part you have to translate.
-| **Key** is text's identifier invisible for users - you should keep it the same, because translating is basically supplying a different tag value in the same key.
-| All examples will use the simple syntax: ``TAG_KEY => TAG_VALUE``
+First I'll explain what tag is. Tag is a pair of text strings: a key and a value.
+
+ - **Value** is the text visible for users of the program - the part you have to translate.
+ - **Key** is text's identifier invisible for users - you should keep it the same, because translating is basically supplying a different tag value for the same key.
+
+All examples will use the simple syntax: ``TAG_KEY => TAG_VALUE``
 
 Hello message
 -------------
@@ -134,7 +136,7 @@ It should always be guaranteed that a base tag exists if any variant exists.
 If you have a tag with variant consisting of many variant letters then matching is done from the most to least exact:
 ::
 
-    ) sweet_cookie#png -> sweet_cookie#pn -> sweet_cookie#p -> sweet_cookie
+    . sweet_cookie#png -> sweet_cookie#pn -> sweet_cookie#p -> sweet_cookie
 
 **Language fallback**
 
@@ -296,9 +298,9 @@ We start with translating the items. It's possible to specify the grammatical fo
              form: m
 
 | Okay, we have translated items, but there's the toughest part. At the first glance it should be something like:
-| presentation_text: To jest now%{**WHAT**:m?y|f?a|n?e} ${item_%{item_name}}.
+| presentation_text: To jest now%{**SOMETHING**:m?y|f?a|n?e} ${item_%{item_name}}.
 
-What to set into **WHAT**? How can we guess what item is it? Should we ask a programmer to create a special variable to be used?
+What to set into **SOMETHING**? How can we guess what item is it? Should we ask a programmer to create a special variable for us?
 It's a very bad idea, because it would significantly complicate the translation process.
 That's why there's a special way in which inner tag fields can cooperate with switch fields.
 
@@ -322,3 +324,41 @@ So the full Polish translation looks like that:
 
 
 If you are translating to a fusional language then I hope you've learned how does it work. If you don't know any of such, then these examples can be hard to understand.
+
+Appendix I - correct variant letters for numbers and cases
+----------------------------------------------------------
+
+As it was already mentioned, variants are specified by single-letter identifiers.
+Every letter has some contractual meaning and specific letters are not imposed by Pyslate (with exception of pluralization letters, which are based on language locale).
+
+Letters that are reserved to be used for pluralization forms:
+
+    - "" (empty) - singular - base form
+    - z - zero - when there are no elements
+    - t - **T**\ wo - plural form for 2 or numbers treated like 2.
+    - w - fe\ **W** - form used for *a few* elements (usually 3, 4) or treated like *a few*
+    - p - plural (a.k.a. many) - form used for all the rest
+
+They are unused for most of languages.
+
+Suggestion what letters should be used for the following gender forms:
+
+    - m - masculine
+    - f - feminine
+    - n - neuter
+
+There's suggestion what letters should be used for the following (latin) cases in fusional languages:
+
+    - "" (empty) - nominative - base form
+    - g - genitive
+    - d - dative
+    - a - accusative
+    - b - ablative
+    - l - locative
+    - v - vocative
+
+It's worthless to try to supply all the forms, even if the language supports them. Use only those really needed in the translation system.
+If language you are translating to supports more than that - you can use any of "unused" letters. It's just advised to avoid using "x".
+
+If variant tag contains all these data, then letters in a variant are advised to be used in the following order: plural form, gender form, case.
+For example: small_stone#pmg (plural, masculine, genitive). This order guarantees the fallback process most effective.
