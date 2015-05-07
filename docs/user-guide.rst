@@ -187,7 +187,7 @@ But we can translate answers, which are visible for users.
 
 
 If you see above, I wrote "if 'identifier' is like 'option1'", because LIKE doesn't mean the same as "equals to".
-In fact it means "if 'option1' is part of 'identifier'", but it doesn't matter in this particular example.
+In fact it means "if 'option1' is part of 'identifier' string", but it doesn't matter in this particular example and will be further explained.
 
 Inner tag fields
 ----------------
