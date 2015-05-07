@@ -2,12 +2,12 @@
 
 User guide
 ==========
-Managing translations from the perspective of the translator.
+Managing text translations from the perspective of the translator.
 
 Introduction
 ------------
 
-In this article you'll learn how to translate (internationalize&localize) the messages as a translator - when you have no idea about its programmatic context.
+In this article you'll learn how to translate (internationalize&localize) the messages as a translator - when you have no idea about their programmatic context.
 
 All these examples will be posted in the same form: a box with all tags in English, a box with all tags in Pirate English.
 Then there will be some examples of using these tags in the real-life context.
@@ -45,9 +45,9 @@ Interpolated variables
 
 Sometimes it's necessary to mention in the message something specified from outside.
 Just think about a message dialog 'Do you want to remove a file "mypicture.png"?'
-This file name is not always the same so there must be a way for programmer to specify it and there needs to be a way for a translator to show it in the dialog.
+This file name is something that does change, so there must be a way for a programmer to deliver it and there needs to be a way for a translator to show it as part of the message.
 That's why there exists a special structure, called a **variable field**. It's denoted as **%{variable_name}** which is
-replaced by Pyslate during program execution. The "variable_name" is identifier of value which should be interpolated here.
+later replaced by Pyslate during the program execution. The "variable_name" is identifier of value which should be interpolated here.
 The only easy way to learn what can stand for "variable_name" is to thoroughly read the original translation.
 
 **English**
@@ -62,7 +62,7 @@ So now we know that name of the file is specified using the identifier "file_nam
 
     file_removal => Do ye want to scuttle a file "%{file_name}"?
 
-Example is easy to guess, so let's go on.
+Example is easy to guess...
 
 .. admonition:: English Example
     :class: Note
@@ -77,7 +77,7 @@ Example is easy to guess, so let's go on.
 Interpolated variables - numbers
 --------------------------------
 
-The values interpolated into the variable fields can be also the numbers.
+The values interpolated into the variable fields can also be the numbers.
 
 **English**
 ::
@@ -86,13 +86,13 @@ The values interpolated into the variable fields can be also the numbers.
     rum_barrel#p => I posess %{number} barrels of the finest rum.
 
 What's that? When the programmer calls a variable identifier "number" then some magic happens. As you see there are two forms of the same tag.
-"rum_barrel" is called a base tag, while "#p" is called a tag variant (because it's a variant of a base tag).
+"rum_barrel" is called a base tag, while "#p" is called a tag variant (because it's a variant of the base tag).
 Then, depending on the value of the **%{number}**, a different version of a tag can be selected.
 In English it's "rum_barrel" (singular) when **%{number}** is 1, and "rum_barrel#p" (**p**\ lural) when **number** is not 1.
 There are just two forms, but some languages have much more. Let's assume our Pirate English has a different form
-of noun when **%{number}** is 2, and then "-es" is appended instead of "-s" to the end of the noun.
+of noun when **%{number}** is 2, so "-es" is then appended instead of "-s" to the end of the noun.
 We assume the programmer already took care of specifying pluralization rules for our language, so all we have to do is learning what letter is used when the **%{number}** is 2.
-After a short look into cheatsheet (TODO LINK) we learn that in such situation we should add "#t" variant (**t**\ wo). Okay, here we go.
+After a short look into cheatsheet (TODO LINK) we learn that in such situation we should add "#t" variant (**t**\ wo) to make it work. Okay, here we go.
 
 **English**
 ::
@@ -124,37 +124,40 @@ We are prepared for that.
 
 Fallbacks in Pyslate
 --------------------
+
 Pyslate has a powerful fallback mechanism. It means if something is not available in the expected form/language,
 then Pyslate is selecting the best alternative.
 
 **Tag variant fallback**
 
-Every tag key constraints of base and variant: e.g. *sweet_cookie*\ #\ **p**.
-In case expected tag doesn't exist, then its base tag is used.
-sweet_cookie#p -> sweet_cookie
-It should always be guaranteed that a base tag exists if any variant exists.
+Every tag key is composed of base and variant: e.g. *sweet_cookie*\ #\ **p**.
+In case the expected tag with variant doesn't exist, then its base tag is used: sweet_cookie#p -> sweet_cookie
+
+It should always be guaranteed that a base tag exists if any variant tag with the same base exists.
 If you have a tag with variant consisting of many variant letters then matching is done from the most to least exact:
 ::
 
     . sweet_cookie#png -> sweet_cookie#pn -> sweet_cookie#p -> sweet_cookie
 
+It's useful especially for fluent languages, where form of the word depends on the context.
+
 **Language fallback**
 
 Pyslate supports incremental translations, so the system can be used before all the translations are completed.
-If there's no matching tag in the target language, then the whole procedure is run again for the fallback language.
-E.g. when fallback language for Portuguese is Spanish:
+If there's no matching tag in the target language, then the whole procedure (described above) is run again for the fallback language.
+E.g. when the fallback language for Portuguese is Spanish:
 ::
 
     (pt)sweet_cookie#p -> (pt)sweet_cookie -> (es)sweet_cookie#p -> (es)sweet_cookie
 
-If there's no tag for target language or its fallback language, then its global fallback is used (usually it means English).
+If there's no tag for target language or its fallback language, then its global fallback is used in the same manner (usually it means English).
 
 Switch fields - different forms of the same text
 ------------------------------------------------
 
 Now it's time for another special structure called a **switch field**.
-It's denoted '%{identifier:option1?answer1|option2?answer2}' which means "if value for 'identifier' is equal to 'option1' then show 'answer1',
-if 'identifier' is equal to 'option2' then use 'answer2'. If none of these, then use the first answer from the left - 'answer1' in this case".
+It's denoted '%{identifier:option1?answer1|option2?answer2}' which means "if value for 'identifier' is like 'option1' then show 'answer1',
+if 'identifier' is like 'option2' then use 'answer2'. If none of these, then use the first answer from the left - 'answer1' in this case".
 'identifier' is name of some variable, very similar to 'variable_name' or 'number' from the previous examples.
 
 **English**
@@ -181,6 +184,10 @@ But we can translate answers, which are visible for users.
 
     | Arr! I'ave a saber, a well sharp'd one.
     | Arr! I'ave a saber, which be goin' to be sharp'd before I sail out.
+
+
+If you see above, I wrote "if 'identifier' is like 'option1'", because LIKE doesn't mean the same as "equals to".
+In fact it means "if 'option1' is part of 'identifier'", but it doesn't matter in this particular example.
 
 Inner tag fields
 ----------------
@@ -334,10 +341,10 @@ Every letter has some contractual meaning and specific letters are not imposed b
 Letters that are reserved to be used for pluralization forms:
 
     - "" (empty) - singular - base form
-    - z - zero - when there are no elements
+    - z - **z**\ ero - when there are no elements
     - t - **T**\ wo - plural form for 2 or numbers treated like 2.
     - w - fe\ **W** - form used for *a few* elements (usually 3, 4) or treated like *a few*
-    - p - plural (a.k.a. many) - form used for all the rest
+    - p - **p**\ lural (a.k.a. many) - form used for all the rest
 
 They are unused for most of languages.
 
