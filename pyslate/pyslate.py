@@ -152,6 +152,7 @@ class Pyslate(object):
             else:
                 helper = PyslateHelper(self)
                 function_for_language = self._first_left_value_from(self._functions[tag_base], self._get_languages())
+
                 t9n = function_for_language(helper, tag_name, kwargs)
                 form = helper.returned_form
                 if self.functions_deterministic[tag_base]:
@@ -265,7 +266,7 @@ class Pyslate(object):
         if not language:
             language = self.global_fallback
 
-        if tag_name not in self._decorators:  # no such decorator for any language yet, so create a dict for it
+        if tag_name not in self._functions:  # no such function for any language yet, so create a dict for it
             self._functions[tag_name] = {}
         self._functions[tag_name][language] = function
 
