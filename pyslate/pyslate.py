@@ -129,6 +129,8 @@ class Pyslate(object):
 
     def _translate(self, tag_name, **kwargs):
 
+        kwargs = dict(self.context, **kwargs)  # add context variables, which have lower priority
+
         if "number" in kwargs:
             number_variant = self._first_left_value_from(LOCALES, self._get_languages())["number_rule"](kwargs["number"])
 
@@ -137,8 +139,6 @@ class Pyslate(object):
 
             if tag_name[-1] == "#":
                 tag_name = tag_name[:-1]
-
-
 
         tag_base = tag_name.partition("#")[0]
         variant = tag_name.partition("#")[2]
@@ -450,6 +450,13 @@ class PyslateHelper(object):
         """
         self.returned_form = form
 
+    def get_suffix(self, tag_name):
+        if "#" in tag_name:
+            return tag_name.partition("#")[2]
+        return ""
 
-
+    def pass_the_suffix(self, tag_name):
+        if self.get_suffix(tag_name):
+            return "#" + self.get_suffix(tag_name)
+        return ""
 
