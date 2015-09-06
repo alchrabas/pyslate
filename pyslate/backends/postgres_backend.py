@@ -32,7 +32,8 @@ class PostgresBackend(object):
             for language in languages:
                 for tag_name in tag_names:
                     query_str = "SELECT content, form FROM " + self.table_name + " WHERE name = %s AND language = %s"
-                    cur.move_between_entities(query_str, (tag_name, language))
+                    cur.execute(query_str, (tag_name, language))
                     ret = cur.fetchone()
                     if ret:
                         return ret
+        raise Exception("none of {} in languages {} is available".format(tag_names, languages))
