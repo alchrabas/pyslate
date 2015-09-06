@@ -1,5 +1,4 @@
 # encoding: utf-8
-__author__ = 'aleksander chrabaszcz'
 
 import unittest
 from pyslate.parser import PyLexer, PyParser, InnerTagField, VariableField, SwitchField, PyslateException

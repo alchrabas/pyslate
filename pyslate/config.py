@@ -1,5 +1,3 @@
-__author__ = 'Aleksander Chrabaszcz'
-
 from .parser import PyParser
 
  #####    ####           #    #   ####    #####
@@ -63,7 +61,6 @@ class DefaultConfig(object):
         Default: ``{}``
         """
 
-
         self.ALLOW_INNER_TAGS = True
         """
         Inner tags are fields specified in the tag value using ``${}`` syntax, e.g::
@@ -80,10 +77,10 @@ class DefaultConfig(object):
 
         self.ALLOW_CACHE = True
         """
-        Specifies if instance of Pyslate should cache any data.
+        Specifies if instance of Pyslate should use cache to cache any data.
 
         When ALLOW_CACHE is True, then the cache needs to be specified as a keyword argument in Pyslate constructor.
-        You can see the API of the cache.SimpleMemoryCache to create your own implementation.
+        You can see the API of the :obj:`SimpleMemoryCache <pyslate.pyslate.cache.SimpleMemoryCache>` to create your own implementation.
         
         .. NOTE::
            If you supply a cache this way, then the class must have a default (parameter-less) constructor.
@@ -145,4 +142,16 @@ class DefaultConfig(object):
         For information what decorators are - see doc of :attr:`GLOBAL_DECORATORS <pyslate.config.DefaultConfig.GLOBAL_DECORATORS>` variable.
 
         Default: see :ref:`Available_Decorators`
+        """
+
+        self.MISSING_VARIABLE_TEXT = "[MISSING VALUE FOR '{0}']"
+        """
+        String added to the result when variable requested in the tag value is missing.
+        {0} is a placeholder where missing variable name will be interpolated.
+        """
+
+        self.MISSING_TAG_TEXT = "[MISSING TAG '{0}']"
+        """
+        String added to the result when requested tag (or inner tag) is missing.
+        {0} is a placeholder where missing tag key will be interpolated.
         """

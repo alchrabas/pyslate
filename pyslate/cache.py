@@ -1,4 +1,3 @@
-__author__ = 'Aleksander Chrabaszcz'
 
 
 class SimpleMemoryCache(object):

@@ -92,7 +92,7 @@ In English it's "rum_barrel" (singular) when **%{number}** is 1, and "rum_barrel
 There are just two forms, but some languages have much more. Let's assume our Pirate English has a different form
 of noun when **%{number}** is 2, so "-es" is then appended instead of "-s" to the end of the noun.
 We assume the programmer already took care of specifying pluralization rules for our language, so all we have to do is learning what letter is used when the **%{number}** is 2.
-After a short look into cheatsheet (TODO LINK) we learn that in such situation we should add "#t" variant (**t**\ wo) to make it work. Okay, here we go.
+After a quick look into the cheatsheet (TODO LINK) we learn that in such situation we should add "#t" variant (**t**\ wo) to make it work. Okay, here we go.
 
 **English**
 ::

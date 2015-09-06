@@ -1,5 +1,5 @@
-import string
 from ply import lex, yacc
+
 
 class PyLexer(object):
 

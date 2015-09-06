@@ -1,9 +1,10 @@
-from collections import namedtuple
 import datetime
+import logging
+import numbers
+
 from .config import DefaultConfig
 from .locales import LOCALES
 from .parser import InnerTagField, VariableField, SwitchField, PyslateException
-import numbers
 
 
 class Pyslate(object):
@@ -12,7 +13,8 @@ class Pyslate(object):
     backend. It's possible to set custom config, context dict and instance of cache class.
     """
 
-    def __init__(self, language, backend=None, config=DefaultConfig(), context=None, cache=None, parser=None):
+    def __init__(self, language, backend=None, config=DefaultConfig(), context=None,
+                 cache=None, parser=None, logger=None):
         """
         Constructor
 
@@ -22,6 +24,7 @@ class Pyslate(object):
         :param context: see context field
         :param cache: see cache field
         :param parser: see parser field
+        :param logger: see logger field
         :return: object of Pyslate class
         """
 
@@ -103,6 +106,15 @@ class Pyslate(object):
         It's good to specify kwargs which need to be available globally, e.g. information about the person reading the text.
         """
 
+        if logger is None:
+            logger = logging.getLogger(__name__)
+            logger.setLevel(99)  # default logger logs nothing
+        self.logger = logger
+        """
+        Object responsible for logging in Pyslate library.
+        When not set then default logger is used which doesn't log anything.
+        """
+
     def translate(self, tag_name, **kwargs):
         """
         Method returning fully translated tag value for a specified tag_name using kwargs as a list of keyword arguments.
@@ -166,13 +178,15 @@ class Pyslate(object):
 
         return t9n, form
 
-    def _first_left_value_from(self, dictionary, keys):
+    @staticmethod
+    def _first_left_value_from(dictionary, keys):
         for key in keys:
             if key in dictionary:
                 return dictionary[key]
         return None
 
-    def _first_left_key_from(self, dictionary, keys):
+    @staticmethod
+    def _first_left_key_from(dictionary, keys):
         for key in keys:
             if key in dictionary:
                 return key
@@ -290,7 +304,8 @@ class Pyslate(object):
 
         retrieved_content = self.backend.get_content(requested_tags, self._get_languages())
         if retrieved_content is None:
-            retrieved_content = "[MISSING TAG '{0}']".format(requested_tags[0])
+            self.logger.error("Tags are missing: %s", ", ".join(requested_tags))
+            retrieved_content = self.config.MISSING_TAG_TEXT.format(requested_tags[0])
         elif self.cache and self.config.ALLOW_CACHE:
             self.cache.save(tag_name, self.language, retrieved_content)
         return retrieved_content
@@ -303,7 +318,7 @@ class Pyslate(object):
         return languages
 
     def _get_raw_form(self, tag_name):
-        """Gets and returns grammatical form from backend considering all possible tag and language fallbacks
+        """Returns grammatical form got from backend considering all possible tag and language fallbacks
         Returns none if no form is set"""
         requested_tags = [tag_name]
         if "#" in tag_name:
@@ -313,27 +328,34 @@ class Pyslate(object):
         return self.backend.get_form(requested_tags, languages)
 
     def _traverse(self, nodes, kwargs):
-        nodes_with_inner = []
-        forms = {}
+        nodes_after_replacing_inner_tags = []
+        forms_by_id = {}
         for node in nodes:
-            text, form = self._replace_inner_tag_or_pass(node, kwargs)
-            nodes_with_inner.append(text)
-            forms.update(form)
-        nodes = [self._replace_variable_or_switch_field(node, kwargs, forms) for node in nodes_with_inner]
-        return "".join(nodes)
+            text, form_by_id_dict = self._replace_inner_tag_or_pass(node, kwargs)
+            nodes_after_replacing_inner_tags.append(text)
+            forms_by_id.update(form_by_id_dict)
+
+        fully_interpreted_nodes = []
+        for node in nodes_after_replacing_inner_tags:
+            fully_interpreted_nodes.append(self._interpolate_variable_or_switch_field(node, kwargs, forms_by_id))
+
+        return "".join(fully_interpreted_nodes)
 
     def _replace_inner_tag_or_pass(self, node, kwargs):
         if type(node) is not InnerTagField:  # do nothing
             return node, {}
+
         tag_name = self._traverse(node.contents, kwargs)
+
         if not self.config.ALLOW_INNER_TAGS:  # when inner tags are disabled then print them as-is
             return "${" + tag_name + "}", {}
         final_kwargs = kwargs
 
-        if node.tag_id:
+        if node.tag_id:  # if this inner tag has a string ID, like that: ${ID:some_value}
             if "groups" in kwargs:
                 final_kwargs = dict(kwargs)
                 del final_kwargs["groups"]
+                # available kwargs can be overwritten by elements of dict, which is a group specific for this tag's id
                 final_kwargs.update(kwargs["groups"][node.tag_id])
 
         text, form = self._translate(tag_name, **final_kwargs)
@@ -345,7 +367,7 @@ class Pyslate(object):
             return text, {}
         return text, {node.tag_id: form}
 
-    def _replace_variable_or_switch_field(self, node, kwargs, forms):
+    def _interpolate_variable_or_switch_field(self, node, kwargs, forms):
         if type(node) is str:  # just return the string
             return node
         elif type(node) is VariableField:
@@ -359,7 +381,7 @@ class Pyslate(object):
 
     def _replace_variable_fields(self, node, kwargs):
         if node.contents not in kwargs and node.contents not in self.context:
-            return "[MISSING VALUE FOR '{0}']".format(node.contents)
+            return self.config.MISSING_VARIABLE_TEXT.format(node.contents)
 
         value = ""
         if node.contents in kwargs:

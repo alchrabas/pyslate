@@ -1,4 +1,3 @@
-__author__ = 'alek'
 
 
 class PostgresBackend(object):
@@ -12,20 +11,26 @@ class PostgresBackend(object):
 
     def __init__(self, conn, table_name):
         """
-        Constructor taking handle to psycopg2 connection object and name of the table with translations.
+        Constructor taking a handle to psycopg2 connection object and name of the table containing translations.
         Please note the table_name is not escaped in any way, so it's your responsibility to avoid risk of SQL injection
         :param conn: psycopg2 connection
         :param table_name: name of the table with translations, IT'S NOT SAFE AGAINST SQL INJECTION
-        :return: backend to use in Pyslate
+        :return: backend usable in Pyslate
         """
         self.conn = conn
         self.table_name = table_name
 
     def get_content(self, tag_names, languages):
-        return self.get_record(tag_names, languages)[0]
+        record = self.get_record(tag_names, languages)
+        if record:
+            return record[0]
+        return None
 
     def get_form(self, tag_names, languages):
-        return self.get_record(tag_names, languages)[1]
+        record = self.get_record(tag_names, languages)
+        if record:
+            return record[1]
+        return None
 
     def get_record(self, tag_names, languages):
         with self.conn.cursor() as cur:
@@ -36,4 +41,4 @@ class PostgresBackend(object):
                     ret = cur.fetchone()
                     if ret:
                         return ret
-        raise Exception("none of {} in languages {} is available".format(tag_names, languages))
+        return None

@@ -4,7 +4,6 @@ import json
 class JsonBackend(object):
     """
     JSON-based backend. It has no external dependencies.
-
     """
 
     def __init__(self, file=None, json_data=None):
@@ -24,14 +23,16 @@ class JsonBackend(object):
                 self.tags = json_data
 
     def get_content(self, tag_names, languages):
-        try:
-            return self.get_record(tag_names, languages)[0]
-        except:
-            print("FAIL FOR", tag_names)
-            raise
+        record = self.get_record(tag_names, languages)
+        if record:
+            return record[0]
+        return None
 
     def get_form(self, tag_names, languages):
-        return self.get_record(tag_names, languages)[1]
+        record = self.get_record(tag_names, languages)
+        if record:
+            return record[1]
+        return None
 
     def get_record(self, tag_names, languages):
         for language in languages:
@@ -41,4 +42,5 @@ class JsonBackend(object):
                     if type(translation) is list:
                         return translation[0], translation[1]
                     return translation, None
+        return None
 
