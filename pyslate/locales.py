@@ -836,9 +836,9 @@ LOCALES = {
     },
     "en": {
         "format": {
-            "date": "%-d/%-m/%Y",
-            "datetime": "%-d/%-m/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-d/%-m/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -849,9 +849,9 @@ LOCALES = {
     },
     "en-001": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -862,9 +862,9 @@ LOCALES = {
     },
     "en-150": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -875,9 +875,9 @@ LOCALES = {
     },
     "en-AG": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -888,9 +888,9 @@ LOCALES = {
     },
     "en-AI": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -901,9 +901,9 @@ LOCALES = {
     },
     "en-AS": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -914,9 +914,9 @@ LOCALES = {
     },
     "en-BB": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -927,9 +927,9 @@ LOCALES = {
     },
     "en-BE": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -940,9 +940,9 @@ LOCALES = {
     },
     "en-BM": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -953,9 +953,9 @@ LOCALES = {
     },
     "en-BS": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -966,9 +966,9 @@ LOCALES = {
     },
     "en-BW": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -979,9 +979,9 @@ LOCALES = {
     },
     "en-BZ": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -992,9 +992,9 @@ LOCALES = {
     },
     "en-CA": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1005,9 +1005,9 @@ LOCALES = {
     },
     "en-CC": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1018,9 +1018,9 @@ LOCALES = {
     },
     "en-CK": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1031,9 +1031,9 @@ LOCALES = {
     },
     "en-CM": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1044,9 +1044,9 @@ LOCALES = {
     },
     "en-CX": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1057,9 +1057,9 @@ LOCALES = {
     },
     "en-DG": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1070,9 +1070,9 @@ LOCALES = {
     },
     "en-DM": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1083,9 +1083,9 @@ LOCALES = {
     },
     "en-ER": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1096,9 +1096,9 @@ LOCALES = {
     },
     "en-FJ": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1109,9 +1109,9 @@ LOCALES = {
     },
     "en-FK": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1122,9 +1122,9 @@ LOCALES = {
     },
     "en-FM": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1135,9 +1135,9 @@ LOCALES = {
     },
     "en-GB": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1148,9 +1148,9 @@ LOCALES = {
     },
     "en-GD": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1161,9 +1161,9 @@ LOCALES = {
     },
     "en-GG": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1174,9 +1174,9 @@ LOCALES = {
     },
     "en-GH": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1187,9 +1187,9 @@ LOCALES = {
     },
     "en-GI": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1200,9 +1200,9 @@ LOCALES = {
     },
     "en-GM": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1213,9 +1213,9 @@ LOCALES = {
     },
     "en-GU": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1226,9 +1226,9 @@ LOCALES = {
     },
     "en-GY": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1239,9 +1239,9 @@ LOCALES = {
     },
     "en-HK": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1252,9 +1252,9 @@ LOCALES = {
     },
     "en-IE": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1265,9 +1265,9 @@ LOCALES = {
     },
     "en-IM": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1278,9 +1278,9 @@ LOCALES = {
     },
     "en-IN": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1291,9 +1291,9 @@ LOCALES = {
     },
     "en-IO": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1304,9 +1304,9 @@ LOCALES = {
     },
     "en-JE": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1317,9 +1317,9 @@ LOCALES = {
     },
     "en-JM": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1330,9 +1330,9 @@ LOCALES = {
     },
     "en-KE": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1343,9 +1343,9 @@ LOCALES = {
     },
     "en-KI": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1356,9 +1356,9 @@ LOCALES = {
     },
     "en-KN": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1369,9 +1369,9 @@ LOCALES = {
     },
     "en-KY": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1382,9 +1382,9 @@ LOCALES = {
     },
     "en-LC": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1395,9 +1395,9 @@ LOCALES = {
     },
     "en-LR": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1408,9 +1408,9 @@ LOCALES = {
     },
     "en-LS": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1421,9 +1421,9 @@ LOCALES = {
     },
     "en-MG": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1434,9 +1434,9 @@ LOCALES = {
     },
     "en-MH": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1447,9 +1447,9 @@ LOCALES = {
     },
     "en-MO": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1460,9 +1460,9 @@ LOCALES = {
     },
     "en-MP": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1473,9 +1473,9 @@ LOCALES = {
     },
     "en-MS": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1486,9 +1486,9 @@ LOCALES = {
     },
     "en-MT": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1499,9 +1499,9 @@ LOCALES = {
     },
     "en-MU": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1512,9 +1512,9 @@ LOCALES = {
     },
     "en-MW": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1525,9 +1525,9 @@ LOCALES = {
     },
     "en-MY": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1538,9 +1538,9 @@ LOCALES = {
     },
     "en-NA": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1551,9 +1551,9 @@ LOCALES = {
     },
     "en-NF": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1564,9 +1564,9 @@ LOCALES = {
     },
     "en-NG": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1577,9 +1577,9 @@ LOCALES = {
     },
     "en-NR": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1590,9 +1590,9 @@ LOCALES = {
     },
     "en-NU": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1603,9 +1603,9 @@ LOCALES = {
     },
     "en-NZ": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1616,9 +1616,9 @@ LOCALES = {
     },
     "en-PG": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1629,9 +1629,9 @@ LOCALES = {
     },
     "en-PH": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1642,9 +1642,9 @@ LOCALES = {
     },
     "en-PK": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1655,9 +1655,9 @@ LOCALES = {
     },
     "en-PN": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1668,9 +1668,9 @@ LOCALES = {
     },
     "en-PR": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1681,9 +1681,9 @@ LOCALES = {
     },
     "en-PW": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1694,9 +1694,9 @@ LOCALES = {
     },
     "en-RW": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1707,9 +1707,9 @@ LOCALES = {
     },
     "en-SB": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1720,9 +1720,9 @@ LOCALES = {
     },
     "en-SC": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1733,9 +1733,9 @@ LOCALES = {
     },
     "en-SD": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1746,9 +1746,9 @@ LOCALES = {
     },
     "en-SG": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1759,9 +1759,9 @@ LOCALES = {
     },
     "en-SH": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1772,9 +1772,9 @@ LOCALES = {
     },
     "en-SL": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1785,9 +1785,9 @@ LOCALES = {
     },
     "en-SS": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1798,9 +1798,9 @@ LOCALES = {
     },
     "en-SX": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1811,9 +1811,9 @@ LOCALES = {
     },
     "en-SZ": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1824,9 +1824,9 @@ LOCALES = {
     },
     "en-TC": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1837,9 +1837,9 @@ LOCALES = {
     },
     "en-TK": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1850,9 +1850,9 @@ LOCALES = {
     },
     "en-TO": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1863,9 +1863,9 @@ LOCALES = {
     },
     "en-TT": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1876,9 +1876,9 @@ LOCALES = {
     },
     "en-TV": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1889,9 +1889,9 @@ LOCALES = {
     },
     "en-TZ": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1902,9 +1902,9 @@ LOCALES = {
     },
     "en-UG": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1915,9 +1915,9 @@ LOCALES = {
     },
     "en-UM": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1941,9 +1941,9 @@ LOCALES = {
     },
     "en-VC": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1954,9 +1954,9 @@ LOCALES = {
     },
     "en-VG": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1967,9 +1967,9 @@ LOCALES = {
     },
     "en-VI": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1980,9 +1980,9 @@ LOCALES = {
     },
     "en-VU": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -1993,9 +1993,9 @@ LOCALES = {
     },
     "en-WS": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -2006,9 +2006,9 @@ LOCALES = {
     },
     "en-ZA": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -2019,9 +2019,9 @@ LOCALES = {
     },
     "en-ZM": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
@@ -2032,9 +2032,9 @@ LOCALES = {
     },
     "en-ZW": {
         "format": {
-            "date": "%-m/%-d/%Y",
-            "datetime": "%-m/%-d/%Y, %-I:%M:%S %p",
-            "datetime_short": "%-m/%-d/%Y, %-I:%M %p",
+            "date": "%Y-%-m-%-d",
+            "datetime": "%Y-%-m-%-d, %-I:%M:%S %p",
+            "datetime_short": "%Y-%-m-%-d, %-I:%M %p",
             "decimal_point": ".",
             "time": "%-I:%M:%S %p",
             "time_short": "%-I:%M %p"
