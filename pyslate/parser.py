@@ -186,7 +186,7 @@ class PyParser(object):
         self.data = None
         self.lexer = PyLexer()
         self.lexer.build()
-        self.parser = yacc.yacc(module=self, debug=1)
+        self.parser = yacc.yacc(module=self, debug=0)
 
     def parse(self, data, **kwargs):
         self.data = data
