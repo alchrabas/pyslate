@@ -150,8 +150,10 @@ class DefaultConfig(object):
         {0} is a placeholder where missing variable name will be interpolated.
         """
 
-        self.MISSING_TAG_TEXT = "[MISSING TAG '{0}']"
+        self.ON_MISSING_TAG_KEY = lambda name, params: "[MISSING TAG '{0}']".format(name)
         """
-        String added to the result when requested tag (or inner tag) is missing.
-        {0} is a placeholder where missing tag key will be interpolated.
+        Two-argument function whose return value is written to the output
+        when the requested tag (or inner tag) and all its fallbacks are missing.
+        The first argument is key of the missing tag, the second is dict of parameters available for interpolation
+        into this tag's value. For example you can print keys of params dict to see what parameters are available.
         """

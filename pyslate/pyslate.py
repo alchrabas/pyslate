@@ -14,7 +14,7 @@ class Pyslate(object):
     """
 
     def __init__(self, language, backend=None, config=DefaultConfig(), context=None,
-                 cache=None, parser=None, logger=None):
+                 cache=None, parser=None, on_missing_tag_key_callback=None):
         """
         Constructor
 
@@ -24,7 +24,7 @@ class Pyslate(object):
         :param context: see context field
         :param cache: see cache field
         :param parser: see parser field
-        :param logger: see logger field
+        :param on_missing_tag_key_callback: see on_missing_tag_key_callback field
         :return: object of Pyslate class
         """
 
@@ -106,13 +106,14 @@ class Pyslate(object):
         It's good to specify kwargs which need to be available globally, e.g. information about the person reading the text.
         """
 
-        if logger is None:
-            logger = logging.getLogger(__name__)
-            logger.setLevel(99)  # default logger logs nothing
-        self.logger = logger
+        if not on_missing_tag_key_callback:
+            on_missing_tag_key_callback = config.ON_MISSING_TAG_KEY
+        self.on_missing_tag_key_callback = on_missing_tag_key_callback
         """
-        Object responsible for logging in Pyslate library.
-        When not set then default logger is used which doesn't log anything.
+        Contains two-parameter function which is run when some tag value cannot be got from the backend.
+        It should return string which is written to the output instead of the missing tag.
+        The first parameter is tag key, the second is dict of interpolable parameters (a.k.a. kwargs).
+        You can replace it with your own implementation having some side-effect, for example logging the of missing tags.
         """
 
     def translate(self, tag_name, **kwargs):
@@ -144,7 +145,8 @@ class Pyslate(object):
         kwargs = dict(self.context, **kwargs)  # add context variables, which have lower priority
 
         if "number" in kwargs:
-            number_variant = self._first_left_value_from(LOCALES, self._get_languages())["number_rule"](kwargs["number"])
+            number_variant = self._first_left_value_from(LOCALES, self._get_languages())["number_rule"](
+                kwargs["number"])
 
             base_variant_parts = tag_name.partition("#")
             tag_name = base_variant_parts[0] + "#" + number_variant + base_variant_parts[2]
@@ -159,7 +161,7 @@ class Pyslate(object):
         if tag_base in self._functions:
             function_language = self._first_left_key_from(self._functions[tag_base], self._get_languages())
             if (self.functions_deterministic[tag_base]  # deterministic function so maybe result is already known
-                    and tuple([function_language] + sorted(kwargs.items())) in self.functions_memory[tag_name]):
+                and tuple([function_language] + sorted(kwargs.items())) in self.functions_memory[tag_name]):
                 t9n, form = self.functions_memory[tag_name][tuple([function_language] + sorted(kwargs.items()))]
             else:
                 helper = PyslateHelper(self)
@@ -170,7 +172,7 @@ class Pyslate(object):
                 if self.functions_deterministic[tag_base]:
                     self.functions_memory[tag_name][tuple([function_language] + sorted(kwargs.items()))] = (t9n, form)
         else:
-            t9n, form = self._get_raw_content(tag_name), self._get_raw_form(tag_name)
+            t9n, form = self._get_raw_content(tag_name, kwargs), self._get_raw_form(tag_name)
 
         nodes = self.parser.parse(t9n)
 
@@ -287,7 +289,7 @@ class Pyslate(object):
         self.functions_deterministic[tag_name] = is_deterministic
         self.functions_memory[tag_name] = {}
 
-    def _get_raw_content(self, tag_name):
+    def _get_raw_content(self, tag_name, kwargs):
         """Gets and returns content from backend considering all possible tag and language fallbacks"""
 
         requested_tags = [tag_name]
@@ -304,8 +306,7 @@ class Pyslate(object):
 
         retrieved_content = self.backend.get_content(requested_tags, self._get_languages())
         if retrieved_content is None:
-            self.logger.error("Tags are missing: %s", ", ".join(requested_tags))
-            retrieved_content = self.config.MISSING_TAG_TEXT.format(requested_tags[0])
+            retrieved_content = self.on_missing_tag_key_callback(requested_tags[0], kwargs)
         elif self.cache and self.config.ALLOW_CACHE:
             self.cache.save(tag_name, self.language, retrieved_content)
         return retrieved_content
@@ -414,7 +415,7 @@ class Pyslate(object):
             decorator_language = self._first_left_key_from(self._decorators[decorator_name], self._get_languages())
 
             if (self.functions_deterministic[decorator_name]  # deterministic function so maybe result is already known
-                    and tuple([decorator_language, value]) in self.functions_memory[decorator_name]):
+                and tuple([decorator_language, value]) in self.functions_memory[decorator_name]):
                 return self.functions_memory[decorator_name][tuple([decorator_language, value])]
 
             decorator = self._decorators[decorator_name][decorator_language]
@@ -481,4 +482,3 @@ class PyslateHelper(object):
         if self.get_suffix(tag_name):
             return "#" + self.get_suffix(tag_name)
         return ""
-

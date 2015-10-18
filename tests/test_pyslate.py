@@ -369,17 +369,17 @@ class TestTranslationsEnglish(unittest.TestCase):
 
     def test_localization(self):  # en = en_GB
         # date
-        self.assertEqual("15/12/1999", self.pys.l(datetime.date(1999, 12, 15)))
-        self.assertEqual("1/11/2222", self.pys.l(datetime.date(2222, 11, 1)))
-        self.assertEqual("3/1/2", self.pys.l(datetime.date(2, 1, 3)))
+        self.assertEqual("1999-12-15", self.pys.l(datetime.date(1999, 12, 15)))
+        self.assertEqual("2222-11-1", self.pys.l(datetime.date(2222, 11, 1)))
+        self.assertEqual("2-1-3", self.pys.l(datetime.date(2, 1, 3)))
 
         # time
         self.assertEqual("2:11:37 AM", self.pys.l(datetime.time(2, 11, 37)))
         self.assertEqual("6:13:22 PM", self.pys.l(datetime.time(18, 13, 22)))
 
         # datetime
-        self.assertEqual("7/12/1999, 2:11:37 AM", self.pys.l(datetime.datetime(1999, 12, 7, 2, 11, 37)))
-        self.assertEqual("3/1/2128, 6:13:22 PM", self.pys.l(datetime.datetime(2128, 1, 3, 18, 13, 22)))
+        self.assertEqual("1999-12-7, 2:11:37 AM", self.pys.l(datetime.datetime(1999, 12, 7, 2, 11, 37)))
+        self.assertEqual("2128-1-3, 6:13:22 PM", self.pys.l(datetime.datetime(2128, 1, 3, 18, 13, 22)))
 
 
 class TestTranslationsPolish(unittest.TestCase):
