@@ -103,7 +103,7 @@ Hello! I'd like to show you a wooden toy.
 Two new things here: `${}` specifies an inner tag field. It means evaluating a "toy" tag and interpolating the contents directly into the main tag value.
 At the end of the inner tag key there's a `@article`. It's a decorator, which means "take the tag value of tag it's used in, and then transform the string into something else".
 Decorator "article" is included as specific for English and simply adds a/an article.
-There also "upper" "lower" and "capitalize" decorators included right away. In addition, you can define any new decorator as you like.
+There are also "upper" "lower" and "capitalize" decorators included right away. In addition, you can define any new decorator as you like.
 
 Combo
 -----
@@ -124,7 +124,7 @@ Then you can write:
 Hello! I'd like to show you a rocking horse.
 ```
 
-How does it work? It's simply evaluating `%{toy_name}` variable field into "horse", which produces `%{horse@article}` inner tag field,
+How does it work? It's simply evaluating `%{toy_name}` variable field into "horse", which produces `${horse@article}` inner tag field,
 which is evaluated to "rocking horse" which is decorated using `article`, and in the end we get "a rocking horse".
 
 Grammatical forms
@@ -186,6 +186,8 @@ its context in the sentence. It's hard to be shown in English, so I'll put an ex
 ```
 >>> pys_en.t("not_having")
 I don't have a stone.
+>>> pys_pl.t("having")
+Mam kamień.
 >>> pys_pl.t("not_having")
 Nie mam kamienia.
 ```
@@ -230,7 +232,7 @@ The word "kwiat*ka*" (genitive form of "kwiat*ek*" ["a flower"]) has the followi
     "having_flower": {
         "pl": "Mam kwiatka",
     },
-    "having_flower#e": {
+    "having_flower#w": {
         "pl": "Mam %{number} kwiatki.",
     },
     "having_flower#p": {
@@ -239,12 +241,12 @@ The word "kwiat*ka*" (genitive form of "kwiat*ek*" ["a flower"]) has the followi
 }
 ```
 [Every language can have different rules](http://unicode.org/repos/cldr-tmp/trunk/diff/supplemental/language_plural_rules.html),
-so it's easy to configure them in `locales.py` file.
+so they are already configured for around 80 languages in `locales.py` file.
 
 Custom functions
 ----------------
 If none of previously mentioned options was a solution for your problem, then custom functions come to the reascue.
-It's possible to create a meta-tag being in fact a custom python function which has access and can do almost everything then return a translated tag.
+It's possible to create a meta-tag being in fact a custom python function which can do almost everything and then return a translated tag.
 ```json
 {
     "product_presentation": {
@@ -267,12 +269,12 @@ Then we have to create a custom function for a "product" inner tag field:
 def product_fun(helper, name, params):
     product_id = params["product_id"]
     product_db = {
-            1: dict(producer='BMW', capacity=1200),
-            7: dict(producer='Audi', capacity=2000)
-        }
+        1: dict(producer='BMW', capacity=1200),
+        7: dict(producer='Audi', capacity=2000)
+    }
     product = product_db[product_id]
     if product["capacity"] >= 1000:
-    car_type = "car_van"
+        car_type = "car_van"
     else:
         car_type = "car_personal"
     return helper.translation(
@@ -297,8 +299,8 @@ I'd like to present you a new product. It's a delivery van produced by Audi.
 ```
 
 It works great.
-Note that if you need lots of custom functions in your code, then possibly you should not use a translation library for this task.
-You also shouldn't misuse Pyslate as a templating engine, if you need to put placeholders into larger documents, use Jinja2 or similar library.
+Note that if you need lots of custom functions in your code, then probably you should not use a translation library for this task.
+You also shouldn't misuse Pyslate as a templating engine, if you need to interpolate variables into large documents, use Jinja2 or similar library.
 
 Integration with templating engines
 -----------------------------------
