@@ -1,7 +1,8 @@
-Pyslate i18n library - WORK IN PROGRESS, NOT TO BE USED YET
-===========================================================
+Pyslate i18n library
+====================
 
-A Python library for maintaining grammatically correct i18n
+A Python library for maintaining grammatically correct i18n (internationalization) of texts used in the program: translation of messages, formatting dates and numbers
+to provide multi-language support.
 
 What is it for?
 ---------------
@@ -9,9 +10,9 @@ What is it for?
 As you probably know, there already are quite many i18n libraries for Python, mostly based on Gettext.
 The reason I decided to prepare my own library was because I wasn't satisfied with any of them.
 I needed full-features library, having similar capabilities as [Rails i18n](http://guides.rubyonrails.org/i18n.html). But it's not just a port.
-I included all features I found important, but also many more:
+I included all features I found necessary, but also many more:
  - i18n of text (tag values) based on their unique names (tag keys)
- - possibility to use different backends where translations are stored
+ - possibility to use different backends where translation texts are stored
  - support for special structures to use by translator directly in translation text
  - powerful fallback capabilities in case some variant of tag is missing
  - possibility of injecting Python code into translations using decorators and custom functions
@@ -20,11 +21,11 @@ I included all features I found important, but also many more:
 What is it not for?
 -------------------
 
-It's possible to not use some of the features, but it's not intended to be used for the following: 
- - when you are sure you don't need anything except literal text i18n
- - when you'd like to use it as a templating engine
- - when you'd like to make some lexical analysis
- - when you'd like to create a natural language generator or a chatterbot 
+All advanced features are optional, but it's surely not intended to be used when: 
+ - you are sure you don't need anything except literal text i18n
+ - you'd like to use it as a templating engine
+ - you'd like to make some lexical analysis
+ - you'd like to create a natural language generator or a chatterbot 
 
 Simple example
 --------------
@@ -53,7 +54,8 @@ Witaj świecie!
 It works!
 
 So the most basic use it to create a Pyslate object for a selected language and then request translation
-of a specific tag using a `Pyslate.translate()` method. To make it more handy you can use `Pyslate.t` abbreviation. The JSON backend is used as an example, there are other storage options available.
+of a specific tag using a `Pyslate.translate()` method. To make it more handy you can use `Pyslate.t` abbreviation.
+The JSON backend is used as an example, there are other storage options available.
 
 More complicated example
 ------------------------
@@ -66,7 +68,7 @@ Change translation file into:
     }
 }
 ```
-Then in your Python file you can write:
+Then in your Python interpreter you can write:
 ```
 >>> pys.t("introduction", name="John", variant="m")
 Hello! His name is John.
@@ -149,7 +151,7 @@ Then you can write:
 Hello! A policeman is here. He is going to help us.
 ```
 
-For "john" key for English in specified JSON string there's a list instead of a single string.
+For "john" key in specified JSON data there's a list instead of a single string.
 The first element of the list is a value used for this key, the second is a grammatical form.
 
 Another new thing is a "pol" identifier followed by a colon - both in an inner tag and a switch field.

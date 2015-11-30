@@ -1,7 +1,7 @@
 .. _user-guide:
 
-User guide
-==========
+User guide (for translators)
+============================
 Managing text translations from the perspective of the translator.
 
 Introduction
@@ -270,7 +270,7 @@ Switch field and inner tag field cooperation
 
 The already presented features are enough for our Pirate English example, but unfortunately Pirate English
 looks quite similar to English. All the difference is changing a few words, but there are real languages which are much different.
-I'm speaking about fusional languages. If you are not working with them, then you don't have to read further, but you may still find it interesting.
+I'm speaking about fusional languages. If you are not working with them, then you don't have to read further, but maybe you'll find it interesting.
 The following example will be much more complicated, but I hope it'll be explained precisely.
 In Polish (and Russian, German... and many others) every noun has a grammatical form (gender).
 Let's see: "szabla" (a sabre) is feminine (f), while "pistolet" (a pistol) is masculine (m).
@@ -280,7 +280,7 @@ Let's see an example:
 | This is a new pistol. => To jest now\ **y** pistolet.
 | This is a new sabre. => To jest now\ **a** szabla.
 
-| "To jest" (This is) part is the same for both items, but the suffix appended to the stem "now-" is based on the gender of the noun:
+| "To jest" ("This is") part is the same for both items, but the suffix appended to the stem "now-" is based on the gender of the noun:
 | "m" => "-y"
 | "f" => "-a"
 | "n" => "-e"
@@ -337,6 +337,9 @@ Appendix I - correct variant letters for numbers and cases
 
 As it was already mentioned, variants are specified by single-letter identifiers.
 Every letter has some contractual meaning and specific letters are not imposed by Pyslate (with exception of pluralization letters, which are based on language locale).
+
+Letter reserved to never be used to work as default value:
+    - x
 
 Letters that are reserved to be used for pluralization forms:
 

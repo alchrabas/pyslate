@@ -1,5 +1,4 @@
 import datetime
-import logging
 import numbers
 
 from .config import DefaultConfig
@@ -113,7 +112,7 @@ class Pyslate(object):
         Contains two-parameter function which is run when some tag value cannot be got from the backend.
         It should return string which is written to the output instead of the missing tag.
         The first parameter is tag key, the second is dict of interpolable parameters (a.k.a. kwargs).
-        You can replace it with your own implementation having some side-effect, for example logging the of missing tags.
+        You can replace it with your own implementation having some side-effect, for example logging of the missing tags.
         """
 
     def translate(self, tag_name, **kwargs):
