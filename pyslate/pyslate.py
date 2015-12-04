@@ -68,7 +68,8 @@ class Pyslate(object):
 
         self._functions = {}
 
-        # info about being deterministic and memory for pure functions is common for decorators and functions
+        # dictionary storing info whether function/decorator is being deterministic and their cache
+        # are shared between functions and decorators
         self.functions_deterministic = {}
         """
         A dictionary where key is a name of function or a decorator and value is True/False.
@@ -78,7 +79,8 @@ class Pyslate(object):
         """
         self.functions_memory = {}
         """
-        A dictionary where key is a function/decorator name and value is a tuple containing a pair:
+        A dictionary used as cache for deterministic functions and decorators.
+        Key is a function/decorator name and value is a tuple containing a pair:
         list of input arguments, result. It's discouraged to access it manually except clearing it.
         """
 
@@ -381,7 +383,7 @@ class Pyslate(object):
 
     def _replace_variable_fields(self, node, kwargs):
         if node.contents not in kwargs and node.contents not in self.context:
-            return self.config.MISSING_VARIABLE_TEXT.format(node.contents)
+            return self.config.ON_MISSING_VARIABLE(node.contents)
 
         value = ""
         if node.contents in kwargs:

@@ -3,10 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Pyslate - WORK IN PROGRESS, NOT TO BE USED YET
-==============================================
-
-WORK IN PROGRESS, NOT TO BE USED YET
+Pyslate
+=======
 
 .. toctree::
    :maxdepth: 2
@@ -14,7 +12,7 @@ WORK IN PROGRESS, NOT TO BE USED YET
    user-guide
    user-reference
    api
-   advanced_examples
+   advanced-examples
 
 Indices and tables
 ==================

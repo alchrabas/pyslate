@@ -23,11 +23,12 @@ class DefaultConfig(object):
     """
     Default values for configuration options of Pyslate.
 
-    If you want to overwrite defaults, create a function which instantiates DefaultConfig,
+    If you want to overwrite defaults, create a subclass of DefaultConfig
+    and overwrite interesting values in your class' constructor.
+    You can also create a function which instantiates DefaultConfig,
     overwrites some values and then gives it to Pyslate's constructor as keyword-argument "config".
-    Please note you can use keyword-arguments to specify own parser, cache and backend
-    in case it cannot be instantiated using the default constructor. Keyword arguments set in Pyslate constructor
-    overwrite values from the config.
+    Please note you can use keyword-arguments of Pyslate constructor to specify own parser, cache and backend.
+    Keyword arguments set in Pyslate constructor have higher precedence than values from the config.
     """
 
     def __init__(self):
@@ -144,16 +145,20 @@ class DefaultConfig(object):
         Default: see :ref:`Available_Decorators`
         """
 
-        self.MISSING_VARIABLE_TEXT = "[MISSING VALUE FOR '{0}']"
+        self.ON_MISSING_VARIABLE = lambda name: "[MISSING VALUE FOR '{0}']".format(name)
         """
-        String added to the result when variable requested in the tag value is missing.
-        {0} is a placeholder where missing variable name will be interpolated.
+        Single-argument function returning string which is added to the result
+        when variable requested in the tag value is missing.
+        The only argument is name of the missing variable.
+        Should return string displayed instead of the missing variable.
         """
 
         self.ON_MISSING_TAG_KEY = lambda name, params: "[MISSING TAG '{0}']".format(name)
         """
         Two-argument function whose return value is written to the output
         when the requested tag (or inner tag) and all its fallbacks are missing.
-        The first argument is key of the missing tag, the second is dict of parameters available for interpolation
-        into this tag's value. For example you can print keys of params dict to see what parameters are available.
+        The first argument is key of the missing tag, the second is dict of parameters
+        available for interpolation into this tag's value.
+        It should return string displayed instead of the missing tag value.
+        For example you can print keys of params dict to see what parameters are available.
         """

@@ -53,7 +53,7 @@ Witaj świecie!
 
 It works!
 
-So the most basic use it to create a Pyslate object for a selected language and then request translation
+So the most basic use is to create a Pyslate object for a selected language and then request translation
 of a specific tag using a `Pyslate.translate()` method. To make it more handy you can use `Pyslate.t` abbreviation.
 The JSON backend is used as an example, there are other storage options available.
 
