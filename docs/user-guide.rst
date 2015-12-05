@@ -238,10 +238,10 @@ We need to go deeper.
     state_gun:      => a shiny pistol
 
 Oh, look, a **variable field** inside of **inner tag field**. It means **variable field** is evaluated first,
-which produces *some* text (e.g. "ABC"), which is merged with "state_", which created a name of the inner tag
+which produces *some* text (e.g. "ABC"), which is merged with ``"state_"``, which created a name of the inner tag
 (e.g. "state_ABC"), which is then looked for on the list of tag keys. Quite complicated, but is it a problem for a translator like you?
 **%{item}** can potentially hold any value you can think, but it's possible to guess that the only possible values are de facto "sabre" and "gun",
-because we see that inner tag must start with "state_". We can  assume it always produce the valid (existing) tags.
+because we see that inner tag must start with ``"state_"``. We can  assume it always produce the valid (existing) tags.
 There cannot be any other in our Pirate language if there aren't such in original language.
 
 **Pirate English**

@@ -13,7 +13,8 @@ with open(path.join(here, 'README.md'), 'rt') as f:
 setup(
     name='pyslate',
     version=pyslate.__version__,
-    description='A translation library.',
+    description='A Python library for maintaining grammatically correct i18n (internationalization) of texts used in'
+                'the program: translation of messages, formatting dates and numbers to provide multi-language support.',
     long_description=long_description,
     classifiers=[
         "Development Status :: 2 - Pre-Alpha",
