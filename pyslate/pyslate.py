@@ -1,3 +1,4 @@
+import copy
 import datetime
 import numbers
 
@@ -13,7 +14,7 @@ class Pyslate(object):
     """
 
     def __init__(self, language, backend=None, config=DefaultConfig(), context=None,
-                 cache=None, parser=None, on_missing_tag_key_callback=None):
+                 cache=None, locales=None, parser=None, on_missing_tag_key_callback=None):
         """
         Constructor
 
@@ -22,6 +23,7 @@ class Pyslate(object):
         :param config: see config field
         :param context: see context field
         :param cache: see cache field
+        :param locales: this dict extends default dict of locales available in :obj:`locales.LOCALES <pyslate.pyslate.locales.LOCALES>`
         :param parser: see parser field
         :param on_missing_tag_key_callback: see on_missing_tag_key_callback field
         :return: object of Pyslate class
@@ -51,6 +53,18 @@ class Pyslate(object):
         If cache is not needed, then it can be None.
         Even if specified, cache may not be used when ``config.ALLOW_CACHE`` is False.
         """
+
+        self.locales = copy.deepcopy(LOCALES)
+        """
+        Dict containing information about locales available in the application.
+        It stores information like native language name, date and time format, decimal separator and
+        rules for plural forms available in this language.
+        Keyword argument `locales` does extend, not replace the default set of locales.
+        Locales specified in keyword argument takes higher precedence over default locales.
+        For examples of correct locale specification see :obj:`pyslate.locales.LOCALES`
+        """
+        if locales:
+            self.locales = dict(self.locales, **locales)
 
         self.fallbacks = {}
         """
@@ -146,7 +160,7 @@ class Pyslate(object):
         kwargs = dict(self.context, **kwargs)  # add context variables, which have lower priority
 
         if "number" in kwargs:
-            number_variant = self._first_left_value_from(LOCALES, self._get_languages())["number_rule"](
+            number_variant = self._first_left_value_from(self.locales, self._get_languages())["number_rule"](
                 kwargs["number"])
 
             base_variant_parts = tag_name.partition("#")
@@ -205,7 +219,7 @@ class Pyslate(object):
         :param value: value to be localized
         :return: string representation of the value, localized if being instance of the supported types
         """
-        locale_data = self._first_left_value_from(LOCALES, self._get_languages())
+        locale_data = self._first_left_value_from(self.locales, self._get_languages())
         if not self.config.LOCALE_FORMAT_NUMBERS:
             return str(value)
         if isinstance(value, float):

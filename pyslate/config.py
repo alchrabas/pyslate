@@ -82,9 +82,6 @@ class DefaultConfig(object):
 
         When ALLOW_CACHE is True, then the cache needs to be specified as a keyword argument in Pyslate constructor.
         You can see the API of the :obj:`SimpleMemoryCache <pyslate.pyslate.cache.SimpleMemoryCache>` to create your own implementation.
-        
-        .. NOTE::
-           If you supply a cache this way, then the class must have a default (parameter-less) constructor.
 
         Default: ``True``
         """
@@ -151,6 +148,8 @@ class DefaultConfig(object):
         when variable requested in the tag value is missing.
         The only argument is name of the missing variable.
         Should return string displayed instead of the missing variable.
+
+        Default: lambda name: "[MISSING VALUE FOR '{0}']".format(name)
         """
 
         self.ON_MISSING_TAG_KEY = lambda name, params: "[MISSING TAG '{0}']".format(name)
@@ -161,4 +160,6 @@ class DefaultConfig(object):
         available for interpolation into this tag's value.
         It should return string displayed instead of the missing tag value.
         For example you can print keys of params dict to see what parameters are available.
+
+        Default: lambda name, params: "[MISSING TAG '{0}']".format(name)
         """
