@@ -27,7 +27,7 @@ knowledge and years of experience
 What is it not for?
 -------------------
 
-All advanced features are optional, but it's surely not intended to be used when:
+| All advanced features are optional, but it's surely not intended to be used when:
 |  - you are sure you don't need anything except literal text i18n
 | - you'd like to use it as a templating engine - you'd like to make some lexical analysis
 | - you'd like to create a natural language generator or a chatterbot
