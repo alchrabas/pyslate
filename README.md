@@ -199,7 +199,7 @@ What's the advantage of doing it instead of having own tag naming convention (e.
 The first thing is previously highlighted fallback ability. When some tag key contains variant which is unavailable in the database, then the more basic form is used.
 That's why the most basic form (singular nominative) should be defined without any variant.
 In case of lack of tag key and its basic form for a specified language, the tag or its base form is searched for in the fallback language.
-Fallback mechanism is big and details can be found [here](). 
+Fallback mechanism is big and details can be found [here](http://pyslate.readthedocs.org/en/latest/user-guide.html#fallbacks-in-pyslate). 
 As you see, it's possible to adapt translations to the specified language without any programmer's knowledge what language is going to be introduced.
 All can be managed in translation system by creating tags with correct variants.
 
