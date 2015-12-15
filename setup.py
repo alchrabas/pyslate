@@ -6,7 +6,7 @@ import pyslate
 from os import path
 
 here = path.abspath(path.dirname(__file__))
-with open(path.join(here, 'README.md'), 'rt') as f:
+with open(path.join(here, 'README.rst'), 'rt') as f:
     long_description = f.read()
 
 
