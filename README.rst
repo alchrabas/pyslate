@@ -14,22 +14,22 @@ Python, mostly based on Gettext. The reason I decided to prepare my own
 library was because I wasn't satisfied with any of them. I needed
 full-features library, having similar capabilities as `Rails
 i18n <http://guides.rubyonrails.org/i18n.html>`__. But it's not just a
-port. I included all features I found necessary, but also many more: -
-i18n of text (tag values) based on their unique names (tag keys) -
-possibility to use different backends where translation texts are stored
-- support for special structures to use by translator directly in
-translation text - powerful fallback capabilities in case some variant
-of tag is missing - possibility of injecting Python code into
-translations using decorators and custom functions - support for
-languages significantly different than English, based on practical
-knowledge and years of experience
+port. I included all features I found necessary, but also many more:
+
+| - i18n of text (tag values) based on their unique names (tag keys)
+| - possibility to use different backends where translation texts are stored
+| - support for special structures to use by translator directly in translation text
+| - powerful fallback capabilities in case some variant of tag is missing
+| - possibility of injecting Python code into translations using decorators and custom functions
+| - support for languages significantly different than English, based on practical knowledge and years of experience
 
 What is it not for?
 -------------------
 
 | All advanced features are optional, but it's surely not intended to be used when:
 |  - you are sure you don't need anything except literal text i18n
-| - you'd like to use it as a templating engine - you'd like to make some lexical analysis
+| - you'd like to use it as a templating engine
+| - you'd like to make some lexical analysis
 | - you'd like to create a natural language generator or a chatterbot
 
 Simple example
