@@ -35,5 +35,6 @@ setup(
     packages=find_packages(),
     install_requires=[
         'ply>=3.4',
+        'six>=1.10',
     ],
 )

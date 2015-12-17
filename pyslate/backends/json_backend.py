@@ -1,4 +1,5 @@
 import json
+import six
 
 
 class JsonBackend(object):
@@ -6,21 +7,28 @@ class JsonBackend(object):
     JSON-based backend. It has no external dependencies.
     """
 
-    def __init__(self, file=None, json_data=None):
+    def __init__(self, file_name=None, file=None, json_data=None):
         """
-        Must specify either file or json_data as string or json data as python dict.
+        Must specify one of these keyword arguments: file name, file handle
+        or json_data as string or json data as python dict.
+        :param file_name: name of file with
         :param file: handle to file with JSON string
         :param json_data: JSON string or python dict with already parsed JSON string
         :return: backend to use in Pyslate
         """
 
-        if file:
+        if file_name:
+            with open(file_name, "r") as file:
+                self.tags = json.loads(file.read())
+        elif file:
             self.tags = json.loads(file.read())
-        else:
-            if type(json_data) is str:
+        elif json_data:
+            if isinstance(json_data, six.string_types):
                 self.tags = json.loads(json_data)
             else:
                 self.tags = json_data
+        else:
+            raise ValueError("You must specify an input (file, file name, dict or string) in the constructor")
 
     def get_content(self, tag_names, languages):
         record = self.get_record(tag_names, languages)
@@ -43,4 +51,3 @@ class JsonBackend(object):
                         return translation[0], translation[1]
                     return translation, None
         return None
-

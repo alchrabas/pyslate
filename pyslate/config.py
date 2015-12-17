@@ -114,9 +114,9 @@ class DefaultConfig(object):
         """
 
         self.GLOBAL_DECORATORS = {
-            "capitalize": str.capitalize,
-            "upper": str.upper,
-            "lower": str.lower,
+            "capitalize": lambda x: x.capitalize(),
+            "upper": lambda x: x.upper(),
+            "lower": lambda x: x.lower(),
         }
         """
         Dict containing decorators which are available for all languages.

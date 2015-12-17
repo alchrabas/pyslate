@@ -1,6 +1,7 @@
 import copy
 import datetime
 import numbers
+import six
 
 from .config import DefaultConfig
 from .locales import LOCALES
@@ -358,7 +359,7 @@ class Pyslate(object):
         return "".join(fully_interpreted_nodes)
 
     def _replace_inner_tag_or_pass(self, node, kwargs):
-        if type(node) is not InnerTagField:  # do nothing
+        if not isinstance(node, InnerTagField):  # do nothing
             return node, {}
 
         tag_name = self._traverse(node.contents, kwargs)
@@ -384,11 +385,11 @@ class Pyslate(object):
         return text, {node.tag_id: form}
 
     def _interpolate_variable_or_switch_field(self, node, kwargs, forms):
-        if type(node) is str:  # just return the string
+        if isinstance(node, six.string_types):  # just return the string
             return node
-        elif type(node) is VariableField:
+        elif isinstance(node, VariableField):
             return self._replace_variable_fields(node, kwargs)
-        elif type(node) is SwitchField:
+        elif isinstance(node, SwitchField):
             if not self.config.ALLOW_SWITCH_FIELDS:
                 return ""
             return self._replace_switch_fields(node, kwargs, forms)

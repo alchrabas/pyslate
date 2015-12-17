@@ -50,11 +50,12 @@ Then you can check that it works in an interactive Python session:
 
 ::
 
-    >>> from pyslate import Pyslate, PyslateJsonBackend
-    >>> pys_en = Pyslate("en", backend=PyslateJsonBackend("translations.json"))
+    >>> from pyslate.pyslate import Pyslate
+    >>> from pyslate.backends.json_backend import JsonBackend
+    >>> pys_en = Pyslate("en", backend=JsonBackend("translations.json"))
     >>> pys_en.translate("hello_world")
     Hello world!
-    >>> pys_pl = Pyslate("pl", backend=PyslateJsonBackend("translations.json"))
+    >>> pys_pl = Pyslate("pl", backend=JsonBackend("translations.json"))
     >>> pys_pl.translate("hello_world")
     Witaj świecie!
 
@@ -83,6 +84,7 @@ Then in your Python interpreter you can write:
 
 ::
 
+    >>> pys = Pyslate("en", backend=JsonBackend("translations.json"))
     >>> pys.t("introduction", name="John", variant="m")
     Hello! His name is John.
     >>> pys.t("introduction", name="Judy", variant="f")
@@ -126,11 +128,13 @@ Then you can write:
 Two new things here: ``${}`` specifies an inner tag field. It means
 evaluating a "toy" tag and interpolating the contents directly into the
 main tag value. At the end of the inner tag key there's a ``@article``.
-It's a decorator, which means "take the tag value of tag it's used in,
+It's a decorator, which means "take the tag value of tag it's used on,
 and then transform the string into something else". Decorator "article"
 is included as specific for English and simply adds a/an article. There
 are also "upper" "lower" and "capitalize" decorators included right
-away. In addition, you can define any new decorator as you like.
+away. In addition, you can define any new decorator as you like, which is
+`described in the documentation
+<http://pyslate.readthedocs.org/en/latest/user-reference.html#decorators>`__.
 
 Combo
 -----
@@ -165,7 +169,7 @@ Grammatical forms
 
     {
         "announcement": {
-            "en": "Hello! ${pol:%{policeperson}@article@capitalize} is here. %{pol:m?He|f?She} is going to help us.",
+            "en": "Hello! ${pol:%{policeperson}@article@capitalize} is here. %{pol:m?He|f?She} is going to help us."
         },
         "john": {
             "en": ["policeman", "m"]
@@ -212,13 +216,13 @@ It's hard to be shown in English, so I'll put an example in Polish:
         },
         "not_having": {
             "en": "I don't have ${item_stone}",
-            "pl": "Mam ${item_stone#g}"
+            "pl": "Nie mam ${item_stone#g}"
         },
-        "stone": {
+        "item_stone": {
             "en": "a stone",
             "pl": "kamień"
         },
-        "stone#g": {
+        "item_stone#g": {
             "pl": "kamienia"
         }
     }
@@ -261,11 +265,11 @@ that easily by a special ``number`` variable:
 
     {
         "having_flower": {
-            "en": "I have a flower",
+            "en": "I have a flower"
         },
         "having_flower#p": {
-            "en": "I have %{number} flowers",
-        },
+            "en": "I have %{number} flowers"
+        }
     }
 
 ::
@@ -287,13 +291,13 @@ many (all the rest). The word "kwiat*ka*" (genitive form of "kwiat*ek*"
 
     {
         "having_flower": {
-            "pl": "Mam kwiatka",
+            "pl": "Mam kwiatka"
         },
         "having_flower#w": {
-            "pl": "Mam %{number} kwiatki.",
+            "pl": "Mam %{number} kwiatki."
         },
         "having_flower#p": {
-            "pl": "Mam %{number} kwiatków.",
+            "pl": "Mam %{number} kwiatków."
         }
     }
 
@@ -314,7 +318,7 @@ everything and then return a translated tag.
 
     {
         "product_presentation": {
-            "en": "I'd like to present you a new product. It's ${product}.",
+            "en": "I'd like to present you a new product. It's ${product}."
         },
         "car_personal": {
             "en": "a personal car"
@@ -323,7 +327,7 @@ everything and then return a translated tag.
             "en": "a delivery van"
         },
         "product_template": {
-            "en": "${type} produced by ${producer}"
+            "en": "${%{type}} produced by %{producer}"
         }
     }
 
