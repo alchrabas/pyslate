@@ -320,6 +320,7 @@ That's right. We have specified an identifier for an inner tag (*obj_g*), which 
 The inner tag's identifier gets the grammatical form contained in an inner tag. It is then transported to the switch field which makes the correct decision.
 
 So the full Polish translation looks like that:
+
 **Polish**
 ::
 

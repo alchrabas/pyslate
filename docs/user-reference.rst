@@ -42,13 +42,21 @@ Apart from built-in decorators it’s possible to define custom ones.
     }
 
     def add_dots(value):
-        return "".join([char + "." for char in value])
+        return ".".join(value)
 
-    self.pys.register_decorator("add_dots", add_dots)
+    pyslate_en.register_decorator("add_dots", add_dots)
 
-    >>> pyslate_en.t("some_message@add_dots")
+    >>> pyslate_en.t("message_container")
+    Message is: I.m.p.o.r.t.a.n.t. .m.e.s.s.a.g.e
+
+    >>> pyslate_en.t("message_container@add_dots")
+    M.e.s.s.a.g.e. .i.s.:. .I...m...p...o...r...t...a...n...t... ...m...e...s...s...a...g...e
 
 
+It's possible to decorate both requested tag, inner tag fields and variable fields.
+In the last command, value of "some_message" tag gets dots added and then the whole texts gets dots added.
+There are three dots between the letters, because second decorator adds dots between
+every single character, including dots added by first decorator.
 
 .. _Available_Decorators:
 

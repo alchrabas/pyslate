@@ -27,7 +27,7 @@ What is it not for?
 -------------------
 
 | All advanced features are optional, but it's surely not intended to be used when:
-|  - you are sure you don't need anything except literal text i18n
+| - you are sure you don't need anything except literal text i18n
 | - you'd like to use it as a templating engine
 | - you'd like to make some lexical analysis
 | - you'd like to create a natural language generator or a chatterbot
@@ -310,7 +310,7 @@ Custom functions
 ----------------
 
 If none of previously mentioned options was a solution for your problem,
-then custom functions come to the reascue. It's possible to create a
+then custom functions come to the rescue. It's possible to create a
 meta-tag being in fact a custom python function which can do almost
 everything and then return a translated tag.
 
