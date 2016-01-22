@@ -48,8 +48,10 @@ class PyLexer(object):
             t.type = "PLAINTEXT"
         return t
 
-    # not any special OR LBRACE after not (dollar or percent) OR (dollar or percent) but not any special after
-    t_PLAINTEXT = r'([^\$@%{}\\:|?]|[^\$%}\\:|?@]{|[\$%][^{}\\:|?@])+'
+    # not any special
+    # OR LBRACE after not (dollar or percent)
+    # OR (dollar or percent) but not any special after (or it's the last character in a string)
+    t_PLAINTEXT = r'([^\$@%{}\\:|?]|[^\$%}\\:|?@]?{|[\$%]([^{}\\:|?@]|$))+'
 
     def t_RBRACE(self, t):
         r'}'
@@ -68,8 +70,7 @@ class PyLexer(object):
         return t
 
     def t_error(self, t):
-        print("Illegal character '%s'" % t.value[0])
-        t.lexer.skip(1)
+        raise PyslateException("Illegal character '%s' (line: %d:%d)" % (t.value[0], t.lexer.lineno, t.lexer.lexpos))
 
     def __init__(self):
         self.lexer = None

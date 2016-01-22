@@ -177,7 +177,7 @@ class Pyslate(object):
         if tag_base in self._functions:
             function_language = self._first_left_key_from(self._functions[tag_base], self._get_languages())
             if (self.functions_deterministic[tag_base]  # deterministic function so maybe result is already known
-                and tuple([function_language] + sorted(kwargs.items())) in self.functions_memory[tag_name]):
+                    and tuple([function_language] + sorted(kwargs.items())) in self.functions_memory[tag_name]):
                 t9n, form = self.functions_memory[tag_name][tuple([function_language] + sorted(kwargs.items()))]
             else:
                 helper = PyslateHelper(self)
@@ -189,10 +189,8 @@ class Pyslate(object):
                     self.functions_memory[tag_name][tuple([function_language] + sorted(kwargs.items()))] = (t9n, form)
         else:
             t9n, form = self._get_raw_content(tag_name, kwargs), self._get_raw_form(tag_name)
-
-        nodes = self.parser.parse(t9n)
-
-        t9n = self._traverse(nodes, kwargs)
+            nodes = self.parser.parse(t9n)
+            t9n = self._traverse(nodes, kwargs)
 
         return t9n, form
 

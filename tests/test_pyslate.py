@@ -37,9 +37,9 @@ def obj_fun(helper, name, params):
     form += case
 
     if quality_tag:
-        quality_tag = "${" + quality_tag + ("#" + form if form else "") + "} "
+        quality_tag = helper.translation(quality_tag + ("#" + form if form else ""))
 
-    return quality_tag + "${entity_" + item_name + ("#" + case if case else "") + "}"
+    return helper.translation("template_obj_fun", quality=quality_tag, item=item_name + ("#" + case if case else "")).strip()
 
 
 class BackendStub():
@@ -65,6 +65,9 @@ class BackendStub():
         "hello_world": {
             "en": "Hello world",
             "pl": "Witaj swiecie",
+        },
+        "text_with_brackets": {
+            "en": r"help {me} hehe",
         },
         "welcome": {
             "en": "Welcome!",
@@ -234,6 +237,9 @@ class BackendStub():
                 "pl": "m",
             }
         },
+        "template_obj_fun": {
+            "en": "%{quality} ${entity_%{item}}"
+        },
         "char_victim": {
             "pl": "${tajnosc} Jest %{victim:x?[NO DATA]|f?fajna|m?fajny|n?fajne}.",
         },
@@ -319,6 +325,9 @@ class TestTranslationsEnglish(unittest.TestCase):
         # no pl translation is available, so it should fallback to en
         self.assertEqual("Welcome!", self.pys.t("welcome"))
 
+    def test_simple_with_brackets(self):
+        self.assertEqual(r"help {me} hehe", self.pys.t("text_with_brackets"))
+
     def test_numbers(self):
         self.assertEqual("10 carrots", self.pys.t("entity_carrot#p", number=10))
         self.assertEqual("10 carrots", self.pys.t("entity_carrot", number=10))
@@ -381,6 +390,24 @@ class TestTranslationsEnglish(unittest.TestCase):
         self.assertEqual("1999-12-7, 2:11:37 AM", self.pys.l(datetime.datetime(1999, 12, 7, 2, 11, 37)))
         self.assertEqual("2128-1-3, 6:13:22 PM", self.pys.l(datetime.datetime(2128, 1, 3, 18, 13, 22)))
 
+    def test_custom_function(self):
+
+        self.pys.context = {"you": "John"}
+
+        def fun(helper, tag_name, params):
+            return tag_name + " " + str(sorted(params.items()))
+
+        self.pys.register_function("fun", fun)
+
+        self.assertEqual("fun [('help', 'yes'), ('tag_v', ''), ('you', 'John')]", self.pys.t("fun", help="yes"))
+
+    def test_custom_function_not_interpret_implicitly(self):
+
+        def fun(helper, tag_name, params):
+            return "%{name}"
+
+        self.pys.register_function("fun", fun)
+        self.assertEqual("%{name}", self.pys.t("fun", name="John"))
 
 class TestTranslationsPolish(unittest.TestCase):
 

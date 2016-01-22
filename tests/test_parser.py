@@ -54,6 +54,37 @@ class LexerTest(unittest.TestCase):
                               ("PLAINTEXT", "}"), ("PLAINTEXT", "}"), ("PLAINTEXT", "}"), ("PLAINTEXT", "}"),
                               ("PLAINTEXT", "eee"), ("PLAINTEXT", "}"), ("PLAINTEXT", "}"), ], tokens)
 
+    def test_sample_with_brackets(self):
+        tokens = self.tokenize_to_list(r"help {me} hehe")
+        self.assertListEqual([("PLAINTEXT", "help {me"), ("PLAINTEXT", "}"), ("PLAINTEXT", " hehe")], tokens)
+
+    def test_bracket_on_start(self):
+        tokens = self.tokenize_to_list("{haha}")
+        self.assertListEqual([("PLAINTEXT", "{haha"), ("PLAINTEXT", "}")], tokens)
+
+    def test_percent_on_start(self):
+        tokens = self.tokenize_to_list("%hehe")
+        self.assertListEqual([("PLAINTEXT", "%hehe")], tokens)
+
+    def test_only_percent(self):
+        tokens = self.tokenize_to_list("%")
+        self.assertListEqual([("PLAINTEXT", "%")], tokens)
+
+    def test_only_dollar(self):
+        tokens = self.tokenize_to_list("$")
+        self.assertListEqual([("PLAINTEXT", "$")], tokens)
+
+    def test_only_lbrace(self):
+        tokens = self.tokenize_to_list("{")
+        self.assertListEqual([("PLAINTEXT", "{")], tokens)
+
+    def test_only_rbrace(self):
+        tokens = self.tokenize_to_list("{")
+        self.assertListEqual([("PLAINTEXT", "{")], tokens)
+
+    def test_empty_string(self):
+        tokens = self.tokenize_to_list("")
+        self.assertListEqual([], tokens)
 
 class ParserTest(unittest.TestCase):
 
