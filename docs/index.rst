@@ -13,6 +13,7 @@ Pyslate
    user-reference
    api
    advanced-examples
+   changelog
 
 Indices and tables
 ==================

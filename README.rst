@@ -283,7 +283,7 @@ These two forms are sufficient for English, but for many other languages
 it's not enough. For example words can have different suffixes when
 there's a few of them and there's many of them. In Polish there are
 three possibilities: singular (1), a few (2, 3, 4, 102, 103, 104...) and
-many (all the rest). The word "kwiat*ka*" (genitive form of "kwiat*ek*"
+many (all the rest). The word "kwiat**ka**" (genitive form of "kwiat**ek**"
 ["a flower"]) has the following plural forms: "kwiatka", "kwiatki",
 "kwiatków".
 
